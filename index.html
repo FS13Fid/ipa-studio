@@ -1274,6 +1274,34 @@
             background: #d175ff;
         }
 
+        .ai-model-select {
+            width: 100%;
+            background: #171a22;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 10px;
+            padding: 8px 12px;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ai-model-select:focus {
+            border-color: #bf5af2;
+            background: #1f232e;
+        }
+        .ai-model-select optgroup {
+            background: #12141a;
+            color: #d175ff;
+            font-weight: 700;
+        }
+        .ai-model-select option {
+            background: #1c202a;
+            color: #ffffff;
+            font-weight: 500;
+        }
+
         .ai-chat-body {
             flex: 1;
             padding: 16px 22px;
@@ -1574,31 +1602,94 @@
 
             <!-- Выбор провайдера нейросети -->
             <div class="ai-provider-bar">
-                <div class="ai-provider-pill active" id="pillGemini" onclick="selectAiProvider('gemini')">
+                <div class="ai-provider-pill active" id="pillTokenlavka" onclick="selectAiProvider('tokenlavka')">
+                    <span>⚡</span> <span>TokenLavka (DeepSeek V4 / Claude)</span>
+                </div>
+                <div class="ai-provider-pill" id="pillGemini" onclick="selectAiProvider('gemini')">
                     <span>💎</span> <span>Google Gemini 1.5</span>
                 </div>
                 <div class="ai-provider-pill" id="pillDeepSeek" onclick="selectAiProvider('deepseek')">
-                    <span>⚡</span> <span>DeepSeek V3</span>
+                    <span>⚡</span> <span>DeepSeek Direct</span>
                 </div>
                 <div class="ai-provider-pill" id="pillOpenAi" onclick="selectAiProvider('openai')">
-                    <span>🟢</span> <span>OpenAI (GPT-4o)</span>
+                    <span>🟢</span> <span>OpenAI Direct</span>
                 </div>
                 <div class="ai-provider-pill" id="pillOffline" onclick="selectAiProvider('offline')">
                     <span>🧬</span> <span>Встроенный AI (Офлайн)</span>
                 </div>
             </div>
 
-            <!-- Настройки API-ключа -->
+            <!-- Настройки API-ключа и выбор модели -->
             <div class="ai-settings-drawer" id="aiSettingsDrawer">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span id="aiProviderDesc" style="color: #e5e5ea; font-weight: 600;">💎 Google Gemini API</span>
-                    <a id="aiKeyHelpLink" href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #5ac8fa; text-decoration: none; font-size: 11px;">Получить бесплатный ключ ↗</a>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                    <span id="aiProviderDesc" style="color: #e5e5ea; font-weight: 600;">⚡ TokenLavka Gateway API</span>
+                    <a id="aiKeyHelpLink" href="https://tokenlavka.com" target="_blank" style="color: #5ac8fa; text-decoration: none; font-size: 11px;">Открыть TokenLavka ↗</a>
                 </div>
+
+                <!-- Окошко для вставки API ключа -->
                 <div class="ai-api-input-row" id="aiKeyRow">
-                    <input type="password" id="aiApiKeyInput" class="ai-api-input" placeholder="Введите API ключ (AIzaSy... / sk-...)">
+                    <input type="password" id="aiApiKeyInput" class="ai-api-input" placeholder="Вставьте ваш API-ключ sk-xxxxxxxxxxxxxxxx...">
                     <button class="ai-api-btn" onclick="saveAiKey()">Сохранить</button>
                     <button class="ai-api-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);" onclick="testAiConnection()">Тест ⚡</button>
                 </div>
+
+                <!-- Выбор модели (27 моделей TokenLavka) -->
+                <div id="aiModelSelectRow" style="margin-top: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <label style="font-size: 11px; color: rgba(255,255,255,0.6); text-transform: uppercase; font-weight: 700;">
+                            🎯 Активная модель (27 доступно в TokenLavka):
+                        </label>
+                        <span id="modelTierBadge" style="font-size: 10px; color: #30d158; font-weight: 700; background: rgba(48,209,88,0.15); padding: 1px 6px; border-radius: 4px;">
+                            Экономичная / 512k
+                        </span>
+                    </div>
+                    <select id="tokenlavkaModelSelect" class="ai-model-select" onchange="onTokenlavkaModelChange(this.value)">
+                        <optgroup label="⚡ DeepSeek (Основная нейросеть)">
+                            <option value="deepseek-v4-flash" selected>DeepSeek V4 Flash — сверхбыстрый и умный (По умолчанию)</option>
+                            <option value="deepseek-v4-pro">DeepSeek V4 Pro — максимальная глубина рассуждений</option>
+                        </optgroup>
+                        <optgroup label="🎭 Claude (Opus, Sonnet, Fable)">
+                            <option value="claude-opus-4-7">Claude Opus 4.7 Claude (512 000 контекст)</option>
+                            <option value="claude-opus-5-5">Opus 5.5 Claude (512 000 контекст)</option>
+                            <option value="claude-opus-5">Opus 5 Claude (512 000 контекст)</option>
+                            <option value="claude-opus-4-8">Claude Opus 4.8 Claude (512 000 контекст)</option>
+                            <option value="claude-opus-4-6">Claude Opus 4.6 Claude (512 000 контекст)</option>
+                            <option value="claude-sonnet-5">Sonnet 5 Claude (512 000 контекст)</option>
+                            <option value="claude-fable-5-1">Fable 5.1 Claude (512 000 контекст)</option>
+                            <option value="claude-fable-5">Fable 5 Claude (512 000 контекст)</option>
+                        </optgroup>
+                        <optgroup label="🟢 ChatGPT / OpenAI">
+                            <option value="gpt-6-astra">GPT 6 Astra ChatGPT</option>
+                            <option value="gpt-6-luna">GPT-6 Luna ChatGPT</option>
+                            <option value="gpt-5-6-sol">GPT 5.6 Sol ChatGPT</option>
+                            <option value="gpt-5-6-terra">GPT 5.6 Terra ChatGPT</option>
+                            <option value="gpt-5-6-luna">GPT 5.6 Luna ChatGPT</option>
+                            <option value="gpt-5-5">GPT 5.5 ChatGPT</option>
+                            <option value="gpt-5-4">GPT 5.4 ChatGPT</option>
+                        </optgroup>
+                        <optgroup label="💎 Google Gemini">
+                            <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro Gemini</option>
+                        </optgroup>
+                        <optgroup label="⚡ Grok (xAI)">
+                            <option value="grok-4.7">Grok 4.7 Grok</option>
+                            <option value="grok-4.6">Grok 4.6 Grok</option>
+                        </optgroup>
+                        <optgroup label="🌕 GLM">
+                            <option value="glm-5.3-flash">GLM-5.3 Flash GLM</option>
+                            <option value="glm-5.3">GLM-5.3 GLM</option>
+                        </optgroup>
+                        <optgroup label="🌙 Kimi">
+                            <option value="kimi-k3">Kimi K3 Kimi</option>
+                            <option value="kimi-k2.7-code">Kimi K2.7 Code Kimi</option>
+                        </optgroup>
+                        <optgroup label="🔮 Qwen (Alibaba)">
+                            <option value="qwen-3.8-flash">Qwen 3.8 Flash Qwen</option>
+                            <option value="qwen-3.8-max">Qwen 3.8 Max Qwen</option>
+                            <option value="qwen-3.8-omni">Qwen 3.8 Omni Qwen</option>
+                        </optgroup>
+                    </select>
+                </div>
+
                 <div id="aiConnectionStatus" style="font-size: 11px; margin-top: 6px; display: none;"></div>
             </div>
 
@@ -2247,12 +2338,78 @@
 10. "com.fidelsinakaevpersonalteam.siteinphone" ("College Flow") — чистый неподписанный IPA-пакет (Personal Team), требует подписания через Scarlet, ESign (ESG), AltStore или TrollStore.
 Отвечай структурированно, понятно, доброжелательно на русском языке с эмодзи.`;
 
-        let currentAiProvider = localStorage.getItem('ipa_ai_provider') || 'gemini';
+        const TOKENLAVKA_MODEL_NAMES = {
+            'deepseek-v4-flash': 'DeepSeek V4 Flash',
+            'deepseek-v4-pro': 'DeepSeek V4 Pro',
+            'claude-opus-4-7': 'Claude Opus 4.7 Claude',
+            'claude-opus-5-5': 'Opus 5.5 Claude',
+            'claude-opus-5': 'Opus 5 Claude',
+            'claude-opus-4-8': 'Claude Opus 4.8 Claude',
+            'claude-opus-4-6': 'Claude Opus 4.6 Claude',
+            'claude-sonnet-5': 'Sonnet 5 Claude',
+            'claude-fable-5-1': 'Fable 5.1 Claude',
+            'claude-fable-5': 'Fable 5 Claude',
+            'gpt-6-astra': 'GPT 6 Astra ChatGPT',
+            'gpt-6-luna': 'GPT-6 Luna ChatGPT',
+            'gpt-5-6-sol': 'GPT 5.6 Sol ChatGPT',
+            'gpt-5-6-terra': 'GPT 5.6 Terra ChatGPT',
+            'gpt-5-6-luna': 'GPT 5.6 Luna ChatGPT',
+            'gpt-5-5': 'GPT 5.5 ChatGPT',
+            'gpt-5-4': 'GPT 5.4 ChatGPT',
+            'gemini-3.1-pro-preview': 'Gemini 3.1 Pro Gemini',
+            'grok-4.7': 'Grok 4.7 Grok',
+            'grok-4.6': 'Grok 4.6 Grok',
+            'glm-5.3-flash': 'GLM-5.3 Flash GLM',
+            'glm-5.3': 'GLM-5.3 GLM',
+            'kimi-k3': 'Kimi K3 Kimi',
+            'kimi-k2.7-code': 'Kimi K2.7 Code Kimi',
+            'qwen-3.8-flash': 'Qwen 3.8 Flash Qwen',
+            'qwen-3.8-max': 'Qwen 3.8 Max Qwen',
+            'qwen-3.8-omni': 'Qwen 3.8 Omni Qwen'
+        };
+
+        let currentAiProvider = localStorage.getItem('ipa_ai_provider') || 'tokenlavka';
+        let currentTokenlavkaModel = localStorage.getItem('ipa_tokenlavka_model') || 'deepseek-v4-flash';
         let aiApiKeys = {
+            tokenlavka: localStorage.getItem('ipa_ai_key_tokenlavka') || '',
             gemini: localStorage.getItem('ipa_ai_key_gemini') || '',
             deepseek: localStorage.getItem('ipa_ai_key_deepseek') || '',
             openai: localStorage.getItem('ipa_ai_key_openai') || ''
         };
+
+        function getActiveModelDisplayName() {
+            if (currentAiProvider === 'tokenlavka') {
+                return TOKENLAVKA_MODEL_NAMES[currentTokenlavkaModel] || currentTokenlavkaModel;
+            }
+            if (currentAiProvider === 'gemini') return 'Gemini 1.5';
+            if (currentAiProvider === 'deepseek') return 'DeepSeek V3';
+            if (currentAiProvider === 'openai') return 'GPT-4o';
+            return 'Offline AI';
+        }
+
+        function onTokenlavkaModelChange(val) {
+            currentTokenlavkaModel = val;
+            localStorage.setItem('ipa_tokenlavka_model', val);
+            const badge = document.getElementById('modelTierBadge');
+            if (badge) {
+                const isFlash = val.includes('flash') || val.includes('mini');
+                const isOpus = val.includes('opus') || val.includes('gpt-6');
+                badge.innerText = isFlash ? 'Экономичная / 512k' : (isOpus ? 'Максимальная (Opus/GPT-6)' : 'Стандарт / 512k');
+                badge.style.color = isOpus ? '#bf5af2' : (isFlash ? '#30d158' : '#5ac8fa');
+            }
+            const descEl = document.getElementById('aiProviderDesc');
+            if (descEl) {
+                descEl.innerText = `⚡ TokenLavka Gateway (Модель: ${TOKENLAVKA_MODEL_NAMES[val] || val})`;
+            }
+            updateAiStatusBadge();
+            const statusEl = document.getElementById('aiConnectionStatus');
+            if (statusEl) {
+                statusEl.style.display = 'block';
+                statusEl.style.color = '#30d158';
+                statusEl.innerText = `✓ Выбрана модель: ${TOKENLAVKA_MODEL_NAMES[val] || val}`;
+                setTimeout(() => { if (statusEl.innerText.startsWith('✓ Выбрана')) statusEl.style.display = 'none'; }, 3000);
+            }
+        }
 
         function updateAiStatusBadge() {
             const badge = document.getElementById('headerAiBadge');
@@ -2262,10 +2419,10 @@
                 badge.innerText = 'Offline AI';
                 badge.className = 'ai-badge-status offline';
             } else if (hasKey) {
-                badge.innerText = currentAiProvider === 'gemini' ? 'Gemini 1.5' : (currentAiProvider === 'deepseek' ? 'DeepSeek V3' : 'GPT-4o');
+                badge.innerText = getActiveModelDisplayName();
                 badge.className = 'ai-badge-status';
             } else {
-                badge.innerText = 'AI Ready';
+                badge.innerText = currentAiProvider === 'tokenlavka' ? 'Вставь ключ TokenLavka' : 'AI Ready';
                 badge.className = 'ai-badge-status offline';
             }
         }
@@ -2291,11 +2448,12 @@
             currentAiProvider = provider;
             if (updateStorage) localStorage.setItem('ipa_ai_provider', provider);
 
-            ['pillGemini', 'pillDeepSeek', 'pillOpenAi', 'pillOffline'].forEach(id => {
+            ['pillTokenlavka', 'pillGemini', 'pillDeepSeek', 'pillOpenAi', 'pillOffline'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.classList.remove('active');
             });
             const activePill = document.getElementById(
+                provider === 'tokenlavka' ? 'pillTokenlavka' :
                 provider === 'gemini' ? 'pillGemini' :
                 provider === 'deepseek' ? 'pillDeepSeek' :
                 provider === 'openai' ? 'pillOpenAi' : 'pillOffline'
@@ -2306,6 +2464,7 @@
             const helpLink = document.getElementById('aiKeyHelpLink');
             const keyRow = document.getElementById('aiKeyRow');
             const keyInput = document.getElementById('aiApiKeyInput');
+            const modelRow = document.getElementById('aiModelSelectRow');
             const statusEl = document.getElementById('aiConnectionStatus');
             if (statusEl) statusEl.style.display = 'none';
 
@@ -2313,9 +2472,31 @@
                 if (descEl) descEl.innerText = '🧬 Встроенное нейросетевое ядро (Офлайн база)';
                 if (helpLink) helpLink.style.display = 'none';
                 if (keyRow) keyRow.style.display = 'none';
+                if (modelRow) modelRow.style.display = 'none';
+            } else if (provider === 'tokenlavka') {
+                if (keyRow) keyRow.style.display = 'flex';
+                if (helpLink) {
+                    helpLink.style.display = 'inline';
+                    helpLink.href = 'https://tokenlavka.com';
+                    helpLink.innerText = 'TokenLavka.com ↗';
+                }
+                if (descEl) {
+                    descEl.innerText = `⚡ TokenLavka Gateway (Модель: ${TOKENLAVKA_MODEL_NAMES[currentTokenlavkaModel] || currentTokenlavkaModel})`;
+                }
+                if (keyInput) {
+                    keyInput.value = aiApiKeys.tokenlavka;
+                    keyInput.placeholder = 'sk-aea63b2c495c... (API-ключ TokenLavka)';
+                }
+                if (modelRow) {
+                    modelRow.style.display = 'block';
+                    const select = document.getElementById('tokenlavkaModelSelect');
+                    if (select) select.value = currentTokenlavkaModel;
+                    onTokenlavkaModelChange(currentTokenlavkaModel);
+                }
             } else {
                 if (keyRow) keyRow.style.display = 'flex';
                 if (helpLink) helpLink.style.display = 'inline';
+                if (modelRow) modelRow.style.display = 'none';
                 if (provider === 'gemini') {
                     if (descEl) descEl.innerText = '💎 Google Gemini 1.5 Flash API';
                     if (helpLink) {
@@ -2327,7 +2508,7 @@
                         keyInput.placeholder = 'AIzaSy... (ключ Google AI Studio)';
                     }
                 } else if (provider === 'deepseek') {
-                    if (descEl) descEl.innerText = '⚡ DeepSeek V3 / R1 API';
+                    if (descEl) descEl.innerText = '⚡ DeepSeek V3 / R1 API (Прямой)';
                     if (helpLink) {
                         helpLink.href = 'https://platform.deepseek.com/api_keys';
                         helpLink.innerText = 'Ключ DeepSeek ↗';
@@ -2337,7 +2518,7 @@
                         keyInput.placeholder = 'sk-... (ключ platform.deepseek.com)';
                     }
                 } else if (provider === 'openai') {
-                    if (descEl) descEl.innerText = '🟢 OpenAI GPT-4o / GPT-4o-mini';
+                    if (descEl) descEl.innerText = '🟢 OpenAI Direct API (GPT-4o)';
                     if (helpLink) {
                         helpLink.href = 'https://platform.openai.com/api-keys';
                         helpLink.innerText = 'Ключ OpenAI ↗';
@@ -2362,7 +2543,8 @@
                 if (statusEl) {
                     statusEl.style.display = 'block';
                     statusEl.style.color = '#30d158';
-                    statusEl.innerText = `✓ Ключ для ${currentAiProvider.toUpperCase()} сохранен!`;
+                    const provName = currentAiProvider === 'tokenlavka' ? 'TokenLavka' : currentAiProvider.toUpperCase();
+                    statusEl.innerText = `✓ Ключ для ${provName} сохранен!`;
                 }
                 updateAiStatusBadge();
             }
@@ -2370,10 +2552,11 @@
 
         async function testAiConnection() {
             const statusEl = document.getElementById('aiConnectionStatus');
+            const modelName = getActiveModelDisplayName();
             if (statusEl) {
                 statusEl.style.display = 'block';
                 statusEl.style.color = '#ff9f0a';
-                statusEl.innerText = `⏳ Проверка подключения к ${currentAiProvider.toUpperCase()}...`;
+                statusEl.innerText = `⏳ Проверка подключения к ${modelName}...`;
             }
             try {
                 const startTime = Date.now();
@@ -2381,7 +2564,7 @@
                 const latency = Date.now() - startTime;
                 if (statusEl) {
                     statusEl.style.color = '#30d158';
-                    statusEl.innerText = `🟢 Подключение успешно! Задержка: ${latency}ms. Ответ: ${reply.trim().slice(0, 40)}`;
+                    statusEl.innerText = `🟢 Подключение успешно! Задержка: ${latency}ms. Модель: ${modelName}. Ответ: ${reply.trim().slice(0, 50)}`;
                 }
             } catch (err) {
                 if (statusEl) {
@@ -2395,6 +2578,30 @@
             const key = aiApiKeys[currentAiProvider];
             if (currentAiProvider === 'offline' || !key) {
                 return generateOfflineAiResponse(userPrompt);
+            }
+
+            if (currentAiProvider === 'tokenlavka') {
+                const model = currentTokenlavkaModel || 'deepseek-v4-flash';
+                const res = await fetch('https://tokenlavka.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${key}`
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: [
+                            { role: 'system', content: AI_SYSTEM_PROMPT },
+                            { role: 'user', content: userPrompt }
+                        ]
+                    })
+                });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.error?.message || `HTTP ${res.status}`);
+                }
+                const data = await res.json();
+                return data.choices[0].message.content;
             }
 
             if (currentAiProvider === 'gemini') {
@@ -2535,7 +2742,7 @@
 
             const aiMsg = document.createElement('div');
             aiMsg.className = 'ai-chat-msg assistant';
-            const modelName = currentAiProvider === 'gemini' ? 'Gemini 1.5' : (currentAiProvider === 'deepseek' ? 'DeepSeek V3' : (currentAiProvider === 'openai' ? 'GPT-4o' : 'Offline Core'));
+            const modelName = getActiveModelDisplayName();
             aiMsg.innerHTML = `<span style="color:#d175ff; font-weight:700;">🧠 ${modelName} думает...</span>`;
             body.appendChild(aiMsg);
             body.scrollTop = body.scrollHeight;
@@ -2544,7 +2751,8 @@
                 const reply = await queryActiveAiModel(text);
                 aiMsg.innerHTML = reply.replace(/\n/g, '<br>');
             } catch (err) {
-                aiMsg.innerHTML = `<span style="color:#ff453a;">⚠️ Ошибка запроса к ${currentAiProvider.toUpperCase()}: ${err.message}.</span><br><br>` +
+                const provLabel = currentAiProvider === 'tokenlavka' ? (TOKENLAVKA_MODEL_NAMES[currentTokenlavkaModel] || 'TokenLavka') : currentAiProvider.toUpperCase();
+                aiMsg.innerHTML = `<span style="color:#ff453a;">⚠️ Ошибка запроса к ${provLabel}: ${err.message}.</span><br><br>` +
                                   generateOfflineAiResponse(text);
             }
             body.scrollTop = body.scrollHeight;
@@ -2567,7 +2775,7 @@
             if (!box) return;
             box.style.display = 'block';
             const real = app.realName || app.name;
-            const modelName = currentAiProvider === 'gemini' ? 'Gemini 1.5' : (currentAiProvider === 'deepseek' ? 'DeepSeek V3' : (currentAiProvider === 'openai' ? 'GPT-4o' : 'Нейросеть'));
+            const modelName = getActiveModelDisplayName();
             box.innerHTML = `<span style="color:#d175ff;">🤖 ${modelName} анализирует ${real}...</span>`;
 
             if (type === 'live' || (aiApiKeys[currentAiProvider] && currentAiProvider !== 'offline')) {

@@ -401,6 +401,9 @@ def query_llm_disguised_app(name, bundle_id, size_str=""):
     Интеграция с реальными LLM: Google Gemini, DeepSeek или OpenAI.
     Автоматически анализирует маскировку приложения при наличии API-ключа.
     """
+    tokenlavka_key = os.environ.get("TOKENLAVKA_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")
+    tokenlavka_model = os.environ.get("TOKENLAVKA_MODEL") or os.environ.get("ANTHROPIC_MODEL") or "deepseek-v4-flash"
+    tokenlavka_base = os.environ.get("TOKENLAVKA_BASE_URL") or os.environ.get("ANTHROPIC_BASE_URL") or "https://tokenlavka.com"
     gemini_key = os.environ.get("GEMINI_API_KEY")
     deepseek_key = os.environ.get("DEEPSEEK_API_KEY")
     openai_key = os.environ.get("OPENAI_API_KEY")
@@ -424,7 +427,26 @@ Bundle ID: "{bundle_id}"
   "aiVerdict": "Развернутый вердикт нейросети"
 }}
 """
-    if gemini_key:
+    if tokenlavka_key:
+        try:
+            import urllib.request
+            url = f"{tokenlavka_base.rstrip('/')}/v1/chat/completions"
+            payload = json.dumps({
+                "model": tokenlavka_model,
+                "messages": [{"role": "user", "content": prompt}],
+                "response_format": {"type": "json_object"}
+            }).encode("utf-8")
+            req = urllib.request.Request(url, data=payload, headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {tokenlavka_key}"
+            })
+            with urllib.request.urlopen(req, timeout=12) as r:
+                res = json.loads(r.read().decode("utf-8"))
+                text = res["choices"][0]["message"]["content"]
+                return json.loads(text)
+        except Exception as e:
+            print(f"[AI LLM] TokenLavka ({tokenlavka_model}) error: {e}")
+    elif gemini_key:
         try:
             import urllib.request
             url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
