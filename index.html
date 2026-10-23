@@ -826,16 +826,19 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.65);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             z-index: 1000;
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 20px 12px;
             opacity: 0;
             transition: opacity 0.25s ease;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            box-sizing: border-box;
         }
 
         .modal-overlay.active {
@@ -844,19 +847,40 @@
         }
 
         .modal-sheet {
-            background: rgba(28, 28, 30, 0.95);
+            background: rgba(28, 28, 30, 0.96);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-top: 1px solid rgba(255, 255, 255, 0.35);
             backdrop-filter: blur(36px);
             -webkit-backdrop-filter: blur(36px);
             border-radius: 26px;
             width: 100%;
-            max-width: 380px;
+            max-width: 420px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            margin: auto;
             padding: 24px;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
             transform: scale(0.9);
             transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
             position: relative;
+            box-sizing: border-box;
+        }
+
+        .modal-sheet::-webkit-scrollbar {
+            width: 5px;
+        }
+        .modal-sheet::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+        .modal-sheet::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.22);
+            border-radius: 10px;
+        }
+        .modal-sheet::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.38);
         }
 
         .modal-overlay.active .modal-sheet {
@@ -1043,156 +1067,6 @@
             fill: currentColor;
         }
 
-        /* СКРЫТНАЯ ПАНЕЛЬ (DEV HUD) */
-        .hud-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .hud-overlay.active {
-            display: flex;
-        }
-
-        .hud-panel {
-            background: #11141a;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 440px;
-            padding: 24px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
-            font-family: 'JetBrains Mono', monospace;
-            color: #e5e5ea;
-        }
-
-        .hud-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 12px;
-        }
-
-        .hud-header h3 {
-            font-size: 13px;
-            font-weight: 600;
-            color: #30d158;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .hud-header h3::before {
-            content: "";
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #30d158;
-            box-shadow: 0 0 8px #30d158;
-        }
-
-        .hud-close {
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .hud-lock-screen {
-            text-align: center;
-            padding: 10px 10px 15px;
-        }
-
-        .touch-icon {
-            font-size: 46px;
-            margin-bottom: 14px;
-            display: inline-block;
-            filter: drop-shadow(0 0 12px rgba(10, 132, 255, 0.5));
-        }
-
-        .hud-lock-btn {
-            background: #0a84ff;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 20px;
-            font-family: inherit;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .hud-reset-link {
-            display: inline-block;
-            margin-top: 18px;
-            background: none;
-            border: none;
-            color: rgba(255, 69, 58, 0.85);
-            font-family: inherit;
-            font-size: 11px;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
-        .hud-group {
-            margin-bottom: 16px;
-        }
-
-        .hud-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 6px;
-            display: block;
-        }
-
-        .hud-input, .hud-select {
-            width: 100%;
-            background: #1c2029;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            padding: 10px 12px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 12px;
-            outline: none;
-        }
-
-        .hud-dropzone {
-            border: 2px dashed rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .hud-status {
-            font-size: 11px;
-            margin-top: 14px;
-            padding: 10px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            display: none;
-            word-break: break-all;
-        }
 
         /* AI HUB & NEURAL CORE STYLES */
         .header-actions {
@@ -1519,7 +1393,7 @@
 
     <div class="wrapper">
         <header>
-            <div class="header-title-box" id="logoBox" title="Тройной клик для панели управления">
+            <div class="header-title-box" id="logoBox">
                 <h1>IPA Studio</h1>
                 <p>Личный каталог приложений <span class="ai-header-pill">✨ Apple Intelligence Active</span></p>
             </div>
@@ -1683,63 +1557,6 @@
         </div>
     </div>
 
-    <!-- DEV HUD -->
-    <div class="hud-overlay" id="hudOverlay">
-        <div class="hud-panel">
-            <div class="hud-header">
-                <h3>SECURITY CONSOLE // DEV HUD</h3>
-                <button class="hud-close" onclick="toggleHud(false)">✕</button>
-            </div>
-
-            <div id="hudLockedState" class="hud-lock-screen" style="display: none;">
-                <div class="touch-icon">🪪</div>
-                <p style="font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 18px;">
-                    Требуется подтверждение Touch ID
-                </p>
-                <div>
-                    <button class="hud-lock-btn" onclick="authenticateUser()">
-                        <span>Войти через Touch ID</span>
-                    </button>
-                </div>
-                <button class="hud-reset-link" onclick="resetBiometrics()">
-                    Сбросить Touch ID / Сменить токен
-                </button>
-            </div>
-
-            <div id="hudMainContent" style="display: none;">
-                <div class="hud-group" id="tokenGroup">
-                    <label class="hud-label">GitHub Access Token</label>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="password" id="hudToken" class="hud-input" placeholder="ghp_xxxxxxxxxxxxxxx">
-                        <button class="hud-lock-btn" id="saveBiometricBtn" style="padding: 0 14px; font-size: 11px; white-space: nowrap;" onclick="enrollBiometrics()">
-                            Touch ID
-                        </button>
-                    </div>
-                </div>
-
-                <div class="hud-group">
-                    <label class="hud-label">Целевое приложение</label>
-                    <select id="hudAppSelect" class="hud-select"></select>
-                </div>
-
-                <div class="hud-group">
-                    <label class="hud-label">Загрузка иконки</label>
-                    <div class="hud-dropzone" onclick="document.getElementById('hudFileInput').click()">
-                        <p id="hudDropText">Нажми для выбора файла иконки</p>
-                    </div>
-                    <input type="file" id="hudFileInput" accept="image/png, image/jpeg" style="display:none;">
-                </div>
-
-                <div id="hudStatus" class="hud-status"></div>
-
-                <div style="margin-top: 16px; padding-top: 12px; border-top: 1px dashed rgba(255, 255, 255, 0.1); text-align: center;">
-                    <button class="hud-reset-link" onclick="resetBiometrics()">
-                        ⚠️ Отвязать Touch ID и сбросить токен
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- AI NEURAL HUB MODAL (Gemini / DeepSeek / OpenAI / Offline) -->
     <div class="ai-modal-overlay" id="aiModalOverlay">
@@ -1819,7 +1636,6 @@
         let currentAccountFilter = 'all';
         let currentCategoryFilter = 'all';
         let currentSort = 'category';
-        let isAuthenticated = false;
 
         const themeBtn = document.getElementById('themeBtn');
         let isDark = true;
@@ -2037,7 +1853,6 @@
                 buildCategoryTabs();
                 buildAccountTabs();
                 renderApps();
-                populateHudSelect();
             } catch (e) {
                 console.warn(e);
                 document.getElementById('appsGrid').innerHTML = `
@@ -2832,192 +2647,12 @@ Bundle ID: "${app.bundleId}"
             document.body.style.overflow = '';
         }
 
-        /* WEBAUTHN / HUD */
-        async function enrollBiometrics() {
-            const token = document.getElementById('hudToken').value.trim();
-            if (!token.startsWith('ghp_')) {
-                alert('Введи корректный токен ghp_!');
-                return;
-            }
-            try {
-                if (window.PublicKeyCredential) {
-                    const challenge = new Uint8Array(32);
-                    window.crypto.getRandomValues(challenge);
-                    await navigator.credentials.create({
-                        publicKey: {
-                            challenge: challenge,
-                            rp: { name: "IPA Studio Console" },
-                            user: { id: new Uint8Array([1, 2, 3, 4]), name: "admin", displayName: "Administrator" },
-                            pubKeyCredParams: [{ alg: -7, type: "public-key" }],
-                            authenticatorSelection: { userVerification: "required" },
-                            timeout: 60000
-                        }
-                    });
-                }
-                localStorage.setItem('gh_token_vault', btoa(token));
-                localStorage.setItem('has_touch_id', 'true');
-                isAuthenticated = true;
-                document.getElementById('tokenGroup').style.display = 'none';
-                alert('Touch ID привязан!');
-            } catch (err) {
-                localStorage.setItem('gh_token_vault', btoa(token));
-                isAuthenticated = true;
-                document.getElementById('tokenGroup').style.display = 'none';
-                alert('Токен сохранен.');
-            }
-        }
-
-        async function authenticateUser() {
-            try {
-                if (window.PublicKeyCredential) {
-                    const challenge = new Uint8Array(32);
-                    window.crypto.getRandomValues(challenge);
-                    await navigator.credentials.get({
-                        publicKey: { challenge: challenge, userVerification: "required", timeout: 60000 }
-                    });
-                }
-                unlockConsole();
-            } catch (err) {
-                const pass = prompt('Введи токен ghp_ вручную:');
-                if (pass && btoa(pass.trim()) === localStorage.getItem('gh_token_vault')) {
-                    unlockConsole();
-                } else if (pass) {
-                    alert('Неверный ключ!');
-                }
-            }
-        }
-
-        function resetBiometrics() {
-            if (confirm('Сбросить привязку Touch ID и токен?')) {
-                localStorage.removeItem('gh_token_vault');
-                localStorage.removeItem('has_touch_id');
-                isAuthenticated = false;
-                document.getElementById('hudToken').value = '';
-                document.getElementById('hudLockedState').style.display = 'none';
-                document.getElementById('hudMainContent').style.display = 'block';
-                document.getElementById('tokenGroup').style.display = 'block';
-            }
-        }
-
-        function unlockConsole() {
-            isAuthenticated = true;
-            document.getElementById('hudLockedState').style.display = 'none';
-            document.getElementById('hudMainContent').style.display = 'block';
-            document.getElementById('tokenGroup').style.display = 'none';
-        }
-
-        function toggleHud(show) {
-            const hud = document.getElementById('hudOverlay');
-            if (show) {
-                const hasVault = localStorage.getItem('gh_token_vault');
-                if (hasVault && !isAuthenticated) {
-                    document.getElementById('hudLockedState').style.display = 'block';
-                    document.getElementById('hudMainContent').style.display = 'none';
-                } else if (hasVault && isAuthenticated) {
-                    unlockConsole();
-                } else {
-                    document.getElementById('hudLockedState').style.display = 'none';
-                    document.getElementById('hudMainContent').style.display = 'block';
-                    document.getElementById('tokenGroup').style.display = 'block';
-                }
-                hud.classList.add('active');
-            } else {
-                hud.classList.remove('active');
-            }
-        }
-
-        function populateHudSelect() {
-            const select = document.getElementById('hudAppSelect');
-            select.innerHTML = '';
-            appsData.forEach(app => {
-                const opt = document.createElement('option');
-                opt.value = app.bundleId;
-                opt.textContent = `${app.name} (${app.account || 'Unknown'})`;
-                select.appendChild(opt);
-            });
-        }
-
+        // Закрытие модальных окон по Escape
         window.addEventListener('keydown', (e) => {
-            if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.code === 'KeyD') {
-                e.preventDefault();
-                toggleHud(!document.getElementById('hudOverlay').classList.contains('active'));
+            if (e.key === 'Escape' || e.code === 'Escape') {
+                closeModal();
+                toggleAiModal(false);
             }
-        });
-
-        let tapCount = 0;
-        let tapTimer = null;
-        document.getElementById('logoBox').addEventListener('click', () => {
-            tapCount++;
-            clearTimeout(tapTimer);
-            tapTimer = setTimeout(() => { tapCount = 0; }, 500);
-            if (tapCount === 3) {
-                tapCount = 0;
-                toggleHud(true);
-            }
-        });
-
-        document.getElementById('hudFileInput').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const vault = localStorage.getItem('gh_token_vault');
-            const token = vault ? atob(vault) : document.getElementById('hudToken').value.trim();
-            const statusEl = document.getElementById('hudStatus');
-            statusEl.style.display = 'block';
-
-            if (!token) {
-                statusEl.style.color = '#ff453a';
-                statusEl.innerText = '[ERROR] Токен не найден!';
-                return;
-            }
-
-            const bundleId = document.getElementById('hudAppSelect').value;
-            const targetApp = appsData.find(a => a.bundleId === bundleId);
-            statusEl.style.color = '#ff9f0a';
-            statusEl.innerText = `[INFO] Загрузка иконки для ${bundleId}...`;
-
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async () => {
-                const base64Content = reader.result.split(',')[1];
-                const filePath = `icons/${bundleId}.png`;
-
-                try {
-                    let sha = null;
-                    const getRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}`, {
-                        headers: { 'Authorization': `token ${token}` }
-                    });
-                    if (getRes.ok) {
-                        const fileInfo = await getRes.json();
-                        sha = fileInfo.sha;
-                    }
-
-                    const putRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: `Update icon for ${bundleId}`,
-                            content: base64Content,
-                            sha: sha || undefined
-                        })
-                    });
-
-                    if (!putRes.ok) throw new Error(`HTTP ${putRes.status}`);
-
-                    const newUrl = `https://${REPO_OWNER.toLowerCase()}.github.io/${REPO_NAME}/${filePath}?t=${Date.now()}`;
-                    if (targetApp) targetApp.icon = newUrl;
-
-                    statusEl.style.color = '#30d158';
-                    statusEl.innerText = `[SUCCESS] Иконка сохранена!`;
-                    renderApps();
-                } catch (err) {
-                    statusEl.style.color = '#ff453a';
-                    statusEl.innerText = `[FAIL] ${err.message}`;
-                }
-            };
         });
 
         document.getElementById('searchInput').addEventListener('input', renderApps);
@@ -3033,8 +2668,6 @@ Bundle ID: "${app.bundleId}"
         window.addEventListener('click', (e) => {
             const modal = document.getElementById('appModal');
             if (e.target === modal) closeModal();
-            const hud = document.getElementById('hudOverlay');
-            if (e.target === hud) toggleHud(false);
             const aiModal = document.getElementById('aiModalOverlay');
             if (e.target === aiModal) toggleAiModal(false);
         });
