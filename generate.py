@@ -279,27 +279,26 @@ def extract_account_email(ipa_filename, metadata=None):
     """
     Extracts normalized Apple ID account email from filename or iTunesMetadata.plist.
     """
-    # 1. Filename suffix: ..._sinakayev@icloud.com.ipa or ..._f.sinakaev@ya.ru.ipa
-    fn_match = re.search(r'[\s._-]([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,10})\.ipa$', ipa_filename, re.IGNORECASE)
-    if fn_match:
-        return fn_match.group(1).lower().strip()
+    # 1. Search for clean email pattern in filename
+    if ipa_filename:
+        clean_fn = ipa_filename.replace(".ipa", "")
+        m = re.search(r'(?:^|[_\+\s\/\\:\-])([a-zA-Z0-9][a-zA-Z0-9.-]*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,10})$', clean_fn, re.IGNORECASE)
+        if not m:
+            m = re.search(r'(?:^|[_\+\s\/\\:\-])([a-zA-Z0-9][a-zA-Z0-9.-]*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,10})', clean_fn, re.IGNORECASE)
+        if m:
+            return m.group(1).lower().strip()
 
-    # 2. Any other email in filename
-    any_email = re.search(r'([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,10})', ipa_filename)
-    if any_email:
-        clean = any_email.group(1).lstrip("._-").lower().strip()
-        if "@" in clean and "." in clean.split("@")[-1]:
-            return clean
-
-    # 3. iTunesMetadata.plist
+    # 2. Check iTunesMetadata.plist for actual email (must contain @ and .)
     if metadata:
-        found = (
-            metadata.get("apple-id") or 
-            metadata.get("userName") or 
-            metadata.get("com.apple.iTunesStore.downloadInfo", {}).get("accountInfo", {}).get("AppleID")
-        )
-        if found:
-            return str(found).lower().strip()
+        for key in ["apple-id", "AppleID"]:
+            found = metadata.get(key)
+            if found and "@" in str(found) and "." in str(found).split("@")[-1]:
+                return str(found).lower().strip()
+        account_info = metadata.get("com.apple.iTunesStore.downloadInfo", {}).get("accountInfo", {})
+        if account_info and isinstance(account_info, dict):
+            found = account_info.get("AppleID")
+            if found and "@" in str(found) and "." in str(found).split("@")[-1]:
+                return str(found).lower().strip()
 
     return "sinakayev@icloud.com"
 

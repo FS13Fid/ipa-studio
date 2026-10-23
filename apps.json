@@ -47,12 +47,12 @@
     "name": "Online",
     "version": "17.6.1",
     "bundleId": "com.inv.gen",
-    "account": "fidel sinakaev",
+    "account": "sinakayev@icloud.com",
     "size": "507.4 МБ",
     "minIos": "15.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.inv.gen.png?t=1792787003",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.inv.gen.plist",
-    "description": "Приложение Online выгружено из учетной записи fidel sinakaev."
+    "description": "Приложение Online выгружено из учетной записи sinakayev@icloud.com."
   },
   {
     "name": "Ozon Банк",
@@ -80,12 +80,12 @@
     "name": "VK Mail",
     "version": "3.92.0",
     "bundleId": "com.vk.mail",
-    "account": "fidel sinakaev",
+    "account": "f.sinakaev@ya.ru",
     "size": "475.3 МБ",
     "minIos": "16.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.vk.mail.png?v=3.92.0",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.vk.mail.plist",
-    "description": "Приложение VK Mail выгружено из учетной записи fidel sinakaev."
+    "description": "Приложение VK Mail выгружено из учетной записи f.sinakaev@ya.ru."
   },
   {
     "name": "VK Messenger",
@@ -113,23 +113,23 @@
     "name": "VK Музыка",
     "version": "8.30.1",
     "bundleId": "com.music.vk",
-    "account": "fidel sinakaev",
+    "account": "f.sinakaev@ya.ru",
     "size": "180.7 МБ",
     "minIos": "16.6",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.music.vk.png?v=8.30.1",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.music.vk.plist",
-    "description": "Приложение VK Музыка выгружено из учетной записи fidel sinakaev."
+    "description": "Приложение VK Музыка выгружено из учетной записи f.sinakaev@ya.ru."
   },
   {
     "name": "Ак Барс Банк",
     "version": "3.156.0",
     "bundleId": "ru.abb.akbarsonline",
-    "account": "fidel sinakaev",
+    "account": "sinakayev@icloud.com",
     "size": "216.8 МБ",
     "minIos": "12.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.abb.akbarsonline.png?v=3.156.0",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.abb.akbarsonline.plist",
-    "description": "Приложение Ак Барс Банк выгружено из учетной записи fidel sinakaev."
+    "description": "Приложение Ак Барс Банк выгружено из учетной записи sinakayev@icloud.com."
   },
   {
     "name": "ВКонтакте",
@@ -157,12 +157,12 @@
     "name": "Деливери",
     "version": "26.39.0",
     "bundleId": "am.helix.Delivery-Club",
-    "account": "fidel sinakaev",
+    "account": "f.sinakaev@ya.ru",
     "size": "265.7 МБ",
     "minIos": "16.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/am.helix.Delivery-Club.png?v=26.39.0",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/am.helix.Delivery-Club.plist",
-    "description": "Приложение Деливери выгружено из учетной записи fidel sinakaev."
+    "description": "Приложение Деливери выгружено из учетной записи f.sinakaev@ya.ru."
   },
   {
     "name": "Купер",
@@ -212,34 +212,34 @@
     "name": "Т-Мобайл",
     "version": "4.9.1",
     "bundleId": "ru.mobile.timob",
-    "account": "fidel sinakaev",
+    "account": "sinakayev@icloud.com",
     "size": "221.5 МБ",
     "minIos": "16.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.mobile.timob.png?v=4.9.1",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.mobile.timob.plist",
-    "description": "Приложение Т-Мобайл выгружено из учетной записи fidel sinakaev."
+    "description": "Приложение Т-Мобайл выгружено из учетной записи sinakayev@icloud.com."
   },
   {
     "name": "Учёт надоя",
     "version": "1.2.2",
     "bundleId": "ru.nadoiaccount",
-    "account": "fidel sinakaev",
+    "account": "f.sinakaev@ya.ru",
     "size": "52.0 МБ",
     "minIos": "12.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.nadoiaccount.png?v=1.2.2",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.nadoiaccount.plist",
-    "description": "Приложение Учёт надоя выгружено из учетной записи fidel sinakaev."
+    "description": "Приложение Учёт надоя выгружено из учетной записи f.sinakaev@ya.ru."
   },
   {
     "name": "ЮMoney",
     "version": "11.12.0",
     "bundleId": "ru.yoo.money",
-    "account": "fidel sinakaev",
+    "account": "sinakayev@icloud.com",
     "size": "224.4 МБ",
     "minIos": "13.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.yoo.money.png?v=11.12.0",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.yoo.money.plist",
-    "description": "Приложение ЮMoney выгружено из учетной записи fidel sinakaev."
+    "description": "Приложение ЮMoney выгружено из учетной записи sinakayev@icloud.com."
   },
   {
     "name": "Яндекс Банк",

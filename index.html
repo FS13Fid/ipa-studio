@@ -939,11 +939,31 @@
             return num || 0;
         }
 
+        function cleanAccountEmail(acc) {
+            if (!acc) return 'sinakayev@icloud.com';
+            const str = String(acc).trim();
+            const m = str.match(/(?:^|[_\+\s\/\\:\-])([a-zA-Z0-9][a-zA-Z0-9.-]*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,10})/i);
+            if (m) return m[1].toLowerCase().trim();
+            if (str.includes('@')) {
+                const parts = str.split('@');
+                const user = parts[0].split(/[_\+\s\/\\:\-]/).pop();
+                const domain = parts[1].split(/[_\+\s\/\\:\/]/)[0];
+                if (user && domain) return (user + '@' + domain).toLowerCase().trim();
+            }
+            if (str.toLowerCase().includes('fidel') || str.toLowerCase().includes('sinakaev')) {
+                return 'f.sinakaev@ya.ru';
+            }
+            return 'sinakayev@icloud.com';
+        }
+
         async function loadApps() {
             try {
                 const res = await fetch('apps.json?t=' + Date.now());
                 if (!res.ok) throw new Error('apps.json не найден');
                 appsData = await res.json();
+                appsData.forEach(app => {
+                    app.account = cleanAccountEmail(app.account);
+                });
                 buildAccountTabs();
                 renderApps();
                 populateHudSelect();
@@ -959,23 +979,32 @@
         // Построение вкладок для фильтра по аккаунтам
         function buildAccountTabs() {
             const tabsContainer = document.getElementById('accountTabs');
-            const accounts = {};
+            tabsContainer.innerHTML = '';
 
+            const allTab = document.createElement('div');
+            allTab.className = 'account-tab' + (currentAccountFilter === 'all' ? ' active' : '');
+            allTab.dataset.acc = 'all';
+            allTab.innerHTML = `Все аккаунты <span class="count">${appsData.length}</span>`;
+            allTab.onclick = () => {
+                document.querySelectorAll('.account-tab').forEach(t => t.classList.remove('active'));
+                allTab.classList.add('active');
+                currentAccountFilter = 'all';
+                renderApps();
+            };
+            tabsContainer.appendChild(allTab);
+
+            const accounts = {};
             appsData.forEach(app => {
-                const acc = app.account || 'Без аккаунта';
+                const acc = cleanAccountEmail(app.account);
                 accounts[acc] = (accounts[acc] || 0) + 1;
             });
 
-            document.getElementById('countAll').innerText = appsData.length;
-
             // Генерируем кнопки для каждого найденного Apple ID
-            Object.keys(accounts).forEach(acc => {
+            Object.keys(accounts).sort().forEach(acc => {
                 const tab = document.createElement('div');
-                tab.className = 'account-tab';
+                tab.className = 'account-tab' + (currentAccountFilter === acc ? ' active' : '');
                 tab.dataset.acc = acc;
-                // Красиво сокращаем длинный email, если нужно
-                const displayAcc = acc.length > 20 ? acc.substring(0, 18) + '...' : acc;
-                tab.innerHTML = ` ${displayAcc} <span class="count">${accounts[acc]}</span>`;
+                tab.innerHTML = ` ${acc} <span class="count">${accounts[acc]}</span>`;
                 tab.onclick = () => {
                     document.querySelectorAll('.account-tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
@@ -984,13 +1013,6 @@
                 };
                 tabsContainer.appendChild(tab);
             });
-
-            document.querySelector('.account-tab[data-acc="all"]').onclick = function() {
-                document.querySelectorAll('.account-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                currentAccountFilter = 'all';
-                renderApps();
-            };
         }
 
         function renderApps() {
