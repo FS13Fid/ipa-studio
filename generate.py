@@ -409,6 +409,7 @@ def inspect_ipa(ipa_path, download_url, ipa_filename=None):
             "size": size_str,
             "minIos": min_ios or "14.0",
             "icon": icon_url,
+            "downloadUrl": download_url,
             "manifestUrl": f"{BASE_URL}/manifests/{manifest_filename}",
             "description": f"Приложение {name} выгружено из учетной записи {account_email}."
         }

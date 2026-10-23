@@ -8,7 +8,8 @@
     "minIos": "16.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.advancy.app.png?t=1792787003",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.advancy.app.plist",
-    "description": "Приложение Advance выгружено из учетной записи sinakayev@icloud.com."
+    "description": "Приложение Advance выгружено из учетной записи sinakayev@icloud.com.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/Advance.1.2.ipa"
   },
   {
     "name": "DocStorage",
@@ -19,7 +20,8 @@
     "minIos": "14.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.tomlevierr.docstorage.png?v=6.22",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.tomlevierr.docstorage.plist",
-    "description": "Приложение DocStorage выгружено из учетной записи sinakayev@icloud.com."
+    "description": "Приложение DocStorage выгружено из учетной записи sinakayev@icloud.com.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/DocStorage.6.22.ipa"
   },
   {
     "name": "EatsRate",
@@ -30,7 +32,8 @@
     "minIos": "16.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.paata.shihan.png?v=1.3",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.paata.shihan.plist",
-    "description": "Приложение EatsRate выгружено из учетной записи sinakayev@icloud.com."
+    "description": "Приложение EatsRate выгружено из учетной записи sinakayev@icloud.com.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/EatsRate.1.3.ipa"
   },
   {
     "name": "MAX",
@@ -41,7 +44,8 @@
     "minIos": "15.5",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.oneme.app.png?v=26.17.3",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.oneme.app.plist",
-    "description": "Приложение MAX выгружено из учетной записи f.sinakaev@ya.ru."
+    "description": "Приложение MAX выгружено из учетной записи f.sinakaev@ya.ru.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/MAX.26.17.3.ipa"
   },
   {
     "name": "Online",
@@ -52,7 +56,8 @@
     "minIos": "15.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.inv.gen.png?t=1792787003",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.inv.gen.plist",
-    "description": "Приложение Online выгружено из учетной записи sinakayev@icloud.com."
+    "description": "Приложение Online выгружено из учетной записи sinakayev@icloud.com.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/_._._._17.6.1_iOS_15.0%2B.ipa"
   },
   {
     "name": "Ozon Банк",
@@ -63,7 +68,8 @@
     "minIos": "15.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.ozon.fintech.finance.png?v=19.27.0",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.ozon.fintech.finance.plist",
-    "description": "Приложение Ozon Банк выгружено из учетной записи f.sinakaev@ya.ru."
+    "description": "Приложение Ozon Банк выгружено из учетной записи f.sinakaev@ya.ru.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/Ozon.19.27.0.ipa"
   },
   {
     "name": "Rave",
@@ -74,7 +80,8 @@
     "minIos": "15.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/sh.weme.wemesh.png?v=8.1.2",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/sh.weme.wemesh.plist",
-    "description": "Приложение Rave выгружено из учетной записи f.sinakaev@ya.ru."
+    "description": "Приложение Rave выгружено из учетной записи f.sinakaev@ya.ru.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/Rave.8.1.2.ipa"
   },
   {
     "name": "VK Mail",
@@ -85,7 +92,8 @@
     "minIos": "16.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.vk.mail.png?v=3.92.0",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.vk.mail.plist",
-    "description": "Приложение VK Mail выгружено из учетной записи f.sinakaev@ya.ru."
+    "description": "Приложение VK Mail выгружено из учетной записи f.sinakaev@ya.ru.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/_._.VK_Mail._3.92.0_iOS_16.0%2B.ipa"
   },
   {
     "name": "VK Messenger",
@@ -96,7 +104,8 @@
     "minIos": "17.6",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.vk.vkme.png?v=1.307",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.vk.vkme.plist",
-    "description": "Приложение VK Messenger выгружено из учетной записи sinakayev@icloud.com."
+    "description": "Приложение VK Messenger выгружено из учетной записи sinakayev@icloud.com.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/VK.Messenger.1.307.ipa"
   },
   {
     "name": "VK Video",
@@ -107,7 +116,8 @@
     "minIos": "17.6",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.vk.vkvideo.prod.png?v=8.183",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.vk.vkvideo.prod.plist",
-    "description": "Приложение VK Video выгружено из учетной записи f.sinakaev@ya.ru."
+    "description": "Приложение VK Video выгружено из учетной записи f.sinakaev@ya.ru.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/_._.VK_Video._8.183_iOS_17.6%2B.ipa"
   },
   {
     "name": "VK Музыка",
@@ -118,7 +128,8 @@
     "minIos": "16.6",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.music.vk.png?v=8.30.1",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.music.vk.plist",
-    "description": "Приложение VK Музыка выгружено из учетной записи f.sinakaev@ya.ru."
+    "description": "Приложение VK Музыка выгружено из учетной записи f.sinakaev@ya.ru.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/_._.VK_._8.30.1_iOS_16.6%2B.ipa"
   },
   {
     "name": "Ак Барс Банк",
@@ -129,7 +140,8 @@
     "minIos": "12.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.abb.akbarsonline.png?v=3.156.0",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.abb.akbarsonline.plist",
-    "description": "Приложение Ак Барс Банк выгружено из учетной записи sinakayev@icloud.com."
+    "description": "Приложение Ак Барс Банк выгружено из учетной записи sinakayev@icloud.com.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/_._._3.156.0_iOS_12.0%2B.ipa"
   },
   {
     "name": "ВКонтакте",
@@ -140,7 +152,8 @@
     "minIos": "17.6",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.vk.vkclient.png?v=8.183.1",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.vk.vkclient.plist",
-    "description": "Приложение ВКонтакте выгружено из учетной записи sinakayev@icloud.com."
+    "description": "Приложение ВКонтакте выгружено из учетной записи sinakayev@icloud.com.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/VK.8.183.1.ipa"
   },
   {
     "name": "Вкусно — и точка",
@@ -151,7 +164,8 @@
     "minIos": "15.6",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.mcdonaldsru.mcd.png?v=14.2.1",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.mcdonaldsru.mcd.plist",
-    "description": "Приложение Вкусно — и точка выгружено из учетной записи sinakayev@icloud.com."
+    "description": "Приложение Вкусно — и точка выгружено из учетной записи sinakayev@icloud.com.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/14.2.1.ipa"
   },
   {
     "name": "Деливери",
@@ -162,7 +176,8 @@
     "minIos": "16.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/am.helix.Delivery-Club.png?v=26.39.0",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/am.helix.Delivery-Club.plist",
-    "description": "Приложение Деливери выгружено из учетной записи f.sinakaev@ya.ru."
+    "description": "Приложение Деливери выгружено из учетной записи f.sinakaev@ya.ru.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/_._._._26.39.0_iOS_16.0%2B.ipa"
   },
   {
     "name": "Купер",
@@ -173,7 +188,8 @@
     "minIos": "14.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.moiseev.png?v=10.0.36",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.moiseev.plist",
-    "description": "Приложение Купер выгружено из учетной записи sinakayev@icloud.com."
+    "description": "Приложение Купер выгружено из учетной записи sinakayev@icloud.com.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/10.0.36.ipa"
   },
   {
     "name": "Пассажирам",
@@ -184,7 +200,8 @@
     "minIos": "12.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.rzd.passenger.png?v=1.47.2",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.rzd.passenger.plist",
-    "description": "Приложение Пассажирам выгружено из учетной записи sinakayev@icloud.com."
+    "description": "Приложение Пассажирам выгружено из учетной записи sinakayev@icloud.com.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/Russian.Railways.1.47.2.ipa"
   },
   {
     "name": "Почта Mail.ru",
@@ -195,7 +212,8 @@
     "minIos": "16.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.mail.mail.png?v=15.92.0",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.mail.mail.plist",
-    "description": "Приложение Почта Mail.ru выгружено из учетной записи sinakayev@icloud.com."
+    "description": "Приложение Почта Mail.ru выгружено из учетной записи sinakayev@icloud.com.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/Mail.App.15.92.0.ipa"
   },
   {
     "name": "Сириус",
@@ -206,7 +224,8 @@
     "minIos": "16.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.sm.FlowTime.png?v=2.0.1",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.sm.FlowTime.plist",
-    "description": "Приложение Сириус выгружено из учетной записи f.sinakaev@ya.ru."
+    "description": "Приложение Сириус выгружено из учетной записи f.sinakaev@ya.ru.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/2.0.1.ipa"
   },
   {
     "name": "Т-Мобайл",
@@ -217,7 +236,8 @@
     "minIos": "16.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.mobile.timob.png?v=4.9.1",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.mobile.timob.plist",
-    "description": "Приложение Т-Мобайл выгружено из учетной записи sinakayev@icloud.com."
+    "description": "Приложение Т-Мобайл выгружено из учетной записи sinakayev@icloud.com.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/TIMOB_esim._call_recorder_4.9.1_iOS_16.0%2B.ipa"
   },
   {
     "name": "Учёт надоя",
@@ -228,7 +248,8 @@
     "minIos": "12.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.nadoiaccount.png?v=1.2.2",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.nadoiaccount.plist",
-    "description": "Приложение Учёт надоя выгружено из учетной записи f.sinakaev@ya.ru."
+    "description": "Приложение Учёт надоя выгружено из учетной записи f.sinakaev@ya.ru.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/_._._1.2.2_iOS_12.0%2B.ipa"
   },
   {
     "name": "ЮMoney",
@@ -239,7 +260,8 @@
     "minIos": "13.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.yoo.money.png?v=11.12.0",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.yoo.money.plist",
-    "description": "Приложение ЮMoney выгружено из учетной записи sinakayev@icloud.com."
+    "description": "Приложение ЮMoney выгружено из учетной записи sinakayev@icloud.com.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/Money_11.12.0_iOS_13.0%2B.ipa"
   },
   {
     "name": "Яндекс Банк",
@@ -250,6 +272,7 @@
     "minIos": "15.0",
     "icon": "https://fs13fid.github.io/ipa-studio/icons/com.yandex.fintech.bank-app.png?v=0.234.4",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.yandex.fintech.bank-app.plist",
-    "description": "Приложение Яндекс Банк выгружено из учетной записи f.sinakaev@ya.ru."
+    "description": "Приложение Яндекс Банк выгружено из учетной записи f.sinakaev@ya.ru.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/Yandex.Pay.0.234.4.ipa"
   }
 ]

@@ -430,24 +430,84 @@
             color: var(--text-secondary);
         }
 
-        .btn-install {
+        .card-actions {
             margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-install {
+            flex: 1;
             background: var(--btn-bg);
             color: var(--btn-text);
             text-decoration: none;
-            padding: 10px;
-            border-radius: 14px;
-            font-size: 14px;
+            padding: 9px 12px;
+            border-radius: 12px;
+            font-size: 13.5px;
             font-weight: 700;
             text-align: center;
-            display: block;
-            letter-spacing: 0.4px;
-            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.3px;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .btn-install:hover {
+            filter: brightness(1.2);
+            transform: translateY(-1px);
         }
 
         .btn-install:active {
-            filter: brightness(1.2);
             transform: scale(0.97);
+        }
+
+        .btn-download-ipa {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 9px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            flex-shrink: 0;
+        }
+
+        .btn-download-ipa:hover {
+            background: rgba(90, 200, 250, 0.18);
+            border-color: rgba(90, 200, 250, 0.35);
+            color: #5ac8fa;
+            transform: translateY(-1px);
+        }
+
+        .btn-download-ipa:active {
+            transform: scale(0.97);
+        }
+
+        .btn-download-ipa svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        [data-theme="light"] .btn-download-ipa {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .btn-download-ipa:hover {
+            background: rgba(0, 122, 255, 0.1);
+            border-color: rgba(0, 122, 255, 0.25);
+            color: #007aff;
         }
 
         /* МОДАЛКА */
@@ -591,17 +651,72 @@
             color: #fff;
         }
 
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
         .modal-install-btn {
+            flex: 1.2;
             background: #007aff;
             color: #ffffff;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
-            padding: 14px;
-            border-radius: 16px;
+            padding: 13px 16px;
+            border-radius: 14px;
             text-decoration: none;
-            display: block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
             text-align: center;
-            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.35);
+            box-shadow: 0 4px 16px rgba(0, 122, 255, 0.35);
+            transition: all 0.2s;
+        }
+
+        .modal-install-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .modal-install-btn:active {
+            transform: scale(0.98);
+        }
+
+        .modal-download-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #5ac8fa;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 13px 16px;
+            border-radius: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .modal-download-btn:hover {
+            background: rgba(90, 200, 250, 0.18);
+            border-color: rgba(90, 200, 250, 0.4);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .modal-download-btn:active {
+            transform: scale(0.98);
+        }
+
+        .modal-download-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
         }
 
         /* СКРЫТНАЯ ПАНЕЛЬ (DEV HUD) */
@@ -845,12 +960,13 @@
 
             <p id="modalDesc" class="modal-desc"></p>
 
-            <div style="display: flex; gap: 10px;">
-                <a id="modalInstallBtn" href="#" class="modal-install-btn" style="flex: 1;">
-                    Установить на iPhone
+            <div class="modal-actions">
+                <a id="modalInstallBtn" href="#" class="modal-install-btn">
+                    <span>Установить на iPhone</span>
                 </a>
-                <a id="modalDownloadIpaBtn" href="#" class="modal-install-btn" style="background: rgba(255,255,255,0.1); color: #5ac8fa; width: auto; padding: 14px 18px;" download>
-                    Скачать .IPA
+                <a id="modalDownloadIpaBtn" href="#" class="modal-download-btn" download>
+                    <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+                    <span>Скачать .IPA</span>
                 </a>
             </div>
         </div>
@@ -1055,6 +1171,9 @@
                 const itmsLink = `itms-services://?action=download-manifest&url=${encodeURIComponent(app.manifestUrl)}`;
                 const firstLetter = (app.name || 'A').charAt(0).toUpperCase();
                 const accText = app.account || 'App Store';
+                const dlUrl = app.downloadUrl || '';
+                const safeName = (app.name || 'app').replace(/[^\w\sа-яА-ЯёЁ.-]/gi, '').trim().replace(/\s+/g, '_');
+                const downloadAttr = `${safeName}_v${app.version || '1.0'}.ipa`;
 
                 card.innerHTML = `
                     <div class="app-header">
@@ -1074,7 +1193,16 @@
                         <span class="tag">v${app.version}</span>
                         <span class="tag">${app.size || 'IPA'}</span>
                     </div>
-                    <a class="btn-install" href="${itmsLink}" onclick="event.stopPropagation()">GET</a>
+                    <div class="card-actions">
+                        <a class="btn-install" href="${itmsLink}" onclick="event.stopPropagation()">GET</a>
+                        ${dlUrl ? `
+                        <a class="btn-download-ipa" href="${dlUrl}" download="${downloadAttr}" title="Скачать .IPA" onclick="event.stopPropagation()">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+                            </svg>
+                            <span>IPA</span>
+                        </a>` : ''}
+                    </div>
                 `;
                 grid.appendChild(card);
             });
@@ -1099,9 +1227,18 @@
             const itmsLink = `itms-services://?action=download-manifest&url=${encodeURIComponent(app.manifestUrl)}`;
             document.getElementById('modalInstallBtn').href = itmsLink;
 
-            const rawIpaUrl = `https://github.com/${REPO_OWNER}/${REPO_NAME}/releases/download/v1.0/${encodeURIComponent(app.account ? `${app.account}_${app.bundleId}_${app.version}.ipa` : `${app.name}.${app.version}.ipa`)}`;
+            const dlUrl = app.downloadUrl || '';
             const dlBtn = document.getElementById('modalDownloadIpaBtn');
-            if (dlBtn) dlBtn.href = rawIpaUrl;
+            if (dlBtn) {
+                if (dlUrl) {
+                    dlBtn.href = dlUrl;
+                    const safeName = (app.name || 'app').replace(/[^\w\sа-яА-ЯёЁ.-]/gi, '').trim().replace(/\s+/g, '_');
+                    dlBtn.setAttribute('download', `${safeName}_v${app.version || '1.0'}.ipa`);
+                    dlBtn.style.display = 'inline-flex';
+                } else {
+                    dlBtn.style.display = 'none';
+                }
+            }
 
             const modal = document.getElementById('appModal');
             modal.classList.add('active');
