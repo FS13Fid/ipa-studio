@@ -300,7 +300,38 @@ def extract_account_email(ipa_filename, metadata=None):
             if found and "@" in str(found) and "." in str(found).split("@")[-1]:
                 return str(found).lower().strip()
 
-    return "sinakayev@icloud.com"
+REMOVED_KEYWORDS = [
+    'com.inv.gen', 'ru.abb.akbarsonline', 'ru.yoo.money', 'ru.sberbank', 'sbol',
+    'ru.tcsbank', 'tinkoff', 'com.alfabank', 'ru.vtb', 'ru.moiseev', 'ru.rzd.passenger'
+]
+
+def classify_app(name, bundle_id, metadata=None):
+    text = f"{name} {bundle_id}".lower()
+    if metadata:
+        text += " " + str(metadata).lower()
+
+    # 1. Removed status
+    is_removed = any(k in text for k in REMOVED_KEYWORDS) or ('ак барс' in text) or ('online' in text and 'inv.gen' in text)
+
+    # 2. Category
+    if any(k in text for k in ['банк', 'bank', 'fintech', 'money', 'юmoney', 'online', 'inv.gen', 'платеж', 'pay', 'sbol', 'tcs', 'alfa']):
+        cat_id = 'finance'
+        cat_name = 'Банки и Финансы'
+        icon = '🏦'
+    elif any(k in text for k in ['еда', 'food', 'eats', 'купер', 'доставка', 'delivery', 'вкусно', 'mcd', 'маркет', 'ozon', 'shop', 'покупки', 'avito', 'kari', 'shihan']):
+        cat_id = 'shopping'
+        cat_name = 'Маркетплейсы и Еда'
+        icon = '🛍️'
+    elif any(k in text for k in ['vk', 'вконтакте', 'мессенджер', 'messenger', 'vkme', 'видео', 'video', 'музыка', 'music', 'rave', 'max', 'чат', 'chat', 'oneme', 'wemesh']):
+        cat_id = 'social'
+        cat_name = 'Соцсети и Медиа'
+        icon = '💬'
+    else:
+        cat_id = 'utilities'
+        cat_name = 'Сервисы и Утилиты'
+        icon = '⚙️'
+
+    return cat_id, cat_name, icon, is_removed
 
 def inspect_ipa(ipa_path, download_url, ipa_filename=None):
     if not ipa_filename:
@@ -401,6 +432,8 @@ def inspect_ipa(ipa_path, download_url, ipa_filename=None):
         with open(manifest_path, "w", encoding="utf-8") as f:
             f.write(manifest_content)
 
+        cat_id, cat_name, cat_icon, is_removed = classify_app(name, bundle_id, meta_data)
+
         return {
             "name": name,
             "version": version,
@@ -410,6 +443,10 @@ def inspect_ipa(ipa_path, download_url, ipa_filename=None):
             "minIos": min_ios or "14.0",
             "icon": icon_url,
             "downloadUrl": download_url,
+            "categoryId": cat_id,
+            "category": cat_name,
+            "categoryIcon": cat_icon,
+            "isRemoved": is_removed,
             "manifestUrl": f"{BASE_URL}/manifests/{manifest_filename}",
             "description": f"Приложение {name} выгружено из учетной записи {account_email}."
         }

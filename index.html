@@ -211,6 +211,78 @@
             pointer-events: none;
         }
 
+        /* Категории приложений в стиле App Store */
+        .category-tabs-wrapper {
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .category-tabs-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-tab {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+        }
+
+        .category-tab:hover {
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .category-tab.active {
+            background: var(--text-primary);
+            color: var(--bg-base);
+            border-color: var(--text-primary);
+        }
+
+        .category-tab.tab-removed {
+            border-color: rgba(255, 69, 58, 0.35);
+            color: #ff6961;
+        }
+
+        .category-tab.tab-removed.active {
+            background: #ff453a;
+            color: #ffffff;
+            border-color: #ff453a;
+        }
+
+        .category-tab .count {
+            font-size: 10.5px;
+            font-weight: 700;
+            opacity: 0.8;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 2px 7px;
+            border-radius: 10px;
+        }
+
+        .category-tab.active .count {
+            background: rgba(0, 0, 0, 0.2);
+            color: inherit;
+        }
+
         /* Фильтры аккаунтов */
         .filter-sort-bar {
             margin-bottom: 24px;
@@ -396,7 +468,14 @@
             text-overflow: ellipsis;
         }
 
-        /* Бейдж аккаунта */
+        /* Бейджи карточки */
+        .card-badges {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
         .account-badge {
             display: inline-flex;
             align-items: center;
@@ -406,13 +485,45 @@
             color: #5ac8fa;
             background: rgba(90, 200, 250, 0.1);
             border: 1px solid rgba(90, 200, 250, 0.2);
-            padding: 4px 8px;
+            padding: 3px 8px;
             border-radius: 8px;
-            width: fit-content;
             max-width: 100%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        .category-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3px 8px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        [data-theme="light"] .category-pill {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        .removed-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #ff453a;
+            background: rgba(255, 69, 58, 0.12);
+            border: 1px solid rgba(255, 69, 58, 0.28);
+            padding: 3px 8px;
+            border-radius: 8px;
+            white-space: nowrap;
         }
 
         .app-tags {
@@ -595,28 +706,43 @@
             position: relative;
         }
 
-        .modal-account-box {
+        .modal-info-rows {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 10px 14px;
+            border-radius: 14px;
+            padding: 8px 14px;
             margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .modal-info-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .modal-account-label {
+        .modal-info-row:last-child {
+            border-bottom: none;
+        }
+
+        .modal-info-label {
             font-size: 11px;
             text-transform: uppercase;
             color: var(--text-secondary);
             font-weight: 700;
         }
 
-        .modal-account-val {
+        .modal-info-val {
             font-size: 12.5px;
             font-weight: 600;
-            color: #5ac8fa;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .modal-desc {
@@ -895,6 +1021,13 @@
             <input type="text" class="search-bar" id="searchInput" placeholder="Поиск по названию или bundle id...">
         </div>
 
+        <!-- Категории приложений в стиле App Store -->
+        <div class="category-tabs-wrapper" id="categoryTabs">
+            <div class="category-tab active" data-cat="all">
+                <span>⚡</span> <span>Все приложения</span> <span class="count" id="countCatAll">0</span>
+            </div>
+        </div>
+
         <!-- Вкладки фильтрации по Apple ID и сортировка -->
         <div class="filter-sort-bar">
             <div class="account-tabs-wrapper" id="accountTabs">
@@ -905,8 +1038,10 @@
             <div class="sort-container">
                 <label class="sort-label">Сортировка:</label>
                 <select id="sortSelect" class="sort-select">
-                    <option value="name-asc">По названию (А → Я)</option>
+                    <option value="category">По категориям (как в App Store)</option>
+                    <option value="name-asc" selected>По названию (А → Я)</option>
                     <option value="name-desc">По названию (Я → А)</option>
+                    <option value="removed">🚫 Удаленные из App Store сначала</option>
                     <option value="size-desc">По размеру (большие сначала)</option>
                     <option value="size-asc">По размеру (маленькие сначала)</option>
                     <option value="version-desc">По версии (новые)</option>
@@ -937,10 +1072,20 @@
                 </div>
             </div>
 
-            <!-- Строка учетной записи Apple ID -->
-            <div class="modal-account-box">
-                <span class="modal-account-label">Apple ID</span>
-                <span id="modalAccount" class="modal-account-val"></span>
+            <!-- Строки метаданных: категория, статус, Apple ID -->
+            <div class="modal-info-rows">
+                <div class="modal-info-row">
+                    <span class="modal-info-label">Категория</span>
+                    <span id="modalCategory" class="modal-info-val">-</span>
+                </div>
+                <div class="modal-info-row">
+                    <span class="modal-info-label">Статус App Store</span>
+                    <span id="modalStoreStatus" class="modal-info-val">-</span>
+                </div>
+                <div class="modal-info-row">
+                    <span class="modal-info-label">Apple ID</span>
+                    <span id="modalAccount" class="modal-info-val" style="color: #5ac8fa;">-</span>
+                </div>
             </div>
 
             <div class="modal-specs">
@@ -1036,7 +1181,8 @@
 
         let appsData = [];
         let currentAccountFilter = 'all';
-        let currentSort = 'name-asc';
+        let currentCategoryFilter = 'all';
+        let currentSort = 'category';
         let isAuthenticated = false;
 
         const themeBtn = document.getElementById('themeBtn');
@@ -1072,6 +1218,34 @@
             return 'sinakayev@icloud.com';
         }
 
+        function classifyAppClient(app) {
+            if (app.categoryId && app.category && app.categoryIcon) return;
+            const REMOVED_KEYWORDS = [
+                'com.inv.gen', 'ru.abb.akbarsonline', 'ru.yoo.money', 'ru.sberbank', 'sbol',
+                'ru.tcsbank', 'tinkoff', 'com.alfabank', 'ru.vtb', 'ru.moiseev', 'ru.rzd.passenger'
+            ];
+            const text = `${app.name || ''} ${app.bundleId || ''} ${app.description || ''}`.toLowerCase();
+            app.isRemoved = Boolean(app.isRemoved || REMOVED_KEYWORDS.some(k => text.includes(k)) || text.includes('ак барс') || (text.includes('online') && text.includes('inv.gen')));
+
+            if (['банк', 'bank', 'fintech', 'money', 'юmoney', 'online', 'inv.gen', 'платеж', 'pay', 'sbol', 'tcs', 'alfa'].some(k => text.includes(k))) {
+                app.categoryId = 'finance';
+                app.category = 'Банки и Финансы';
+                app.categoryIcon = '🏦';
+            } else if (['еда', 'food', 'eats', 'купер', 'доставка', 'delivery', 'вкусно', 'mcd', 'маркет', 'ozon', 'shop', 'покупки', 'avito', 'kari', 'shihan'].some(k => text.includes(k))) {
+                app.categoryId = 'shopping';
+                app.category = 'Маркетплейсы и Еда';
+                app.categoryIcon = '🛍️';
+            } else if (['vk', 'вконтакте', 'мессенджер', 'messenger', 'vkme', 'видео', 'video', 'музыка', 'music', 'rave', 'max', 'чат', 'chat', 'oneme', 'wemesh'].some(k => text.includes(k))) {
+                app.categoryId = 'social';
+                app.category = 'Соцсети и Медиа';
+                app.categoryIcon = '💬';
+            } else {
+                app.categoryId = 'utilities';
+                app.category = 'Сервисы и Утилиты';
+                app.categoryIcon = '⚙️';
+            }
+        }
+
         async function loadApps() {
             try {
                 const res = await fetch('apps.json?t=' + Date.now());
@@ -1079,7 +1253,9 @@
                 appsData = await res.json();
                 appsData.forEach(app => {
                     app.account = cleanAccountEmail(app.account);
+                    classifyAppClient(app);
                 });
+                buildCategoryTabs();
                 buildAccountTabs();
                 renderApps();
                 populateHudSelect();
@@ -1090,6 +1266,43 @@
                         Каталог обновляется...
                     </div>`;
             }
+        }
+
+        // Построение вкладок категорий (App Store)
+        function buildCategoryTabs() {
+            const container = document.getElementById('categoryTabs');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const categories = [
+                { id: 'all', name: 'Все приложения', icon: '⚡' },
+                { id: 'finance', name: 'Банки и Финансы', icon: '🏦' },
+                { id: 'removed', name: 'Удалено из App Store', icon: '🚫', isRemovedTab: true },
+                { id: 'shopping', name: 'Маркетплейсы и Еда', icon: '🛍️' },
+                { id: 'social', name: 'Соцсети и Медиа', icon: '💬' },
+                { id: 'utilities', name: 'Сервисы и Утилиты', icon: '⚙️' }
+            ];
+
+            categories.forEach(cat => {
+                let count = 0;
+                if (cat.id === 'all') count = appsData.length;
+                else if (cat.id === 'removed') count = appsData.filter(a => a.isRemoved).length;
+                else count = appsData.filter(a => a.categoryId === cat.id).length;
+
+                if (count === 0 && cat.id !== 'all') return;
+
+                const tab = document.createElement('div');
+                tab.className = `category-tab ${cat.isRemovedTab ? 'tab-removed' : ''} ${currentCategoryFilter === cat.id ? 'active' : ''}`;
+                tab.dataset.cat = cat.id;
+                tab.innerHTML = `<span>${cat.icon}</span> <span>${cat.name}</span> <span class="count">${count}</span>`;
+                tab.onclick = () => {
+                    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentCategoryFilter = cat.id;
+                    renderApps();
+                };
+                container.appendChild(tab);
+            });
         }
 
         // Построение вкладок для фильтра по аккаунтам
@@ -1138,10 +1351,13 @@
 
             const filtered = appsData.filter(app => {
                 const matchesAccount = currentAccountFilter === 'all' || app.account === currentAccountFilter;
+                const matchesCategory = currentCategoryFilter === 'all' || 
+                                        (currentCategoryFilter === 'removed' ? app.isRemoved : app.categoryId === currentCategoryFilter);
                 const matchesQuery = (app.name || '').toLowerCase().includes(query) || 
                                      (app.bundleId || '').toLowerCase().includes(query) ||
-                                     (app.account || '').toLowerCase().includes(query);
-                return matchesAccount && matchesQuery;
+                                     (app.account || '').toLowerCase().includes(query) ||
+                                     (app.category || '').toLowerCase().includes(query);
+                return matchesAccount && matchesCategory && matchesQuery;
             });
 
             if (filtered.length === 0) {
@@ -1154,6 +1370,17 @@
 
             // Сортировка
             filtered.sort((a, b) => {
+                if (currentSort === 'category') {
+                    const catOrder = { 'finance': 1, 'shopping': 2, 'social': 3, 'utilities': 4 };
+                    const diff = (catOrder[a.categoryId] || 99) - (catOrder[b.categoryId] || 99);
+                    if (diff !== 0) return diff;
+                    return (a.name || '').localeCompare(b.name || '', 'ru');
+                }
+                if (currentSort === 'removed') {
+                    if (a.isRemoved && !b.isRemoved) return -1;
+                    if (!a.isRemoved && b.isRemoved) return 1;
+                    return (a.name || '').localeCompare(b.name || '', 'ru');
+                }
                 if (currentSort === 'name-asc') return (a.name || '').localeCompare(b.name || '', 'ru');
                 if (currentSort === 'name-desc') return (b.name || '').localeCompare(a.name || '', 'ru');
                 if (currentSort === 'size-desc') return parseSizeInMb(b.size) - parseSizeInMb(a.size);
@@ -1186,8 +1413,10 @@
                             <div class="app-meta">${app.bundleId}</div>
                         </div>
                     </div>
-                    <div class="account-badge">
-                        <span></span> ${accText}
+                    <div class="card-badges">
+                        <span class="account-badge"> ${accText}</span>
+                        <span class="category-pill">${app.categoryIcon || '📦'} ${app.category || 'Приложение'}</span>
+                        ${app.isRemoved ? `<span class="removed-pill" title="Удалено из официального App Store">🚫 Удалено</span>` : ''}
                     </div>
                     <div class="app-tags">
                         <span class="tag">v${app.version}</span>
@@ -1220,6 +1449,19 @@
             document.getElementById('modalTitle').innerText = app.name;
             document.getElementById('modalBundle').innerText = app.bundleId;
             document.getElementById('modalAccount').innerText = app.account || 'Не указан';
+            
+            const catEl = document.getElementById('modalCategory');
+            if (catEl) catEl.innerHTML = `${app.categoryIcon || '📦'} ${app.category || 'Приложение'}`;
+
+            const storeStatusEl = document.getElementById('modalStoreStatus');
+            if (storeStatusEl) {
+                if (app.isRemoved) {
+                    storeStatusEl.innerHTML = `<span style="color: #ff453a; font-weight: 700;">🚫 Удалено из App Store</span>`;
+                } else {
+                    storeStatusEl.innerHTML = `<span style="color: #30d158; font-weight: 600;">✓ Доступно в App Store</span>`;
+                }
+            }
+
             document.getElementById('modalVersion').innerText = 'v' + app.version;
             document.getElementById('modalSize').innerText = app.size || 'IPA';
             document.getElementById('modalDesc').innerText = app.description || 'Приложение готово к установке.';
