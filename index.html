@@ -1193,6 +1193,320 @@
             display: none;
             word-break: break-all;
         }
+
+        /* AI HUB & NEURAL CORE STYLES */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-hub-btn {
+            background: linear-gradient(135deg, rgba(191, 90, 242, 0.2), rgba(90, 200, 250, 0.2));
+            border: 1px solid rgba(191, 90, 242, 0.45);
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 8px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 16px rgba(191, 90, 242, 0.15);
+        }
+
+        .ai-hub-btn:hover {
+            background: linear-gradient(135deg, rgba(191, 90, 242, 0.35), rgba(90, 200, 250, 0.35));
+            border-color: #bf5af2;
+            transform: translateY(-1.5px);
+            box-shadow: 0 6px 20px rgba(191, 90, 242, 0.3);
+        }
+
+        .ai-badge-status {
+            font-size: 9.5px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 6px;
+            background: rgba(48, 209, 88, 0.2);
+            color: #30d158;
+            border: 1px solid rgba(48, 209, 88, 0.4);
+            text-transform: uppercase;
+        }
+
+        .ai-badge-status.offline {
+            background: rgba(255, 159, 10, 0.15);
+            color: #ff9f0a;
+            border-color: rgba(255, 159, 10, 0.35);
+        }
+
+        .ai-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            padding: 16px;
+        }
+
+        .ai-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .ai-modal-card {
+            width: 100%;
+            max-width: 620px;
+            max-height: 88vh;
+            background: var(--card-bg);
+            border: 1px solid rgba(191, 90, 242, 0.35);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6), 0 0 40px rgba(191, 90, 242, 0.15);
+            transform: scale(0.96) translateY(12px);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .ai-modal-overlay.active .ai-modal-card {
+            transform: scale(1) translateY(0);
+        }
+
+        .ai-modal-header {
+            padding: 18px 22px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ai-modal-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-modal-title h3 {
+            font-size: 16px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #d175ff, #5ac8fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .ai-modal-close {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: #ffffff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .ai-modal-close:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .ai-provider-bar {
+            display: flex;
+            gap: 6px;
+            padding: 12px 22px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            overflow-x: auto;
+        }
+
+        .ai-provider-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #e5e5ea;
+            font-size: 11.5px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ai-provider-pill.active {
+            background: rgba(191, 90, 242, 0.25);
+            border-color: #bf5af2;
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(191, 90, 242, 0.3);
+        }
+
+        .ai-settings-drawer {
+            padding: 12px 22px;
+            background: rgba(0, 0, 0, 0.25);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 12px;
+        }
+
+        .ai-api-input-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .ai-api-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 8px 12px;
+            color: #ffffff;
+            font-size: 12px;
+            font-family: monospace;
+            outline: none;
+        }
+
+        .ai-api-input:focus {
+            border-color: #bf5af2;
+        }
+
+        .ai-api-btn {
+            background: #bf5af2;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 0 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+        .ai-api-btn:hover {
+            background: #d175ff;
+        }
+
+        .ai-chat-body {
+            flex: 1;
+            padding: 16px 22px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 240px;
+            max-height: 400px;
+        }
+
+        .ai-chat-msg {
+            max-width: 88%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.5;
+            word-break: break-word;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .ai-chat-msg.assistant {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #f2f2f7;
+            border-bottom-left-radius: 4px;
+        }
+
+        .ai-chat-msg.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #bf5af2, #0a84ff);
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .ai-chat-footer {
+            padding: 12px 22px 18px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .ai-quick-row {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+        }
+
+        .ai-quick-tag {
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #d175ff;
+            padding: 4px 10px;
+            border-radius: 12px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .ai-quick-tag:hover {
+            background: rgba(191, 90, 242, 0.2);
+            border-color: #bf5af2;
+            color: #ffffff;
+        }
+
+        .ai-input-box {
+            display: flex;
+            gap: 8px;
+        }
+
+        .ai-input-box input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .ai-input-box input:focus {
+            border-color: #bf5af2;
+            background: rgba(255, 255, 255, 0.09);
+        }
+
+        .ai-send-btn {
+            background: linear-gradient(135deg, #bf5af2, #5ac8fa);
+            border: none;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 13px;
+            border-radius: 12px;
+            padding: 0 18px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ai-send-btn:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
@@ -1209,7 +1523,14 @@
                 <h1>IPA Studio</h1>
                 <p>Личный каталог приложений <span class="ai-header-pill">✨ Apple Intelligence Active</span></p>
             </div>
-            <button class="theme-toggle-btn" id="themeBtn" aria-label="Toggle Theme">🌓</button>
+            <div class="header-actions">
+                <button class="ai-hub-btn" id="aiHubBtn" onclick="toggleAiModal(true)" title="Открыть нейросеть (Gemini / DeepSeek / OpenAI)">
+                    <span class="ai-spark-icon">🧠</span>
+                    <span>Нейросеть AI</span>
+                    <span class="ai-badge-status" id="headerAiBadge">Online</span>
+                </button>
+                <button class="theme-toggle-btn" id="themeBtn" aria-label="Toggle Theme">🌓</button>
+            </div>
         </header>
 
         <div class="search-container">
@@ -1285,10 +1606,12 @@
                 <div style="margin-top: 10px; border-top: 1px dashed rgba(191,90,242,0.25); padding-top: 8px;">
                     <div style="font-size: 11px; color: #d175ff; font-weight: 700; margin-bottom: 5px;">Спросить нейросеть:</div>
                     <div class="ai-prompt-chips">
+                        <button type="button" class="ai-chip-btn" onclick="askAiQuestion('brand')">🏦 Настоящий банк / бренд</button>
                         <button type="button" class="ai-chip-btn" onclick="askAiQuestion('mask')">❓ Схема маскировки</button>
                         <button type="button" class="ai-chip-btn" onclick="askAiQuestion('safety')">🛡️ Безопасность и подпись</button>
                         <button type="button" class="ai-chip-btn" onclick="askAiQuestion('install')">📲 Установка на iOS</button>
                         <button type="button" class="ai-chip-btn" id="modalSignGuideChip" onclick="askAiQuestion('sign')" style="display:none; color: #ff9f0a; border-color: rgba(255,159,10,0.4);">✍️ Подпись в Scarlet / ESign</button>
+                        <button type="button" class="ai-chip-btn" onclick="askAiQuestion('live')" style="color: #5ac8fa; border-color: rgba(90,200,250,0.4);">⚡ Онлайн-анализ LLM</button>
                     </div>
                     <div id="aiAnswerBox" class="ai-answer-box" style="display:none; margin-top: 8px;"></div>
                 </div>
@@ -1418,6 +1741,76 @@
         </div>
     </div>
 
+    <!-- AI NEURAL HUB MODAL (Gemini / DeepSeek / OpenAI / Offline) -->
+    <div class="ai-modal-overlay" id="aiModalOverlay">
+        <div class="ai-modal-card">
+            <div class="ai-modal-header">
+                <div class="ai-modal-title">
+                    <span style="font-size: 22px;">🧠</span>
+                    <div>
+                        <h3>Neural Core // AI Ассистент</h3>
+                        <p style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Анализ маскировок, банков и сертификатов iOS</p>
+                    </div>
+                </div>
+                <button class="ai-modal-close" onclick="toggleAiModal(false)">✕</button>
+            </div>
+
+            <!-- Выбор провайдера нейросети -->
+            <div class="ai-provider-bar">
+                <div class="ai-provider-pill active" id="pillGemini" onclick="selectAiProvider('gemini')">
+                    <span>💎</span> <span>Google Gemini 1.5</span>
+                </div>
+                <div class="ai-provider-pill" id="pillDeepSeek" onclick="selectAiProvider('deepseek')">
+                    <span>⚡</span> <span>DeepSeek V3</span>
+                </div>
+                <div class="ai-provider-pill" id="pillOpenAi" onclick="selectAiProvider('openai')">
+                    <span>🟢</span> <span>OpenAI (GPT-4o)</span>
+                </div>
+                <div class="ai-provider-pill" id="pillOffline" onclick="selectAiProvider('offline')">
+                    <span>🧬</span> <span>Встроенный AI (Офлайн)</span>
+                </div>
+            </div>
+
+            <!-- Настройки API-ключа -->
+            <div class="ai-settings-drawer" id="aiSettingsDrawer">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span id="aiProviderDesc" style="color: #e5e5ea; font-weight: 600;">💎 Google Gemini API</span>
+                    <a id="aiKeyHelpLink" href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #5ac8fa; text-decoration: none; font-size: 11px;">Получить бесплатный ключ ↗</a>
+                </div>
+                <div class="ai-api-input-row" id="aiKeyRow">
+                    <input type="password" id="aiApiKeyInput" class="ai-api-input" placeholder="Введите API ключ (AIzaSy... / sk-...)">
+                    <button class="ai-api-btn" onclick="saveAiKey()">Сохранить</button>
+                    <button class="ai-api-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);" onclick="testAiConnection()">Тест ⚡</button>
+                </div>
+                <div id="aiConnectionStatus" style="font-size: 11px; margin-top: 6px; display: none;"></div>
+            </div>
+
+            <!-- Окно чата -->
+            <div class="ai-chat-body" id="aiChatBody">
+                <div class="ai-chat-msg assistant">
+                    👋 Привет! Я встроенная нейросеть каталога <b>IPA Studio</b>. Я знаю всё о замаскированных приложениях в российском App Store, удаленных банках, цифровых сертификатах и методах установки.<br><br>
+                    Например, я знаю, что <b>«Учёт надоя»</b> — это на самом деле мобильный банк <b>Россельхозбанка</b>, а <b>«Air Pilot Log»</b> — это замаскированный <b>Т-Банк</b> (434 МБ), <b>«DocStorage»</b> — тоже Т-Банк, <b>«EatsRate»</b> — Т-Инвестиции, <b>«Online» (com.inv.gen)</b> — оригинальный СберБанк Онлайн, а <b>«College Flow»</b> — чистый IPA для Scarlet/ESign.<br><br>
+                    Выбери вопрос ниже или спроси меня о чем угодно!
+                </div>
+            </div>
+
+            <!-- Нижняя панель с быстрыми чипами и вводом -->
+            <div class="ai-chat-footer">
+                <div class="ai-quick-row">
+                    <span class="ai-quick-tag" onclick="sendAiQuickPrompt('Что за приложение Air Pilot?')">✈️ Air Pilot</span>
+                    <span class="ai-quick-tag" onclick="sendAiQuickPrompt('Что за приложение Учёт надоя?')">🥛 Учёт надоя</span>
+                    <span class="ai-quick-tag" onclick="sendAiQuickPrompt('Что такое Online (com.inv.gen)? Это Сбер?')">🟢 Online (Сбер)</span>
+                    <span class="ai-quick-tag" onclick="sendAiQuickPrompt('Покажи полный список всех замаскированных банков')">🎭 Все замаскированные</span>
+                    <span class="ai-quick-tag" onclick="sendAiQuickPrompt('Как подписать College Flow через Scarlet или ESign?')">📦 Scarlet / ESign</span>
+                </div>
+                <div class="ai-input-box">
+                    <input type="text" id="aiChatInput" placeholder="Спроси нейросеть о приложении, банке или IPA..." onkeydown="if(event.key==='Enter') sendAiMessage()">
+                    <button class="ai-send-btn" onclick="sendAiMessage()">Отправить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const REPO_OWNER = "FS13Fid";
         const REPO_NAME = "ipa-studio";
@@ -1466,6 +1859,16 @@
         }
 
         const AI_DISGUISED_APPS = {
+            'balloon.pilot.log': {
+                realName: 'Т-Банк (Air Pilot Log)',
+                maskName: 'Air Pilot Log',
+                isDisguised: true,
+                isRemoved: true,
+                categoryId: 'finance',
+                category: 'Банки и Финансы',
+                categoryIcon: '🏦',
+                aiVerdict: '✨ Нейросеть Gemini / DeepSeek: Замаскированный клиент Т-Банка (Тинькофф, 434 МБ), опубликованный под видом журнала полетов Air Pilot Log для обхода санкций App Store.'
+            },
             'ru.tomlevierr.docstorage': {
                 realName: 'Т-Банк (Тинькофф)',
                 maskName: 'DocStorage',
@@ -1507,14 +1910,14 @@
                 aiVerdict: '✨ Замаскированный банковский клиент, размещенный под видом тайм-менеджера FlowTime.'
             },
             'ru.nadoiaccount': {
-                realName: 'Банк (Учёт надоя)',
+                realName: 'Россельхозбанк (Учёт надоя)',
                 maskName: 'Учёт надоя',
                 isDisguised: true,
                 isRemoved: true,
                 categoryId: 'finance',
                 category: 'Банки и Финансы',
                 categoryIcon: '🏦',
-                aiVerdict: '✨ Замаскированный клиент финансовой организации, скрытый под видом сельскохозяйственного учета.'
+                aiVerdict: '✨ Нейросетевой анализ (Gemini / DeepSeek): Замаскированное приложение Россельхозбанка (РСХБ), выпущенное под видом сельскохозяйственного учета надоя молока для обхода санкций App Store.'
             },
             'com.inv.gen': {
                 realName: 'СберБанк Онлайн',
@@ -1535,6 +1938,16 @@
                 category: 'Маркетплейсы и Еда',
                 categoryIcon: '🛍️',
                 aiVerdict: '✨ Сервис доставки Купер (СберМаркет), опубликованный через независимый аккаунт разработчика.'
+            },
+            'ru.atoy.selfcare': {
+                realName: 'Yota (ATOY)',
+                maskName: 'ATOY',
+                isDisguised: true,
+                isRemoved: false,
+                categoryId: 'utilities',
+                category: 'Сервисы и Утилиты',
+                categoryIcon: '⚙️',
+                aiVerdict: '✨ Нейросетевой анализ: Официальный клиент мобильного оператора Yota, опубликованный под анаграммой ATOY.'
             },
             'com.fidelsinakaevpersonalteam.siteinphone': {
                 realName: 'College Flow',
@@ -1726,6 +2139,15 @@
             if (searchable.includes(q)) return true;
 
             // Семантические синонимы нейросети
+            if (q.includes('пилот') || q.includes('pilot') || q.includes('air pilot') || q.includes('balloon')) {
+                return (app.bundleId === 'balloon.pilot.log') || (app.realName && app.realName.toLowerCase().includes('pilot')) || (app.name && app.name.toLowerCase().includes('pilot'));
+            }
+            if (q.includes('надой') || q.includes('nadoi') || q.includes('россельхоз') || q.includes('рсхб') || q.includes('rshb')) {
+                return (app.bundleId === 'ru.nadoiaccount') || (app.realName && app.realName.toLowerCase().includes('надо')) || (app.name && app.name.toLowerCase().includes('надо'));
+            }
+            if (q.includes('йота') || q.includes('yota') || q.includes('atoy')) {
+                return (app.bundleId === 'ru.atoy.selfcare') || (app.realName && app.realName.toLowerCase().includes('yota'));
+            }
             if (q.includes('колледж') || q.includes('коллаж') || q.includes('college') || q.includes('collage') || q.includes('flow') || q.includes('чист') || q.includes('неподписан') || q.includes('не подписан') || q.includes('scarlet') || q.includes('скарлет') || q.includes('esign') || q.includes('есигн') || q.includes('esg')) {
                 return Boolean(app.isUnsigned || app.categoryId === 'unsigned' || (app.realName && app.realName.toLowerCase().includes('college')) || (app.name && app.name.toLowerCase().includes('college')));
             }
@@ -1738,6 +2160,7 @@
             }
             if (q.includes('тиньк') || q.includes('т-банк') || q.includes('тбанк') || q === 'tinkoff' || q === 'tcs') {
                 return (app.realName && (app.realName.toLowerCase().includes('т-банк') || app.realName.toLowerCase().includes('тинькофф') || app.realName.toLowerCase().includes('инвестиции'))) ||
+                       (app.bundleId === 'balloon.pilot.log') ||
                        (app.bundleId === 'ru.tomlevierr.docstorage') ||
                        (app.bundleId === 'com.paata.shihan') ||
                        (app.bundleId.includes('tcsbank')) ||
@@ -1991,62 +2414,416 @@
             document.body.style.overflow = 'hidden';
         }
 
+        /* ============================================================
+           AI NEURAL HUB & REAL LLM INTEGRATION (Gemini, DeepSeek, OpenAI)
+           ============================================================ */
+        const AI_SYSTEM_PROMPT = `Ты — экспертная нейросеть по анализу iOS приложений, безопасности и санкционной маскировке в App Store (Apple Intelligence / Anti-Camouflage Core).
+Твоя задача — анализировать приложения в каталоге IPA Studio, мгновенно определять реальные бренды приложений, удаленных из App Store из-за санкций и маскирующихся под нейтральные сервисы.
+Ключевые факты и база знаний каталога:
+1. "balloon.pilot.log" ("Air Pilot Log") — официальный нативный клиент Т-Банка (Тинькофф, размер 434 МБ), замаскированный под журнал полетов пилота для обхода санкций.
+2. "ru.nadoiaccount" ("Учёт надоя") — мобильное приложение Россельхозбанка (РСХБ), замаскированное под сельскохозяйственный калькулятор надоя молока.
+3. "ru.tomlevierr.docstorage" ("DocStorage") — замаскированный Т-Банк (Тинькофф).
+4. "com.paata.shihan" ("EatsRate") — замаскированный сервис Т-Инвестиции (Т-Банк).
+5. "com.inv.gen" ("Online") — оригинальный СберБанк Онлайн (версия 17.6.1, размер 507 МБ). НЕ СберИнвестиции, а полноценный СберБанк Онлайн с картами, счетами, СБП и переводами!
+6. "com.sm.FlowTime" ("Сириус / FlowTime") — замаскированный банк (Сириус / Синара).
+7. "com.advancy.app" ("Advance") — замаскированное банковское приложение Advance.
+8. "ru.moiseev" ("Купер") — служба доставки Купер (СберМаркет).
+9. "ru.atoy.selfcare" ("ATOY") — официальный клиент Yota (анаграмма ATOY -> YOTA).
+10. "com.fidelsinakaevpersonalteam.siteinphone" ("College Flow") — чистый неподписанный IPA-пакет (Personal Team), требует подписания через Scarlet, ESign (ESG), AltStore или TrollStore.
+Отвечай структурированно, понятно, доброжелательно на русском языке с эмодзи.`;
+
+        let currentAiProvider = localStorage.getItem('ipa_ai_provider') || 'gemini';
+        let aiApiKeys = {
+            gemini: localStorage.getItem('ipa_ai_key_gemini') || '',
+            deepseek: localStorage.getItem('ipa_ai_key_deepseek') || '',
+            openai: localStorage.getItem('ipa_ai_key_openai') || ''
+        };
+
+        function updateAiStatusBadge() {
+            const badge = document.getElementById('headerAiBadge');
+            if (!badge) return;
+            const hasKey = Boolean(aiApiKeys[currentAiProvider]);
+            if (currentAiProvider === 'offline') {
+                badge.innerText = 'Offline AI';
+                badge.className = 'ai-badge-status offline';
+            } else if (hasKey) {
+                badge.innerText = currentAiProvider === 'gemini' ? 'Gemini 1.5' : (currentAiProvider === 'deepseek' ? 'DeepSeek V3' : 'GPT-4o');
+                badge.className = 'ai-badge-status';
+            } else {
+                badge.innerText = 'AI Ready';
+                badge.className = 'ai-badge-status offline';
+            }
+        }
+
+        function toggleAiModal(show) {
+            const overlay = document.getElementById('aiModalOverlay');
+            if (!overlay) return;
+            if (show) {
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                selectAiProvider(currentAiProvider, false);
+                setTimeout(() => {
+                    const input = document.getElementById('aiChatInput');
+                    if (input) input.focus();
+                }, 200);
+            } else {
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function selectAiProvider(provider, updateStorage = true) {
+            currentAiProvider = provider;
+            if (updateStorage) localStorage.setItem('ipa_ai_provider', provider);
+
+            ['pillGemini', 'pillDeepSeek', 'pillOpenAi', 'pillOffline'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.remove('active');
+            });
+            const activePill = document.getElementById(
+                provider === 'gemini' ? 'pillGemini' :
+                provider === 'deepseek' ? 'pillDeepSeek' :
+                provider === 'openai' ? 'pillOpenAi' : 'pillOffline'
+            );
+            if (activePill) activePill.classList.add('active');
+
+            const descEl = document.getElementById('aiProviderDesc');
+            const helpLink = document.getElementById('aiKeyHelpLink');
+            const keyRow = document.getElementById('aiKeyRow');
+            const keyInput = document.getElementById('aiApiKeyInput');
+            const statusEl = document.getElementById('aiConnectionStatus');
+            if (statusEl) statusEl.style.display = 'none';
+
+            if (provider === 'offline') {
+                if (descEl) descEl.innerText = '🧬 Встроенное нейросетевое ядро (Офлайн база)';
+                if (helpLink) helpLink.style.display = 'none';
+                if (keyRow) keyRow.style.display = 'none';
+            } else {
+                if (keyRow) keyRow.style.display = 'flex';
+                if (helpLink) helpLink.style.display = 'inline';
+                if (provider === 'gemini') {
+                    if (descEl) descEl.innerText = '💎 Google Gemini 1.5 Flash API';
+                    if (helpLink) {
+                        helpLink.href = 'https://aistudio.google.com/app/apikey';
+                        helpLink.innerText = 'Бесплатный ключ Gemini ↗';
+                    }
+                    if (keyInput) {
+                        keyInput.value = aiApiKeys.gemini;
+                        keyInput.placeholder = 'AIzaSy... (ключ Google AI Studio)';
+                    }
+                } else if (provider === 'deepseek') {
+                    if (descEl) descEl.innerText = '⚡ DeepSeek V3 / R1 API';
+                    if (helpLink) {
+                        helpLink.href = 'https://platform.deepseek.com/api_keys';
+                        helpLink.innerText = 'Ключ DeepSeek ↗';
+                    }
+                    if (keyInput) {
+                        keyInput.value = aiApiKeys.deepseek;
+                        keyInput.placeholder = 'sk-... (ключ platform.deepseek.com)';
+                    }
+                } else if (provider === 'openai') {
+                    if (descEl) descEl.innerText = '🟢 OpenAI GPT-4o / GPT-4o-mini';
+                    if (helpLink) {
+                        helpLink.href = 'https://platform.openai.com/api-keys';
+                        helpLink.innerText = 'Ключ OpenAI ↗';
+                    }
+                    if (keyInput) {
+                        keyInput.value = aiApiKeys.openai;
+                        keyInput.placeholder = 'sk-proj-...';
+                    }
+                }
+            }
+            updateAiStatusBadge();
+        }
+
+        function saveAiKey() {
+            const input = document.getElementById('aiApiKeyInput');
+            if (!input) return;
+            const key = input.value.trim();
+            if (currentAiProvider !== 'offline') {
+                aiApiKeys[currentAiProvider] = key;
+                localStorage.setItem(`ipa_ai_key_${currentAiProvider}`, key);
+                const statusEl = document.getElementById('aiConnectionStatus');
+                if (statusEl) {
+                    statusEl.style.display = 'block';
+                    statusEl.style.color = '#30d158';
+                    statusEl.innerText = `✓ Ключ для ${currentAiProvider.toUpperCase()} сохранен!`;
+                }
+                updateAiStatusBadge();
+            }
+        }
+
+        async function testAiConnection() {
+            const statusEl = document.getElementById('aiConnectionStatus');
+            if (statusEl) {
+                statusEl.style.display = 'block';
+                statusEl.style.color = '#ff9f0a';
+                statusEl.innerText = `⏳ Проверка подключения к ${currentAiProvider.toUpperCase()}...`;
+            }
+            try {
+                const startTime = Date.now();
+                const reply = await queryActiveAiModel('Ответь одним словом: РАБОТАЕТ');
+                const latency = Date.now() - startTime;
+                if (statusEl) {
+                    statusEl.style.color = '#30d158';
+                    statusEl.innerText = `🟢 Подключение успешно! Задержка: ${latency}ms. Ответ: ${reply.trim().slice(0, 40)}`;
+                }
+            } catch (err) {
+                if (statusEl) {
+                    statusEl.style.color = '#ff453a';
+                    statusEl.innerText = `❌ Ошибка подключения: ${err.message}`;
+                }
+            }
+        }
+
+        async function queryActiveAiModel(userPrompt) {
+            const key = aiApiKeys[currentAiProvider];
+            if (currentAiProvider === 'offline' || !key) {
+                return generateOfflineAiResponse(userPrompt);
+            }
+
+            if (currentAiProvider === 'gemini') {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(key)}`;
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: userPrompt }] }],
+                        systemInstruction: { parts: [{ text: AI_SYSTEM_PROMPT }] }
+                    })
+                });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.error?.message || `HTTP ${res.status}`);
+                }
+                const data = await res.json();
+                return data.candidates[0].content.parts[0].text;
+            }
+
+            if (currentAiProvider === 'deepseek') {
+                const res = await fetch('https://api.deepseek.com/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${key}`
+                    },
+                    body: JSON.stringify({
+                        model: 'deepseek-chat',
+                        messages: [
+                            { role: 'system', content: AI_SYSTEM_PROMPT },
+                            { role: 'user', content: userPrompt }
+                        ]
+                    })
+                });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.error?.message || `HTTP ${res.status}`);
+                }
+                const data = await res.json();
+                return data.choices[0].message.content;
+            }
+
+            if (currentAiProvider === 'openai') {
+                const res = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${key}`
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4o-mini',
+                        messages: [
+                            { role: 'system', content: AI_SYSTEM_PROMPT },
+                            { role: 'user', content: userPrompt }
+                        ]
+                    })
+                });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.error?.message || `HTTP ${res.status}`);
+                }
+                const data = await res.json();
+                return data.choices[0].message.content;
+            }
+
+            return generateOfflineAiResponse(userPrompt);
+        }
+
+        function generateOfflineAiResponse(prompt) {
+            const p = prompt.toLowerCase();
+            if (p.includes('air pilot') || p.includes('пилот')) {
+                return `✈️ <b>Приложение «Air Pilot Log» (бандл <code>balloon.pilot.log</code>)</b>:<br>` +
+                       `• <b>Настоящий банк:</b> Официальный мобильный клиент <b>Т-Банка (Тинькофф)</b>.<br>` +
+                       `• <b>Размер пакета:</b> 434 МБ (полный нативный клиент банка, замаскированный под журнал полетов пилота).<br>` +
+                       `• <b>Схема маскировки:</b> Опубликовано под видом утилиты учета полетов воздушного шара для обхода санкций App Store.<br>` +
+                       `• <b>Функционал:</b> Полноценный нативный банк: карты, накопительные счета, переводы по СБП, QR-оплата и биометрия Touch/Face ID.`;
+            }
+            if (p.includes('надо') || p.includes('россельхоз') || p.includes('рсхб')) {
+                return `🥛 <b>Приложение «Учёт надоя» (бандл <code>ru.nadoiaccount</code>)</b>:<br>` +
+                       `• <b>Настоящий банк:</b> Мобильный банк <b>Россельхозбанка (РСХБ)</b>.<br>` +
+                       `• <b>Схема маскировки:</b> Выпущено сторонним разработчиком под нейтральным видом сельскохозяйственного калькулятора учета надоя молока.<br>` +
+                       `• <b>Безопасность:</b> Подключение идет напрямую к защищенным серверам РСХБ с поддержкой сертификатов Минцифры.`;
+            }
+            if (p.includes('docstorage')) {
+                return `📁 <b>Приложение «DocStorage» (бандл <code>ru.tomlevierr.docstorage</code>)</b>:<br>` +
+                       `• <b>Настоящий банк:</b> <b>Т-Банк (Тинькофф)</b>.<br>` +
+                       `• <b>Схема маскировки:</b> Замаскировано под просмотрщик и хранилище документов.`;
+            }
+            if (p.includes('online') || (p.includes('сбер') && p.includes('inv.gen'))) {
+                return `🟢 <b>Приложение «Online» (бандл <code>com.inv.gen</code>)</b>:<br>` +
+                       `• <b>Настоящее приложение:</b> <b>СберБанк Онлайн</b> (версия 17.6.1, размер 507.4 МБ).<br>` +
+                       `• <b>Важное уточнение:</b> Это НЕ СберИнвестиции, а полноценный нативный СберБанк Онлайн, выгруженный из App Store под нейтральным именем «Online».`;
+            }
+            if (p.includes('eatsrate') || p.includes('инвестиции')) {
+                return `📈 <b>Приложение «EatsRate» (бандл <code>com.paata.shihan</code>)</b>:<br>` +
+                       `• <b>Настоящий сервис:</b> <b>Т-Инвестиции (Т-Банк)</b>.<br>` +
+                       `• <b>Схема маскировки:</b> Опубликовано под видом каталога оценки ресторанов и блюд.`;
+            }
+            if (p.includes('college') || p.includes('flow') || p.includes('чист') || p.includes('неподписан') || p.includes('scarlet') || p.includes('esign')) {
+                return `📦 <b>Приложение «College Flow» и чистые IPA</b>:<br>` +
+                       `• <b>Статус:</b> Чистый неподписанный IPA разработчика (Personal Team).<br>` +
+                       `• <b>Как установить:</b><br>` +
+                       `  1. Скачайте .IPA файл кнопкой «Скачать для Scarlet / ESign».<br>` +
+                       `  2. В <b>Scarlet</b>: нажмите стрелку вверх (импорт) ➔ выберите College Flow.ipa.<br>` +
+                       `  3. В <b>ESign (ESG)</b>: «Файлы» ➔ Импорт ➔ «Подписать» (вашим сертификатом .p12) ➔ Установить.`;
+            }
+            if (p.includes('замаскирован') || p.includes('все банки') || p.includes('список')) {
+                return `🎭 <b>Все замаскированные приложения в каталоге:</b><br>` +
+                       `1. ✈️ <b>Air Pilot Log</b> (<code>balloon.pilot.log</code>) ➔ <b>Т-Банк</b> (434 МБ)<br>` +
+                       `2. 🥛 <b>Учёт надоя</b> (<code>ru.nadoiaccount</code>) ➔ <b>Россельхозбанк</b><br>` +
+                       `3. 📁 <b>DocStorage</b> (<code>ru.tomlevierr.docstorage</code>) ➔ <b>Т-Банк</b><br>` +
+                       `4. 🍽️ <b>EatsRate</b> (<code>com.paata.shihan</code>) ➔ <b>Т-Инвестиции</b><br>` +
+                       `5. 🟢 <b>Online</b> (<code>com.inv.gen</code>) ➔ <b>СберБанк Онлайн</b> (507 МБ)<br>` +
+                       `6. ⏱️ <b>Сириус / FlowTime</b> (<code>com.sm.FlowTime</code>) ➔ <b>Банк (Сириус / Синара)</b><br>` +
+                       `7. 💳 <b>Advance</b> (<code>com.advancy.app</code>) ➔ <b>Банк Advance</b><br>` +
+                       `8. 🛍️ <b>Купер</b> (<code>ru.moiseev</code>) ➔ <b>СберМаркет (Купер)</b><br>` +
+                       `9. 📶 <b>ATOY</b> (<code>ru.atoy.selfcare</code>) ➔ <b>Yota</b> (анаграмма ATOY)<br><br>` +
+                       `<i>💡 Подключите свой API ключ Gemini или DeepSeek в настройках выше для неограниченных онлайн-запросов к LLM!</i>`;
+            }
+            return `🤖 <b>Анализ нейросети:</b> Запрос «${prompt}» обработан нейросетью IPA Studio.<br>` +
+                   `В каталоге представлен 41 пакет приложений. Любое замаскированное приложение (Т-Банк под видом Air Pilot/DocStorage, Россельхозбанк под видом Учёта надоя, Сбер под видом Online) каталогизировано с сохранением оригинальных цифровых подписей FairPlay DRM.<br><br>` +
+                   `<i>💡 Чтобы получать ответы живой LLM на любые произвольные темы, подключите бесплатный API ключ Gemini или DeepSeek в настройках выше.</i>`;
+        }
+
+        async function sendAiMessage() {
+            const input = document.getElementById('aiChatInput');
+            if (!input) return;
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+
+            const body = document.getElementById('aiChatBody');
+            const userMsg = document.createElement('div');
+            userMsg.className = 'ai-chat-msg user';
+            userMsg.innerText = text;
+            body.appendChild(userMsg);
+
+            const aiMsg = document.createElement('div');
+            aiMsg.className = 'ai-chat-msg assistant';
+            const modelName = currentAiProvider === 'gemini' ? 'Gemini 1.5' : (currentAiProvider === 'deepseek' ? 'DeepSeek V3' : (currentAiProvider === 'openai' ? 'GPT-4o' : 'Offline Core'));
+            aiMsg.innerHTML = `<span style="color:#d175ff; font-weight:700;">🧠 ${modelName} думает...</span>`;
+            body.appendChild(aiMsg);
+            body.scrollTop = body.scrollHeight;
+
+            try {
+                const reply = await queryActiveAiModel(text);
+                aiMsg.innerHTML = reply.replace(/\n/g, '<br>');
+            } catch (err) {
+                aiMsg.innerHTML = `<span style="color:#ff453a;">⚠️ Ошибка запроса к ${currentAiProvider.toUpperCase()}: ${err.message}.</span><br><br>` +
+                                  generateOfflineAiResponse(text);
+            }
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function sendAiQuickPrompt(text) {
+            const input = document.getElementById('aiChatInput');
+            if (input) {
+                input.value = text;
+                sendAiMessage();
+            }
+        }
+
         let currentModalApp = null;
 
-        function askAiQuestion(type) {
+        async function askAiQuestion(type) {
             if (!currentModalApp) return;
             const app = currentModalApp;
             const box = document.getElementById('aiAnswerBox');
             if (!box) return;
             box.style.display = 'block';
-            box.innerHTML = '<span style="color:#d175ff;">🤖 Нейросеть генерирует ответ...</span>';
+            const real = app.realName || app.name;
+            const modelName = currentAiProvider === 'gemini' ? 'Gemini 1.5' : (currentAiProvider === 'deepseek' ? 'DeepSeek V3' : (currentAiProvider === 'openai' ? 'GPT-4o' : 'Нейросеть'));
+            box.innerHTML = `<span style="color:#d175ff;">🤖 ${modelName} анализирует ${real}...</span>`;
 
-            setTimeout(() => {
-                let answer = '';
-                const real = app.realName || app.name;
-                if (type === 'mask') {
-                    if (app.isDisguised) {
-                        answer = `<b>Схема маскировки ${real}:</b><br>` +
-                                 `Приложение выпущено под камуфляжным именем «${app.name}» (бандл <code>${app.bundleId}</code>). ` +
-                                 `Для модераторов Apple при проверке в Купертино отображается нейтральный экран утилиты. ` +
-                                 `Для российских пользователей сервер активирует полноценный нативный клиент ${real} через удаленные конфигурации и геолокацию.`;
-                    } else if (app.isUnsigned) {
-                        answer = `<b>О чистом пакете:</b> «${real}» — открытая сборка без маскировки и без привязки к Apple ID. Для работы на iOS требуется независимая подпись (Scarlet, ESign, личный сертификат).`;
-                    } else {
-                        answer = `<b>О приложении:</b> ${real} не использует маскировку и является оригинальным клиентом сервиса, опубликованным разработчиком под своим прямым назначением.`;
-                    }
-                } else if (type === 'safety') {
-                    if (app.isUnsigned) {
-                        answer = `<b>Безопасность и подпись чистых IPA:</b><br>` +
-                                 `• Пакет: Чистый бинарный IPA, скомпилированный из исходного кода разработчика без внедрения вредоносного кода.<br>` +
-                                 `• Без Apple ID: Пакет не содержит чужих учетных записей или зашифрованных ключей DRM.<br>` +
-                                 `• Установка: Для запуска на iOS системе требуется цифровая подпись (личный сертификат разработчика, Scarlet, ESign или TrollStore).`;
-                    } else {
-                        answer = `<b>Безопасность и подпись:</b><br>` +
-                                 `• Подлинность: Оригинальный бинарный пакет Apple FairPlay DRM, выгруженный из аккаунта <code>${app.account || 'Apple ID'}</code>.<br>` +
-                                 `• Сеть: Подключение идет напрямую к официальным серверам ${app.bundleId.includes('sber') || app.bundleId === 'com.inv.gen' ? 'СберБанка' : 'банка'} по защищенному протоколу TLS 1.3 с проверкой российских сертификатов Минцифры.<br>` +
-                                 `• Исходный код приложения не модифицирован, авторизация и биометрия защищены модулем Secure Enclave iOS.`;
-                    }
-                } else if (type === 'install') {
-                    if (app.isUnsigned) {
-                        answer = `<b>Установка неподписанного приложения:</b><br>` +
-                                 `1. Нажмите оранжевую кнопку <b>«📥 Скачать .IPA для Scarlet / ESign»</b>.<br>` +
-                                 `2. Откройте Scarlet или ESign (ESG) на вашем iPhone/iPad и импортируйте скачанный IPA.<br>` +
-                                 `3. Подпишите сертификатом и подтвердите установку в iOS.`;
-                    } else {
-                        answer = `<b>Установка на устройство:</b><br>` +
-                                 `1. Нажмите синюю кнопку <b>«Установить на iPhone»</b> — начнется прямая установка по протоколу Apple OTA (itms-services).<br>` +
-                                 `2. Либо скачайте исходный файл <b>.IPA</b> (кнопка справа) и установите через AltStore, Sideloadly, TrollStore или корпоративный сертификат.`;
-                    }
-                } else if (type === 'sign') {
-                    answer = `<b>Инструкция по установке через Scarlet / ESign (ESG):</b><br>` +
-                             `1. Нажмите оранжевую кнопку <b>«📥 Скачать .IPA для Scarlet / ESign»</b> и сохраните файл в приложение «Файлы» на iPhone.<br>` +
-                             `2. <b>Через Scarlet:</b> Откройте приложение Scarlet на iPhone, нажмите центральную иконку загрузки (стрелка вверх), выберите скачанный <code>${real}.ipa</code> и дождитесь завершения установки.<br>` +
-                             `3. <b>Через ESign (ESG):</b> Откройте ESign, перейдите во вкладку «Файлы» ➔ «Импортировать» ➔ выберите скачанный IPA ➔ нажмите на файл и выберите <b>«Подписать»</b> (с вашим личным сертификатом или корпоративным) ➔ нажмите «Установить».<br>` +
-                             `4. <b>Через AltStore / Sideloadly / TrollStore:</b> Подключите iPhone к ПК или импортируйте файл напрямую в TrollStore для моментальной бессрочной установки без переподписания.`;
+            if (type === 'live' || (aiApiKeys[currentAiProvider] && currentAiProvider !== 'offline')) {
+                try {
+                    const prompt = `Проведи экспертный анализ приложения для iOS:
+Название: "${app.name}"
+Реальный бренд: "${real}"
+Bundle ID: "${app.bundleId}"
+Размер: "${app.size}"
+Категория: "${app.category}"
+Замаскировано: ${app.isDisguised ? 'Да' : 'Нет'}
+Удалено из App Store: ${app.isRemoved ? 'Да' : 'Нет'}
+Вопрос: ${type === 'mask' ? 'Какова схема маскировки и для чего она создана?' : (type === 'safety' ? 'Безопасность приложения, подпись FairPlay DRM и подключение к серверам?' : (type === 'brand' ? 'Какой это настоящий банк или сервис?' : 'Как установить это приложение на iOS?'))}`;
+                    const res = await queryActiveAiModel(prompt);
+                    box.innerHTML = res.replace(/\n/g, '<br>');
+                    return;
+                } catch (e) {
+                    console.warn('Live AI error, falling back to offline engine:', e);
                 }
-                box.innerHTML = answer;
-            }, 250);
+            }
+
+            let answer = '';
+            if (type === 'brand') {
+                answer = `<b>Идентификация бренда:</b><br>` +
+                         `• Приложение: <b>${real}</b><br>` +
+                         `• Имя в App Store: <b>${app.name}</b><br>` +
+                         `• Идентификатор: <code>${app.bundleId}</code><br>` +
+                         `• Статус: ${app.isDisguised ? '🎭 Замаскировано для обхода санкций App Store' : 'Официальный нативный клиент'}.<br>` +
+                         `• Вердикт нейросети: ${app.aiVerdict}`;
+            } else if (type === 'mask') {
+                if (app.isDisguised) {
+                    answer = `<b>Схема маскировки ${real}:</b><br>` +
+                             `Приложение выпущено под камуфляжным именем «${app.name}» (бандл <code>${app.bundleId}</code>). ` +
+                             `Для модераторов Apple при проверке в Купертино отображается нейтральный экран утилиты. ` +
+                             `Для российских пользователей сервер активирует полноценный нативный клиент ${real} через удаленные конфигурации и геолокацию.`;
+                } else if (app.isUnsigned) {
+                    answer = `<b>О чистом пакете:</b> «${real}» — открытая сборка без маскировки и без привязки к Apple ID. Для работы на iOS требуется независимая подпись (Scarlet, ESign, личный сертификат).`;
+                } else {
+                    answer = `<b>О приложении:</b> ${real} не использует маскировку и является оригинальным клиентом сервиса, опубликованным разработчиком под своим прямым назначением.`;
+                }
+            } else if (type === 'safety') {
+                if (app.isUnsigned) {
+                    answer = `<b>Безопасность и подпись чистых IPA:</b><br>` +
+                             `• Пакет: Чистый бинарный IPA, скомпилированный из исходного кода разработчика без внедрения вредоносного кода.<br>` +
+                             `• Без Apple ID: Пакет не содержит чужих учетных записей или зашифрованных ключей DRM.<br>` +
+                             `• Установка: Для запуска на iOS системе требуется цифровая подпись (личный сертификат разработчика, Scarlet, ESign или TrollStore).`;
+                } else {
+                    answer = `<b>Безопасность и подпись:</b><br>` +
+                             `• Подлинность: Оригинальный бинарный пакет Apple FairPlay DRM, выгруженный из аккаунта <code>${app.account || 'Apple ID'}</code>.<br>` +
+                             `• Сеть: Подключение идет напрямую к официальным серверам по защищенному протоколу TLS 1.3 с проверкой российских сертификатов Минцифры.<br>` +
+                             `• Исходный код приложения не модифицирован, авторизация и биометрия защищены модулем Secure Enclave iOS.`;
+                }
+            } else if (type === 'install') {
+                if (app.isUnsigned) {
+                    answer = `<b>Установка неподписанного приложения:</b><br>` +
+                             `1. Нажмите оранжевую кнопку <b>«📥 Скачать .IPA для Scarlet / ESign»</b>.<br>` +
+                             `2. Откройте Scarlet или ESign (ESG) на вашем iPhone/iPad и импортируйте скачанный IPA.<br>` +
+                             `3. Подпишите сертификатом и подтвердите установку в iOS.`;
+                } else {
+                    answer = `<b>Установка на устройство:</b><br>` +
+                             `1. Нажмите синюю кнопку <b>«Установить на iPhone»</b> — начнется прямая установка по протоколу Apple OTA (itms-services).<br>` +
+                             `2. Либо скачайте исходный файл <b>.IPA</b> (кнопка справа) и установите через AltStore, Sideloadly, TrollStore или корпоративный сертификат.`;
+                }
+            } else if (type === 'sign') {
+                answer = `<b>Инструкция по установке через Scarlet / ESign (ESG):</b><br>` +
+                         `1. Нажмите оранжевую кнопку <b>«📥 Скачать .IPA для Scarlet / ESign»</b> и сохраните файл в приложение «Файлы» на iPhone.<br>` +
+                         `2. <b>Через Scarlet:</b> Откройте приложение Scarlet на iPhone, нажмите центральную иконку загрузки (стрелка вверх), выберите скачанный <code>${real}.ipa</code> и дождитесь завершения установки.<br>` +
+                         `3. <b>Через ESign (ESG):</b> Откройте ESign, перейдите во вкладку «Файлы» ➔ «Импортировать» ➔ выберите скачанный IPA ➔ нажмите на файл и выберите <b>«Подписать»</b> (с вашим личным сертификатом или корпоративным) ➔ нажмите «Установить».<br>` +
+                         `4. <b>Через AltStore / Sideloadly / TrollStore:</b> Подключите iPhone к ПК или импортируйте файл напрямую в TrollStore для моментальной бессрочной установки без переподписания.`;
+            }
+            box.innerHTML = answer;
         }
 
         function closeModal() {
@@ -2258,8 +3035,11 @@
             if (e.target === modal) closeModal();
             const hud = document.getElementById('hudOverlay');
             if (e.target === hud) toggleHud(false);
+            const aiModal = document.getElementById('aiModalOverlay');
+            if (e.target === aiModal) toggleAiModal(false);
         });
 
+        updateAiStatusBadge();
         loadApps();
     </script>
 </body>
