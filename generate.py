@@ -54,7 +54,8 @@ KNOWN_TITLES = {
     "com.vk.vkclient": "ВКонтакте",
     "com.vk.vkme": "VK Messenger",
     "com.vk.vkvideo.prod": "VK Video",
-    "com.yandex.fintech.bank-app": "Яндекс Банк"
+    "com.yandex.fintech.bank-app": "Яндекс Банк",
+    "com.fidelsinakaevpersonalteam.siteinphone": "College Flow"
 }
 
 def format_size(bytes_num):
@@ -378,7 +379,20 @@ REMOVED_KEYWORDS = [
     'ru.tcsbank', 'tinkoff', 'com.alfabank', 'ru.vtb', 'ru.rzd.passenger'
 ]
 
-def classify_app(name, bundle_id, metadata=None):
+def classify_app(name, bundle_id, metadata=None, is_unsigned=False):
+    if is_unsigned:
+        return {
+            'realName': name,
+            'maskName': '',
+            'isDisguised': False,
+            'isRemoved': False,
+            'isUnsigned': True,
+            'categoryId': 'unsigned',
+            'category': 'Чистые IPA',
+            'categoryIcon': '📦',
+            'aiVerdict': f'✨ Нейросетевой анализ: Неподписанный чистый .IPA пакет ({name}). Не имеет привязки к Apple ID и требует подписания через Scarlet, ESign, AltStore, Sideloadly, TrollStore или личный сертификат разработчика.'
+        }
+
     if bundle_id in AI_DISGUISED_APPS:
         return AI_DISGUISED_APPS[bundle_id]
 
@@ -412,6 +426,7 @@ def classify_app(name, bundle_id, metadata=None):
         'maskName': '',
         'isDisguised': False,
         'isRemoved': is_removed,
+        'isUnsigned': False,
         'categoryId': cat_id,
         'category': cat_name,
         'categoryIcon': icon,
@@ -427,7 +442,7 @@ def inspect_ipa(ipa_path, download_url, ipa_filename=None):
     with zipfile.ZipFile(ipa_path, 'r') as z:
         plist_path = None
         for name in z.namelist():
-            if re.match(r"^Payload/[^/]+\.app/Info\.plist$", name):
+            if re.match(r"^(?:Payload/)?[^/]+\.app/Info\.plist$", name):
                 plist_path = name
                 break
 
@@ -451,11 +466,22 @@ def inspect_ipa(ipa_path, download_url, ipa_filename=None):
                     pass
 
         account_email = extract_account_email(ipa_filename, meta_data)
+        has_itunes_meta = bool(meta_data and ("apple-id" in meta_data or "AppleID" in meta_data))
         bundle_id = plist_data.get("CFBundleIdentifier", "unknown.bundle")
         version = plist_data.get("CFBundleShortVersionString", plist_data.get("CFBundleVersion", "1.0.0"))
         raw_name = plist_data.get("CFBundleDisplayName", plist_data.get("CFBundleName", ""))
         name = clean_app_name(raw_name, bundle_id, ipa_filename, meta_data)
-        print(f"-> {name} ({bundle_id}, v{version}) | Apple ID: {account_email}")
+
+        is_unsigned = False
+        if "siteinphone" in bundle_id or "college" in ipa_filename.lower():
+            is_unsigned = True
+        elif not has_itunes_meta and not extract_account_email(ipa_filename):
+            is_unsigned = True
+
+        if is_unsigned:
+            account_email = "Чистый IPA (Без Apple ID)"
+
+        print(f"-> {name} ({bundle_id}, v{version}) | Apple ID: {account_email} | Unsigned: {is_unsigned}")
 
         min_ios = plist_data.get("MinimumOSVersion")
         if not min_ios:
@@ -517,27 +543,28 @@ def inspect_ipa(ipa_path, download_url, ipa_filename=None):
         with open(manifest_path, "w", encoding="utf-8") as f:
             f.write(manifest_content)
 
-        ai_info = classify_app(name, bundle_id, meta_data)
+        ai_info = classify_app(name, bundle_id, meta_data, is_unsigned)
 
         return {
             "name": name,
-            "version": version,
+            "version": str(version),
             "bundleId": bundle_id,
             "account": account_email,
             "size": size_str,
-            "minIos": min_ios or "14.0",
+            "minIos": min_ios or "15.0",
             "icon": icon_url,
             "downloadUrl": download_url,
             "categoryId": ai_info["categoryId"],
             "category": ai_info["category"],
             "categoryIcon": ai_info["categoryIcon"],
             "isRemoved": ai_info["isRemoved"],
+            "isUnsigned": is_unsigned,
             "realName": ai_info["realName"],
             "maskName": ai_info["maskName"],
             "isDisguised": ai_info["isDisguised"],
             "aiVerdict": ai_info["aiVerdict"],
             "manifestUrl": f"{BASE_URL}/manifests/{manifest_filename}",
-            "description": f"Приложение {name} выгружено из учетной записи {account_email}."
+            "description": f"Чистый неподписанный IPA-пакет приложения {name}. Для установки на iPhone/iPad требуется подписать через Scarlet, ESign, AltStore, Sideloadly, TrollStore или личный сертификат." if is_unsigned else f"Приложение {name} выгружено из учетной записи {account_email}."
         }
 
 def fetch_releases(repo, token=None):

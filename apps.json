@@ -793,10 +793,30 @@
     "categoryIcon": "🏦",
     "isRemoved": false,
     "realName": "Яндекс Банк",
-    "maskName": "",
     "isDisguised": false,
-    "aiVerdict": "Приложение Яндекс Банк проверено AI каталогом.",
+    "aiVerdict": "Приложение Яндекс Банк доступно в каталоге App Store.",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.yandex.fintech.bank-app.plist",
     "description": "Приложение Яндекс Банк выгружено из учетной записи f.sinakaev@ya.ru."
+  },
+  {
+    "name": "College Flow",
+    "version": "1.0",
+    "bundleId": "com.fidelsinakaevpersonalteam.siteinphone",
+    "account": "Чистый IPA (Без Apple ID)",
+    "size": "2.5 МБ",
+    "minIos": "16.0",
+    "icon": "https://fs13fid.github.io/ipa-studio/icons/com.fidelsinakaevpersonalteam.siteinphone.png",
+    "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.fidelsinakaevpersonalteam.siteinphone.plist",
+    "description": "Чистый неподписанный IPA-пакет приложения College Flow (без привязки к Apple ID). Для установки на iPhone/iPad требуется подписать через Scarlet, ESign, AltStore, Sideloadly, TrollStore или личный сертификат разработчика.",
+    "downloadUrl": "https://github.com/FS13Fid/ipa-studio/releases/download/v1.0/College.Flow.ipa",
+    "categoryId": "unsigned",
+    "category": "Чистые IPA",
+    "categoryIcon": "📦",
+    "isRemoved": false,
+    "isDisguised": false,
+    "isUnsigned": true,
+    "realName": "College Flow",
+    "maskName": "",
+    "aiVerdict": "✨ Нейросетевой анализ: Неподписанный чистый .IPA пакет (Xcode build / Personal Team). Не содержит привязки к Apple ID и требует подписания через Scarlet, ESign, AltStore, Sideloadly, TrollStore или личный сертификат разработчика для установки на iPhone."
   }
 ]

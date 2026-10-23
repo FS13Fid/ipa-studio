@@ -280,6 +280,17 @@
             border-color: #bf5af2;
         }
 
+        .category-tab.tab-unsigned {
+            border-color: rgba(255, 159, 10, 0.35);
+            color: #ff9f0a;
+        }
+
+        .category-tab.tab-unsigned.active {
+            background: #ff9f0a;
+            color: #ffffff;
+            border-color: #ff9f0a;
+        }
+
         .category-tab .count {
             font-size: 10.5px;
             font-weight: 700;
@@ -558,6 +569,63 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
+        }
+
+        .unsigned-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #ff9f0a;
+            background: rgba(255, 159, 10, 0.15);
+            border: 1px solid rgba(255, 159, 10, 0.35);
+            padding: 3px 8px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        .unsigned-notice {
+            background: rgba(255, 159, 10, 0.08);
+            border: 1px solid rgba(255, 159, 10, 0.35);
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+        }
+
+        .unsigned-notice-title {
+            font-size: 11.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #ff9f0a;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .unsigned-notice-text {
+            font-size: 12px;
+            line-height: 1.45;
+            color: #e5e5ea;
+        }
+
+        .signing-tools-bar {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .sign-tool-tag {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 7px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .ai-box {
@@ -1220,8 +1288,26 @@
                         <button type="button" class="ai-chip-btn" onclick="askAiQuestion('mask')">❓ Схема маскировки</button>
                         <button type="button" class="ai-chip-btn" onclick="askAiQuestion('safety')">🛡️ Безопасность и подпись</button>
                         <button type="button" class="ai-chip-btn" onclick="askAiQuestion('install')">📲 Установка на iOS</button>
+                        <button type="button" class="ai-chip-btn" id="modalSignGuideChip" onclick="askAiQuestion('sign')" style="display:none; color: #ff9f0a; border-color: rgba(255,159,10,0.4);">✍️ Подпись в Scarlet / ESign</button>
                     </div>
                     <div id="aiAnswerBox" class="ai-answer-box" style="display:none; margin-top: 8px;"></div>
+                </div>
+            </div>
+
+            <!-- Предупреждение о чистом неподписанном IPA -->
+            <div class="unsigned-notice" id="modalUnsignedNotice" style="display:none;">
+                <div class="unsigned-notice-title">
+                    <span>⚠️ Требуется подписание перед установкой</span>
+                </div>
+                <div class="unsigned-notice-text">
+                    Этот <b>.IPA</b> файл является чистым пакетом разработчика без цифровой привязки к Apple ID. Для работы на iPhone/iPad подпишите его через одну из утилит:
+                </div>
+                <div class="signing-tools-bar">
+                    <span class="sign-tool-tag">⚡ Scarlet</span>
+                    <span class="sign-tool-tag">🛡️ ESign (ESG)</span>
+                    <span class="sign-tool-tag">💻 AltStore</span>
+                    <span class="sign-tool-tag">🦖 TrollStore</span>
+                    <span class="sign-tool-tag">🪪 Сертификат .p12</span>
                 </div>
             </div>
 
@@ -1358,9 +1444,13 @@
             return num || 0;
         }
 
-        function cleanAccountEmail(acc) {
+        function cleanAccountEmail(acc, isUnsigned) {
+            if (isUnsigned) return 'Чистый IPA (Без Apple ID)';
             if (!acc) return 'sinakayev@icloud.com';
             const str = String(acc).trim();
+            if (str.toLowerCase().includes('чист') || str.toLowerCase().includes('не подписан') || str.toLowerCase().includes('без apple')) {
+                return 'Чистый IPA (Без Apple ID)';
+            }
             const m = str.match(/(?:^|[_\+\s\/\\:\-])([a-zA-Z0-9][a-zA-Z0-9.-]*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,10})/i);
             if (m) return m[1].toLowerCase().trim();
             if (str.includes('@')) {
@@ -1445,16 +1535,40 @@
                 category: 'Маркетплейсы и Еда',
                 categoryIcon: '🛍️',
                 aiVerdict: '✨ Сервис доставки Купер (СберМаркет), опубликованный через независимый аккаунт разработчика.'
+            },
+            'com.fidelsinakaevpersonalteam.siteinphone': {
+                realName: 'College Flow',
+                maskName: '',
+                isDisguised: false,
+                isRemoved: false,
+                isUnsigned: true,
+                categoryId: 'unsigned',
+                category: 'Чистые IPA',
+                categoryIcon: '📦',
+                aiVerdict: '✨ Нейросетевой анализ: Неподписанный чистый .IPA пакет (Xcode build / Personal Team). Не содержит привязки к Apple ID и требует подписания через Scarlet, ESign, AltStore, Sideloadly, TrollStore или личный сертификат разработчика для установки на iPhone.'
             }
         };
 
         function classifyAppClient(app) {
+            if (app.isUnsigned || app.categoryId === 'unsigned' || app.bundleId === 'com.fidelsinakaevpersonalteam.siteinphone' || (app.name && (app.name.toLowerCase().includes('college flow') || app.name.toLowerCase().includes('collage flow')))) {
+                app.isUnsigned = true;
+                app.categoryId = 'unsigned';
+                app.category = 'Чистые IPA';
+                app.categoryIcon = '📦';
+                app.realName = app.realName || 'College Flow';
+                app.account = 'Чистый IPA (Без Apple ID)';
+                if (!app.aiVerdict) {
+                    app.aiVerdict = '✨ Нейросетевой анализ: Неподписанный чистый .IPA пакет (Xcode build / Personal Team). Не содержит привязки к Apple ID и требует подписания через Scarlet, ESign, AltStore, Sideloadly, TrollStore или личный сертификат разработчика для установки на iPhone.';
+                }
+                return;
+            }
+
             if (AI_DISGUISED_APPS[app.bundleId]) {
                 const d = AI_DISGUISED_APPS[app.bundleId];
                 app.realName = d.realName;
                 app.maskName = d.maskName;
-                app.isDisguised = true;
-                app.isRemoved = true;
+                app.isDisguised = d.isDisguised;
+                app.isRemoved = d.isRemoved;
                 app.categoryId = d.categoryId;
                 app.category = d.category;
                 app.categoryIcon = d.categoryIcon;
@@ -1504,8 +1618,8 @@
                 if (!res.ok) throw new Error('apps.json не найден');
                 appsData = await res.json();
                 appsData.forEach(app => {
-                    app.account = cleanAccountEmail(app.account);
                     classifyAppClient(app);
+                    app.account = cleanAccountEmail(app.account, app.isUnsigned);
                 });
                 buildCategoryTabs();
                 buildAccountTabs();
@@ -1531,6 +1645,7 @@
                 { id: 'finance', name: 'Банки и Финансы', icon: '🏦' },
                 { id: 'disguised', name: 'Замаскированные', icon: '🎭', isDisguisedTab: true },
                 { id: 'removed', name: 'Удалено из App Store', icon: '🚫', isRemovedTab: true },
+                { id: 'unsigned', name: 'Чистые IPA', icon: '📦', isUnsignedTab: true },
                 { id: 'shopping', name: 'Маркетплейсы и Еда', icon: '🛍️' },
                 { id: 'social', name: 'Соцсети и Медиа', icon: '💬' },
                 { id: 'utilities', name: 'Сервисы и Утилиты', icon: '⚙️' }
@@ -1541,12 +1656,13 @@
                 if (cat.id === 'all') count = appsData.length;
                 else if (cat.id === 'disguised') count = appsData.filter(a => a.isDisguised).length;
                 else if (cat.id === 'removed') count = appsData.filter(a => a.isRemoved).length;
+                else if (cat.id === 'unsigned') count = appsData.filter(a => a.isUnsigned || a.categoryId === 'unsigned').length;
                 else count = appsData.filter(a => a.categoryId === cat.id).length;
 
                 if (count === 0 && cat.id !== 'all') return;
 
                 const tab = document.createElement('div');
-                tab.className = `category-tab ${cat.isRemovedTab ? 'tab-removed' : ''} ${cat.isDisguisedTab ? 'tab-disguised' : ''} ${currentCategoryFilter === cat.id ? 'active' : ''}`;
+                tab.className = `category-tab ${cat.isRemovedTab ? 'tab-removed' : ''} ${cat.isDisguisedTab ? 'tab-disguised' : ''} ${cat.isUnsignedTab ? 'tab-unsigned' : ''} ${currentCategoryFilter === cat.id ? 'active' : ''}`;
                 tab.dataset.cat = cat.id;
                 tab.innerHTML = `<span>${cat.icon}</span> <span>${cat.name}</span> <span class="count">${count}</span>`;
                 tab.onclick = () => {
@@ -1578,7 +1694,7 @@
 
             const accounts = {};
             appsData.forEach(app => {
-                const acc = cleanAccountEmail(app.account);
+                const acc = cleanAccountEmail(app.account, app.isUnsigned);
                 accounts[acc] = (accounts[acc] || 0) + 1;
             });
 
@@ -1587,7 +1703,8 @@
                 const tab = document.createElement('div');
                 tab.className = 'account-tab' + (currentAccountFilter === acc ? ' active' : '');
                 tab.dataset.acc = acc;
-                tab.innerHTML = ` ${acc} <span class="count">${accounts[acc]}</span>`;
+                const isClean = acc.includes('Чистый');
+                tab.innerHTML = `${isClean ? '📦' : ''} ${acc} <span class="count">${accounts[acc]}</span>`;
                 tab.onclick = () => {
                     document.querySelectorAll('.account-tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
@@ -1609,6 +1726,9 @@
             if (searchable.includes(q)) return true;
 
             // Семантические синонимы нейросети
+            if (q.includes('колледж') || q.includes('коллаж') || q.includes('college') || q.includes('collage') || q.includes('flow') || q.includes('чист') || q.includes('неподписан') || q.includes('не подписан') || q.includes('scarlet') || q.includes('скарлет') || q.includes('esign') || q.includes('есигн') || q.includes('esg')) {
+                return Boolean(app.isUnsigned || app.categoryId === 'unsigned' || (app.realName && app.realName.toLowerCase().includes('college')) || (app.name && app.name.toLowerCase().includes('college')));
+            }
             if (q.includes('сбер') || q === 'sber') {
                 return (app.realName && app.realName.toLowerCase().includes('сбер')) || 
                        (app.bundleId === 'com.inv.gen') || 
@@ -1649,6 +1769,8 @@
                     matchesCategory = Boolean(app.isDisguised);
                 } else if (currentCategoryFilter === 'removed') {
                     matchesCategory = Boolean(app.isRemoved);
+                } else if (currentCategoryFilter === 'unsigned') {
+                    matchesCategory = Boolean(app.isUnsigned || app.categoryId === 'unsigned');
                 } else {
                     matchesCategory = app.categoryId === currentCategoryFilter;
                 }
@@ -1671,7 +1793,7 @@
                 const nameB = b.realName || b.name || '';
 
                 if (currentSort === 'category') {
-                    const catOrder = { 'finance': 1, 'shopping': 2, 'social': 3, 'utilities': 4 };
+                    const catOrder = { 'finance': 1, 'shopping': 2, 'social': 3, 'utilities': 4, 'unsigned': 5 };
                     const diff = (catOrder[a.categoryId] || 99) - (catOrder[b.categoryId] || 99);
                     if (diff !== 0) return diff;
                     return nameA.localeCompare(nameB, 'ru');
@@ -1721,8 +1843,9 @@
                         </div>
                     </div>
                     <div class="card-badges">
-                        <span class="account-badge"> ${accText}</span>
+                        <span class="account-badge">${app.isUnsigned ? '📦 Чистый IPA' : ' ' + accText}</span>
                         <span class="category-pill">${app.categoryIcon || '📦'} ${app.category || 'Приложение'}</span>
+                        ${app.isUnsigned ? `<span class="unsigned-pill" title="Не подписан сертификатом (требуется Scarlet / ESign)">✍️ Не подписан</span>` : ''}
                         ${app.isDisguised ? `<span class="disguised-pill" title="Замаскированное приложение для обхода санкций">🎭 Замаскирован</span>` : ''}
                         ${app.isRemoved ? `<span class="removed-pill" title="Удалено из официального App Store">🚫 Удалено</span>` : ''}
                     </div>
@@ -1731,9 +1854,13 @@
                         <span class="tag">${app.size || 'IPA'}</span>
                     </div>
                     <div class="card-actions">
+                        ${app.isUnsigned ? `
+                        <button class="btn-install" style="background: rgba(255, 159, 10, 0.2); border: 1px solid rgba(255, 159, 10, 0.4); color: #ff9f0a;" onclick="event.stopPropagation(); openModal(appsData.find(a => a.bundleId === '${app.bundleId}'))">ИНФО</button>
+                        ` : `
                         <a class="btn-install" href="${itmsLink}" onclick="event.stopPropagation()">GET</a>
+                        `}
                         ${dlUrl ? `
-                        <a class="btn-download-ipa" href="${dlUrl}" download="${downloadAttr}" title="Скачать .IPA" onclick="event.stopPropagation()">
+                        <a class="btn-download-ipa" href="${dlUrl}" download="${downloadAttr}" title="${app.isUnsigned ? 'Скачать .IPA для Scarlet / ESign' : 'Скачать .IPA'}" onclick="event.stopPropagation()">
                             <svg viewBox="0 0 24 24">
                                 <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
                             </svg>
@@ -1784,9 +1911,21 @@
             const catEl = document.getElementById('modalCategory');
             if (catEl) catEl.innerHTML = `${app.categoryIcon || '📦'} ${app.category || 'Приложение'}`;
 
+            const unsignedNotice = document.getElementById('modalUnsignedNotice');
+            if (unsignedNotice) {
+                unsignedNotice.style.display = app.isUnsigned ? 'block' : 'none';
+            }
+
+            const signChip = document.getElementById('modalSignGuideChip');
+            if (signChip) {
+                signChip.style.display = app.isUnsigned ? 'inline-flex' : 'none';
+            }
+
             const storeStatusEl = document.getElementById('modalStoreStatus');
             if (storeStatusEl) {
-                if (app.isRemoved) {
+                if (app.isUnsigned) {
+                    storeStatusEl.innerHTML = `<span style="color: #ff9f0a; font-weight: 700;">📦 Чистый IPA (Требует Scarlet / ESign)</span>`;
+                } else if (app.isRemoved) {
                     storeStatusEl.innerHTML = `<span style="color: #ff453a; font-weight: 700;">🚫 Удалено из App Store</span>`;
                 } else {
                     storeStatusEl.innerHTML = `<span style="color: #30d158; font-weight: 600;">✓ Доступно в App Store</span>`;
@@ -1798,7 +1937,15 @@
             document.getElementById('modalDesc').innerText = app.description || 'Приложение готово к установке.';
 
             const itmsLink = `itms-services://?action=download-manifest&url=${encodeURIComponent(app.manifestUrl)}`;
-            document.getElementById('modalInstallBtn').href = itmsLink;
+            const installBtn = document.getElementById('modalInstallBtn');
+            if (installBtn) {
+                if (app.isUnsigned) {
+                    installBtn.style.display = 'none';
+                } else {
+                    installBtn.style.display = 'inline-flex';
+                    installBtn.href = itmsLink;
+                }
+            }
 
             const dlUrl = app.downloadUrl || '';
             const dlBtn = document.getElementById('modalDownloadIpaBtn');
@@ -1808,6 +1955,17 @@
                     const safeName = displayTitle.replace(/[^\w\sа-яА-ЯёЁ.-]/gi, '').trim().replace(/\s+/g, '_');
                     dlBtn.setAttribute('download', `${safeName}_v${app.version || '1.0'}.ipa`);
                     dlBtn.style.display = 'inline-flex';
+                    if (app.isUnsigned) {
+                        dlBtn.style.background = 'linear-gradient(135deg, #ff9f0a, #ff6b00)';
+                        dlBtn.style.color = '#ffffff';
+                        const span = dlBtn.querySelector('span');
+                        if (span) span.innerText = '📥 Скачать .IPA для Scarlet / ESign';
+                    } else {
+                        dlBtn.style.background = '';
+                        dlBtn.style.color = '';
+                        const span = dlBtn.querySelector('span');
+                        if (span) span.innerText = 'Скачать .IPA';
+                    }
                 } else {
                     dlBtn.style.display = 'none';
                 }
@@ -1821,7 +1979,11 @@
             }
             const vectorChip = document.getElementById('aiChipVector');
             if (vectorChip) {
-                vectorChip.innerText = app.isDisguised ? '🧬 Метод: Dynamic Camouflage' : '🧬 Метод: Прямой релиз';
+                if (app.isUnsigned) {
+                    vectorChip.innerText = '🧬 Метод: Чистый .IPA / Scarlet / ESign';
+                } else {
+                    vectorChip.innerText = app.isDisguised ? '🧬 Метод: Dynamic Camouflage' : '🧬 Метод: Прямой релиз';
+                }
             }
 
             const modal = document.getElementById('appModal');
@@ -1848,18 +2010,40 @@
                                  `Приложение выпущено под камуфляжным именем «${app.name}» (бандл <code>${app.bundleId}</code>). ` +
                                  `Для модераторов Apple при проверке в Купертино отображается нейтральный экран утилиты. ` +
                                  `Для российских пользователей сервер активирует полноценный нативный клиент ${real} через удаленные конфигурации и геолокацию.`;
+                    } else if (app.isUnsigned) {
+                        answer = `<b>О чистом пакете:</b> «${real}» — открытая сборка без маскировки и без привязки к Apple ID. Для работы на iOS требуется независимая подпись (Scarlet, ESign, личный сертификат).`;
                     } else {
                         answer = `<b>О приложении:</b> ${real} не использует маскировку и является оригинальным клиентом сервиса, опубликованным разработчиком под своим прямым назначением.`;
                     }
                 } else if (type === 'safety') {
-                    answer = `<b>Безопасность и подпись:</b><br>` +
-                             `• Подлинность: Оригинальный бинарный пакет Apple FairPlay DRM, выгруженный из аккаунта <code>${app.account || 'Apple ID'}</code>.<br>` +
-                             `• Сеть: Подключение идет напрямую к официальным серверам ${app.bundleId.includes('sber') || app.bundleId === 'com.inv.gen' ? 'СберБанка' : 'банка'} по защищенному протоколу TLS 1.3 с проверкой российских сертификатов Минцифры.<br>` +
-                             `• Исходный код приложения не модифицирован, авторизация и биометрия защищены модулем Secure Enclave iOS.`;
+                    if (app.isUnsigned) {
+                        answer = `<b>Безопасность и подпись чистых IPA:</b><br>` +
+                                 `• Пакет: Чистый бинарный IPA, скомпилированный из исходного кода разработчика без внедрения вредоносного кода.<br>` +
+                                 `• Без Apple ID: Пакет не содержит чужих учетных записей или зашифрованных ключей DRM.<br>` +
+                                 `• Установка: Для запуска на iOS системе требуется цифровая подпись (личный сертификат разработчика, Scarlet, ESign или TrollStore).`;
+                    } else {
+                        answer = `<b>Безопасность и подпись:</b><br>` +
+                                 `• Подлинность: Оригинальный бинарный пакет Apple FairPlay DRM, выгруженный из аккаунта <code>${app.account || 'Apple ID'}</code>.<br>` +
+                                 `• Сеть: Подключение идет напрямую к официальным серверам ${app.bundleId.includes('sber') || app.bundleId === 'com.inv.gen' ? 'СберБанка' : 'банка'} по защищенному протоколу TLS 1.3 с проверкой российских сертификатов Минцифры.<br>` +
+                                 `• Исходный код приложения не модифицирован, авторизация и биометрия защищены модулем Secure Enclave iOS.`;
+                    }
                 } else if (type === 'install') {
-                    answer = `<b>Установка на устройство:</b><br>` +
-                             `1. Нажмите синюю кнопку <b>«Установить на iPhone»</b> — начнется прямая установка по протоколу Apple OTA (itms-services).<br>` +
-                             `2. Либо скачайте исходный файл <b>.IPA</b> (кнопка справа) и установите через AltStore, Sideloadly, TrollStore или корпоративный сертификат.`;
+                    if (app.isUnsigned) {
+                        answer = `<b>Установка неподписанного приложения:</b><br>` +
+                                 `1. Нажмите оранжевую кнопку <b>«📥 Скачать .IPA для Scarlet / ESign»</b>.<br>` +
+                                 `2. Откройте Scarlet или ESign (ESG) на вашем iPhone/iPad и импортируйте скачанный IPA.<br>` +
+                                 `3. Подпишите сертификатом и подтвердите установку в iOS.`;
+                    } else {
+                        answer = `<b>Установка на устройство:</b><br>` +
+                                 `1. Нажмите синюю кнопку <b>«Установить на iPhone»</b> — начнется прямая установка по протоколу Apple OTA (itms-services).<br>` +
+                                 `2. Либо скачайте исходный файл <b>.IPA</b> (кнопка справа) и установите через AltStore, Sideloadly, TrollStore или корпоративный сертификат.`;
+                    }
+                } else if (type === 'sign') {
+                    answer = `<b>Инструкция по установке через Scarlet / ESign (ESG):</b><br>` +
+                             `1. Нажмите оранжевую кнопку <b>«📥 Скачать .IPA для Scarlet / ESign»</b> и сохраните файл в приложение «Файлы» на iPhone.<br>` +
+                             `2. <b>Через Scarlet:</b> Откройте приложение Scarlet на iPhone, нажмите центральную иконку загрузки (стрелка вверх), выберите скачанный <code>${real}.ipa</code> и дождитесь завершения установки.<br>` +
+                             `3. <b>Через ESign (ESG):</b> Откройте ESign, перейдите во вкладку «Файлы» ➔ «Импортировать» ➔ выберите скачанный IPA ➔ нажмите на файл и выберите <b>«Подписать»</b> (с вашим личным сертификатом или корпоративным) ➔ нажмите «Установить».<br>` +
+                             `4. <b>Через AltStore / Sideloadly / TrollStore:</b> Подключите iPhone к ПК или импортируйте файл напрямую в TrollStore для моментальной бессрочной установки без переподписания.`;
                 }
                 box.innerHTML = answer;
             }, 250);
