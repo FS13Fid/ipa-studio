@@ -300,25 +300,101 @@ def extract_account_email(ipa_filename, metadata=None):
             if found and "@" in str(found) and "." in str(found).split("@")[-1]:
                 return str(found).lower().strip()
 
+AI_DISGUISED_APPS = {
+    'ru.tomlevierr.docstorage': {
+        'realName': 'Т-Банк (Тинькофф)',
+        'maskName': 'DocStorage',
+        'isDisguised': True,
+        'isRemoved': True,
+        'categoryId': 'finance',
+        'category': 'Банки и Финансы',
+        'categoryIcon': '🏦',
+        'aiVerdict': '✨ Замаскированное приложение Т-Банка (Тинькофф), опубликованное под видом хранилища документов для обхода санкций App Store.'
+    },
+    'com.paata.shihan': {
+        'realName': 'Т-Инвестиции',
+        'maskName': 'EatsRate',
+        'isDisguised': True,
+        'isRemoved': True,
+        'categoryId': 'finance',
+        'category': 'Банки и Финансы',
+        'categoryIcon': '🏦',
+        'aiVerdict': '✨ Замаскированный сервис Т-Инвестиции (Т-Банк), выпущенный под видом каталога оценки ресторанов.'
+    },
+    'com.advancy.app': {
+        'realName': 'Банк (Advance)',
+        'maskName': 'Advance',
+        'isDisguised': True,
+        'isRemoved': True,
+        'categoryId': 'finance',
+        'category': 'Банки и Финансы',
+        'categoryIcon': '🏦',
+        'aiVerdict': '✨ Замаскированное банковское приложение для работы со счетами, картами и переводами.'
+    },
+    'com.sm.FlowTime': {
+        'realName': 'Банк (Сириус)',
+        'maskName': 'Сириус / FlowTime',
+        'isDisguised': True,
+        'isRemoved': True,
+        'categoryId': 'finance',
+        'category': 'Банки и Финансы',
+        'categoryIcon': '🏦',
+        'aiVerdict': '✨ Замаскированный банковский клиент, размещенный под видом тайм-менеджера FlowTime.'
+    },
+    'ru.nadoiaccount': {
+        'realName': 'Банк (Учёт надоя)',
+        'maskName': 'Учёт надоя',
+        'isDisguised': True,
+        'isRemoved': True,
+        'categoryId': 'finance',
+        'category': 'Банки и Финансы',
+        'categoryIcon': '🏦',
+        'aiVerdict': '✨ Замаскированный клиент финансовой организации, скрытый под видом сельскохозяйственного учета.'
+    },
+    'com.inv.gen': {
+        'realName': 'СберБанк (Инвестиции)',
+        'maskName': 'Online',
+        'isDisguised': True,
+        'isRemoved': True,
+        'categoryId': 'finance',
+        'category': 'Банки и Финансы',
+        'categoryIcon': '🏦',
+        'aiVerdict': '✨ Официальный клиент СберБанка (СБОЛ/Инвестиции), удаленный из каталога App Store.'
+    },
+    'ru.moiseev': {
+        'realName': 'Купер (СберМаркет)',
+        'maskName': 'Купер',
+        'isDisguised': True,
+        'isRemoved': True,
+        'categoryId': 'shopping',
+        'category': 'Маркетплейсы и Еда',
+        'categoryIcon': '🛍️',
+        'aiVerdict': '✨ Сервис доставки Купер (СберМаркет), опубликованный через независимый аккаунт разработчика.'
+    }
+}
+
 REMOVED_KEYWORDS = [
-    'com.inv.gen', 'ru.abb.akbarsonline', 'ru.yoo.money', 'ru.sberbank', 'sbol',
-    'ru.tcsbank', 'tinkoff', 'com.alfabank', 'ru.vtb', 'ru.moiseev', 'ru.rzd.passenger'
+    'ru.abb.akbarsonline', 'ru.yoo.money', 'ru.sberbank', 'sbol',
+    'ru.tcsbank', 'tinkoff', 'com.alfabank', 'ru.vtb', 'ru.rzd.passenger'
 ]
 
 def classify_app(name, bundle_id, metadata=None):
+    if bundle_id in AI_DISGUISED_APPS:
+        return AI_DISGUISED_APPS[bundle_id]
+
     text = f"{name} {bundle_id}".lower()
     if metadata:
         text += " " + str(metadata).lower()
 
     # 1. Removed status
-    is_removed = any(k in text for k in REMOVED_KEYWORDS) or ('ак барс' in text) or ('online' in text and 'inv.gen' in text)
+    is_removed = any(k in text for k in REMOVED_KEYWORDS) or ('ак барс' in text)
 
     # 2. Category
-    if any(k in text for k in ['банк', 'bank', 'fintech', 'money', 'юmoney', 'online', 'inv.gen', 'платеж', 'pay', 'sbol', 'tcs', 'alfa']):
+    if any(k in text for k in ['банк', 'bank', 'fintech', 'money', 'юmoney', 'платеж', 'pay', 'sbol', 'tcs', 'alfa']):
         cat_id = 'finance'
         cat_name = 'Банки и Финансы'
         icon = '🏦'
-    elif any(k in text for k in ['еда', 'food', 'eats', 'купер', 'доставка', 'delivery', 'вкусно', 'mcd', 'маркет', 'ozon', 'shop', 'покупки', 'avito', 'kari', 'shihan']):
+    elif any(k in text for k in ['еда', 'food', 'eats', 'доставка', 'delivery', 'вкусно', 'mcd', 'маркет', 'ozon', 'shop', 'покупки', 'avito', 'kari']):
         cat_id = 'shopping'
         cat_name = 'Маркетплейсы и Еда'
         icon = '🛍️'
@@ -331,7 +407,16 @@ def classify_app(name, bundle_id, metadata=None):
         cat_name = 'Сервисы и Утилиты'
         icon = '⚙️'
 
-    return cat_id, cat_name, icon, is_removed
+    return {
+        'realName': name,
+        'maskName': '',
+        'isDisguised': False,
+        'isRemoved': is_removed,
+        'categoryId': cat_id,
+        'category': cat_name,
+        'categoryIcon': icon,
+        'aiVerdict': f'Приложение {name} было удалено из App Store.' if is_removed else f'Приложение {name} проверено AI каталогом.'
+    }
 
 def inspect_ipa(ipa_path, download_url, ipa_filename=None):
     if not ipa_filename:
@@ -432,7 +517,7 @@ def inspect_ipa(ipa_path, download_url, ipa_filename=None):
         with open(manifest_path, "w", encoding="utf-8") as f:
             f.write(manifest_content)
 
-        cat_id, cat_name, cat_icon, is_removed = classify_app(name, bundle_id, meta_data)
+        ai_info = classify_app(name, bundle_id, meta_data)
 
         return {
             "name": name,
@@ -443,10 +528,14 @@ def inspect_ipa(ipa_path, download_url, ipa_filename=None):
             "minIos": min_ios or "14.0",
             "icon": icon_url,
             "downloadUrl": download_url,
-            "categoryId": cat_id,
-            "category": cat_name,
-            "categoryIcon": cat_icon,
-            "isRemoved": is_removed,
+            "categoryId": ai_info["categoryId"],
+            "category": ai_info["category"],
+            "categoryIcon": ai_info["categoryIcon"],
+            "isRemoved": ai_info["isRemoved"],
+            "realName": ai_info["realName"],
+            "maskName": ai_info["maskName"],
+            "isDisguised": ai_info["isDisguised"],
+            "aiVerdict": ai_info["aiVerdict"],
             "manifestUrl": f"{BASE_URL}/manifests/{manifest_filename}",
             "description": f"Приложение {name} выгружено из учетной записи {account_email}."
         }

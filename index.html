@@ -269,6 +269,17 @@
             border-color: #ff453a;
         }
 
+        .category-tab.tab-disguised {
+            border-color: rgba(191, 90, 242, 0.35);
+            color: #d175ff;
+        }
+
+        .category-tab.tab-disguised.active {
+            background: #bf5af2;
+            color: #ffffff;
+            border-color: #bf5af2;
+        }
+
         .category-tab .count {
             font-size: 10.5px;
             font-weight: 700;
@@ -524,6 +535,56 @@
             padding: 3px 8px;
             border-radius: 8px;
             white-space: nowrap;
+        }
+
+        .disguised-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #bf5af2;
+            background: rgba(191, 90, 242, 0.15);
+            border: 1px solid rgba(191, 90, 242, 0.32);
+            padding: 3px 8px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        .disguise-sub {
+            font-size: 11px;
+            color: #bf5af2;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .ai-box {
+            background: rgba(191, 90, 242, 0.08);
+            border: 1px solid rgba(191, 90, 242, 0.25);
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 10.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #d175ff;
+            margin-bottom: 6px;
+        }
+
+        .ai-text {
+            font-size: 12.5px;
+            line-height: 1.45;
+            color: #ffffff;
+            font-weight: 500;
         }
 
         .app-tags {
@@ -1072,8 +1133,21 @@
                 </div>
             </div>
 
+            <!-- Блок AI Анализа нейросети -->
+            <div class="ai-box" id="modalAiBox">
+                <div class="ai-header">
+                    <span>✨ Apple Intelligence // AI Анализ</span>
+                    <span id="modalDisguisedBadge" class="disguised-pill" style="display:none;">🎭 Замаскированный банк</span>
+                </div>
+                <div class="ai-text" id="modalAiVerdict"></div>
+            </div>
+
             <!-- Строки метаданных: категория, статус, Apple ID -->
             <div class="modal-info-rows">
+                <div class="modal-info-row" id="modalMaskRow" style="display:none;">
+                    <span class="modal-info-label">Маскировка</span>
+                    <span id="modalMaskVal" class="modal-info-val" style="color: #bf5af2;">-</span>
+                </div>
                 <div class="modal-info-row">
                     <span class="modal-info-label">Категория</span>
                     <span id="modalCategory" class="modal-info-val">-</span>
@@ -1218,31 +1292,126 @@
             return 'sinakayev@icloud.com';
         }
 
-        function classifyAppClient(app) {
-            if (app.categoryId && app.category && app.categoryIcon) return;
-            const REMOVED_KEYWORDS = [
-                'com.inv.gen', 'ru.abb.akbarsonline', 'ru.yoo.money', 'ru.sberbank', 'sbol',
-                'ru.tcsbank', 'tinkoff', 'com.alfabank', 'ru.vtb', 'ru.moiseev', 'ru.rzd.passenger'
-            ];
-            const text = `${app.name || ''} ${app.bundleId || ''} ${app.description || ''}`.toLowerCase();
-            app.isRemoved = Boolean(app.isRemoved || REMOVED_KEYWORDS.some(k => text.includes(k)) || text.includes('ак барс') || (text.includes('online') && text.includes('inv.gen')));
+        const AI_DISGUISED_APPS = {
+            'ru.tomlevierr.docstorage': {
+                realName: 'Т-Банк (Тинькофф)',
+                maskName: 'DocStorage',
+                isDisguised: true,
+                isRemoved: true,
+                categoryId: 'finance',
+                category: 'Банки и Финансы',
+                categoryIcon: '🏦',
+                aiVerdict: '✨ Замаскированное приложение Т-Банка (Тинькофф), опубликованное под видом хранилища документов для обхода санкций App Store.'
+            },
+            'com.paata.shihan': {
+                realName: 'Т-Инвестиции',
+                maskName: 'EatsRate',
+                isDisguised: true,
+                isRemoved: true,
+                categoryId: 'finance',
+                category: 'Банки и Финансы',
+                categoryIcon: '🏦',
+                aiVerdict: '✨ Замаскированный сервис Т-Инвестиции (Т-Банк), выпущенный под видом каталога оценки ресторанов.'
+            },
+            'com.advancy.app': {
+                realName: 'Банк (Advance)',
+                maskName: 'Advance',
+                isDisguised: true,
+                isRemoved: true,
+                categoryId: 'finance',
+                category: 'Банки и Финансы',
+                categoryIcon: '🏦',
+                aiVerdict: '✨ Замаскированное банковское приложение для работы со счетами, картами и переводами.'
+            },
+            'com.sm.FlowTime': {
+                realName: 'Банк (Сириус)',
+                maskName: 'Сириус / FlowTime',
+                isDisguised: true,
+                isRemoved: true,
+                categoryId: 'finance',
+                category: 'Банки и Финансы',
+                categoryIcon: '🏦',
+                aiVerdict: '✨ Замаскированный банковский клиент, размещенный под видом тайм-менеджера FlowTime.'
+            },
+            'ru.nadoiaccount': {
+                realName: 'Банк (Учёт надоя)',
+                maskName: 'Учёт надоя',
+                isDisguised: true,
+                isRemoved: true,
+                categoryId: 'finance',
+                category: 'Банки и Финансы',
+                categoryIcon: '🏦',
+                aiVerdict: '✨ Замаскированный клиент финансовой организации, скрытый под видом сельскохозяйственного учета.'
+            },
+            'com.inv.gen': {
+                realName: 'СберБанк (Инвестиции)',
+                maskName: 'Online',
+                isDisguised: true,
+                isRemoved: true,
+                categoryId: 'finance',
+                category: 'Банки и Финансы',
+                categoryIcon: '🏦',
+                aiVerdict: '✨ Официальный клиент СберБанка (СБОЛ/Инвестиции), удаленный из каталога App Store.'
+            },
+            'ru.moiseev': {
+                realName: 'Купер (СберМаркет)',
+                maskName: 'Купер',
+                isDisguised: true,
+                isRemoved: true,
+                categoryId: 'shopping',
+                category: 'Маркетплейсы и Еда',
+                categoryIcon: '🛍️',
+                aiVerdict: '✨ Сервис доставки Купер (СберМаркет), опубликованный через независимый аккаунт разработчика.'
+            }
+        };
 
-            if (['банк', 'bank', 'fintech', 'money', 'юmoney', 'online', 'inv.gen', 'платеж', 'pay', 'sbol', 'tcs', 'alfa'].some(k => text.includes(k))) {
-                app.categoryId = 'finance';
-                app.category = 'Банки и Финансы';
-                app.categoryIcon = '🏦';
-            } else if (['еда', 'food', 'eats', 'купер', 'доставка', 'delivery', 'вкусно', 'mcd', 'маркет', 'ozon', 'shop', 'покупки', 'avito', 'kari', 'shihan'].some(k => text.includes(k))) {
-                app.categoryId = 'shopping';
-                app.category = 'Маркетплейсы и Еда';
-                app.categoryIcon = '🛍️';
-            } else if (['vk', 'вконтакте', 'мессенджер', 'messenger', 'vkme', 'видео', 'video', 'музыка', 'music', 'rave', 'max', 'чат', 'chat', 'oneme', 'wemesh'].some(k => text.includes(k))) {
-                app.categoryId = 'social';
-                app.category = 'Соцсети и Медиа';
-                app.categoryIcon = '💬';
-            } else {
-                app.categoryId = 'utilities';
-                app.category = 'Сервисы и Утилиты';
-                app.categoryIcon = '⚙️';
+        function classifyAppClient(app) {
+            if (AI_DISGUISED_APPS[app.bundleId]) {
+                const d = AI_DISGUISED_APPS[app.bundleId];
+                app.realName = app.realName || d.realName;
+                app.maskName = app.maskName || d.maskName;
+                app.isDisguised = true;
+                app.isRemoved = true;
+                app.categoryId = app.categoryId || d.categoryId;
+                app.category = app.category || d.category;
+                app.categoryIcon = app.categoryIcon || d.categoryIcon;
+                app.aiVerdict = app.aiVerdict || d.aiVerdict;
+                return;
+            }
+            app.realName = app.realName || app.name;
+            app.maskName = app.maskName || '';
+
+            if (!app.categoryId || !app.category || !app.categoryIcon) {
+                const REMOVED_KEYWORDS = [
+                    'com.inv.gen', 'ru.abb.akbarsonline', 'ru.yoo.money', 'ru.sberbank', 'sbol',
+                    'ru.tcsbank', 'tinkoff', 'com.alfabank', 'ru.vtb', 'ru.moiseev', 'ru.rzd.passenger'
+                ];
+                const text = `${app.realName || ''} ${app.name || ''} ${app.bundleId || ''} ${app.description || ''}`.toLowerCase();
+                app.isRemoved = Boolean(app.isRemoved || REMOVED_KEYWORDS.some(k => text.includes(k)) || text.includes('ак барс') || (text.includes('online') && text.includes('inv.gen')));
+
+                if (['банк', 'bank', 'fintech', 'money', 'юmoney', 'online', 'inv.gen', 'платеж', 'pay', 'sbol', 'tcs', 'alfa'].some(k => text.includes(k))) {
+                    app.categoryId = 'finance';
+                    app.category = 'Банки и Финансы';
+                    app.categoryIcon = '🏦';
+                } else if (['еда', 'food', 'eats', 'купер', 'доставка', 'delivery', 'вкусно', 'mcd', 'маркет', 'ozon', 'shop', 'покупки', 'avito', 'kari', 'shihan'].some(k => text.includes(k))) {
+                    app.categoryId = 'shopping';
+                    app.category = 'Маркетплейсы и Еда';
+                    app.categoryIcon = '🛍️';
+                } else if (['vk', 'вконтакте', 'мессенджер', 'messenger', 'vkme', 'видео', 'video', 'музыка', 'music', 'rave', 'max', 'чат', 'chat', 'oneme', 'wemesh'].some(k => text.includes(k))) {
+                    app.categoryId = 'social';
+                    app.category = 'Соцсети и Медиа';
+                    app.categoryIcon = '💬';
+                } else {
+                    app.categoryId = 'utilities';
+                    app.category = 'Сервисы и Утилиты';
+                    app.categoryIcon = '⚙️';
+                }
+            }
+
+            if (!app.aiVerdict) {
+                app.aiVerdict = app.isRemoved 
+                    ? `✨ Приложение ${app.realName || app.name} удалено из App Store в связи с санкционными ограничениями.`
+                    : `✨ Приложение ${app.realName || app.name} проверено AI каталогом.`;
             }
         }
 
@@ -1277,6 +1446,7 @@
             const categories = [
                 { id: 'all', name: 'Все приложения', icon: '⚡' },
                 { id: 'finance', name: 'Банки и Финансы', icon: '🏦' },
+                { id: 'disguised', name: 'Замаскированные', icon: '🎭', isDisguisedTab: true },
                 { id: 'removed', name: 'Удалено из App Store', icon: '🚫', isRemovedTab: true },
                 { id: 'shopping', name: 'Маркетплейсы и Еда', icon: '🛍️' },
                 { id: 'social', name: 'Соцсети и Медиа', icon: '💬' },
@@ -1286,13 +1456,14 @@
             categories.forEach(cat => {
                 let count = 0;
                 if (cat.id === 'all') count = appsData.length;
+                else if (cat.id === 'disguised') count = appsData.filter(a => a.isDisguised).length;
                 else if (cat.id === 'removed') count = appsData.filter(a => a.isRemoved).length;
                 else count = appsData.filter(a => a.categoryId === cat.id).length;
 
                 if (count === 0 && cat.id !== 'all') return;
 
                 const tab = document.createElement('div');
-                tab.className = `category-tab ${cat.isRemovedTab ? 'tab-removed' : ''} ${currentCategoryFilter === cat.id ? 'active' : ''}`;
+                tab.className = `category-tab ${cat.isRemovedTab ? 'tab-removed' : ''} ${cat.isDisguisedTab ? 'tab-disguised' : ''} ${currentCategoryFilter === cat.id ? 'active' : ''}`;
                 tab.dataset.cat = cat.id;
                 tab.innerHTML = `<span>${cat.icon}</span> <span>${cat.name}</span> <span class="count">${count}</span>`;
                 tab.onclick = () => {
@@ -1351,12 +1522,26 @@
 
             const filtered = appsData.filter(app => {
                 const matchesAccount = currentAccountFilter === 'all' || app.account === currentAccountFilter;
-                const matchesCategory = currentCategoryFilter === 'all' || 
-                                        (currentCategoryFilter === 'removed' ? app.isRemoved : app.categoryId === currentCategoryFilter);
-                const matchesQuery = (app.name || '').toLowerCase().includes(query) || 
-                                     (app.bundleId || '').toLowerCase().includes(query) ||
-                                     (app.account || '').toLowerCase().includes(query) ||
-                                     (app.category || '').toLowerCase().includes(query);
+                let matchesCategory = false;
+                if (currentCategoryFilter === 'all') {
+                    matchesCategory = true;
+                } else if (currentCategoryFilter === 'disguised') {
+                    matchesCategory = Boolean(app.isDisguised);
+                } else if (currentCategoryFilter === 'removed') {
+                    matchesCategory = Boolean(app.isRemoved);
+                } else {
+                    matchesCategory = app.categoryId === currentCategoryFilter;
+                }
+
+                const matchesQuery = !query || 
+                    (app.realName || '').toLowerCase().includes(query) ||
+                    (app.name || '').toLowerCase().includes(query) || 
+                    (app.maskName || '').toLowerCase().includes(query) ||
+                    (app.bundleId || '').toLowerCase().includes(query) ||
+                    (app.account || '').toLowerCase().includes(query) ||
+                    (app.category || '').toLowerCase().includes(query) ||
+                    (app.aiVerdict || '').toLowerCase().includes(query);
+
                 return matchesAccount && matchesCategory && matchesQuery;
             });
 
@@ -1370,19 +1555,22 @@
 
             // Сортировка
             filtered.sort((a, b) => {
+                const nameA = a.realName || a.name || '';
+                const nameB = b.realName || b.name || '';
+
                 if (currentSort === 'category') {
                     const catOrder = { 'finance': 1, 'shopping': 2, 'social': 3, 'utilities': 4 };
                     const diff = (catOrder[a.categoryId] || 99) - (catOrder[b.categoryId] || 99);
                     if (diff !== 0) return diff;
-                    return (a.name || '').localeCompare(b.name || '', 'ru');
+                    return nameA.localeCompare(nameB, 'ru');
                 }
                 if (currentSort === 'removed') {
                     if (a.isRemoved && !b.isRemoved) return -1;
                     if (!a.isRemoved && b.isRemoved) return 1;
-                    return (a.name || '').localeCompare(b.name || '', 'ru');
+                    return nameA.localeCompare(nameB, 'ru');
                 }
-                if (currentSort === 'name-asc') return (a.name || '').localeCompare(b.name || '', 'ru');
-                if (currentSort === 'name-desc') return (b.name || '').localeCompare(a.name || '', 'ru');
+                if (currentSort === 'name-asc') return nameA.localeCompare(nameB, 'ru');
+                if (currentSort === 'name-desc') return nameB.localeCompare(nameA, 'ru');
                 if (currentSort === 'size-desc') return parseSizeInMb(b.size) - parseSizeInMb(a.size);
                 if (currentSort === 'size-asc') return parseSizeInMb(a.size) - parseSizeInMb(b.size);
                 if (currentSort === 'version-desc') return (b.version || '').localeCompare(a.version || '', undefined, { numeric: true });
@@ -1395,27 +1583,35 @@
                 card.className = 'app-card';
                 card.onclick = () => openModal(app);
 
+                const displayTitle = app.realName || app.name;
+                const hasDisguise = Boolean(app.isDisguised && app.name && app.name !== displayTitle);
+                const disguiseHtml = hasDisguise 
+                    ? `<div class="disguise-sub">🎭 Маскировка: <b>${app.name}</b></div>` 
+                    : '';
+
                 const itmsLink = `itms-services://?action=download-manifest&url=${encodeURIComponent(app.manifestUrl)}`;
-                const firstLetter = (app.name || 'A').charAt(0).toUpperCase();
+                const firstLetter = (displayTitle || 'A').charAt(0).toUpperCase();
                 const accText = app.account || 'App Store';
                 const dlUrl = app.downloadUrl || '';
-                const safeName = (app.name || 'app').replace(/[^\w\sа-яА-ЯёЁ.-]/gi, '').trim().replace(/\s+/g, '_');
+                const safeName = displayTitle.replace(/[^\w\sа-яА-ЯёЁ.-]/gi, '').trim().replace(/\s+/g, '_');
                 const downloadAttr = `${safeName}_v${app.version || '1.0'}.ipa`;
 
                 card.innerHTML = `
                     <div class="app-header">
                         <div class="app-icon-wrapper">
                             <span>${firstLetter}</span>
-                            <img class="app-icon-img" src="${app.icon}" alt="${app.name}" onload="this.style.display='block'" onerror="this.style.display='none'">
+                            <img class="app-icon-img" src="${app.icon}" alt="${displayTitle}" onload="this.style.display='block'" onerror="this.style.display='none'">
                         </div>
                         <div class="app-info">
-                            <div class="app-title">${app.name}</div>
+                            <div class="app-title" title="${displayTitle}">${displayTitle}</div>
+                            ${disguiseHtml}
                             <div class="app-meta">${app.bundleId}</div>
                         </div>
                     </div>
                     <div class="card-badges">
                         <span class="account-badge"> ${accText}</span>
                         <span class="category-pill">${app.categoryIcon || '📦'} ${app.category || 'Приложение'}</span>
+                        ${app.isDisguised ? `<span class="disguised-pill" title="Замаскированное приложение для обхода санкций">🎭 Замаскирован</span>` : ''}
                         ${app.isRemoved ? `<span class="removed-pill" title="Удалено из официального App Store">🚫 Удалено</span>` : ''}
                     </div>
                     <div class="app-tags">
@@ -1438,7 +1634,8 @@
         }
 
         function openModal(app) {
-            const firstLetter = (app.name || 'A').charAt(0).toUpperCase();
+            const displayTitle = app.realName || app.name;
+            const firstLetter = (displayTitle || 'A').charAt(0).toUpperCase();
             document.getElementById('modalIconLetter').innerText = firstLetter;
             
             const modalImg = document.getElementById('modalIconImg');
@@ -1446,10 +1643,32 @@
             modalImg.onload = () => modalImg.style.display = 'block';
             modalImg.onerror = () => modalImg.style.display = 'none';
 
-            document.getElementById('modalTitle').innerText = app.name;
+            document.getElementById('modalTitle').innerText = displayTitle;
             document.getElementById('modalBundle').innerText = app.bundleId;
             document.getElementById('modalAccount').innerText = app.account || 'Не указан';
             
+            // AI Анализ
+            const modalAiVerdict = document.getElementById('modalAiVerdict');
+            if (modalAiVerdict) {
+                modalAiVerdict.innerText = app.aiVerdict || (app.isRemoved ? 'Приложение удалено из App Store в связи с санкционными ограничениями.' : 'Приложение проверено AI каталогом.');
+            }
+            const modalDisguisedBadge = document.getElementById('modalDisguisedBadge');
+            if (modalDisguisedBadge) {
+                modalDisguisedBadge.style.display = app.isDisguised ? 'inline-flex' : 'none';
+            }
+
+            // Маскировка
+            const maskRow = document.getElementById('modalMaskRow');
+            const maskVal = document.getElementById('modalMaskVal');
+            if (maskRow && maskVal) {
+                if (app.isDisguised && app.name && app.name !== displayTitle) {
+                    maskRow.style.display = 'flex';
+                    maskVal.innerText = `${app.name} (${app.bundleId})`;
+                } else {
+                    maskRow.style.display = 'none';
+                }
+            }
+
             const catEl = document.getElementById('modalCategory');
             if (catEl) catEl.innerHTML = `${app.categoryIcon || '📦'} ${app.category || 'Приложение'}`;
 
@@ -1474,7 +1693,7 @@
             if (dlBtn) {
                 if (dlUrl) {
                     dlBtn.href = dlUrl;
-                    const safeName = (app.name || 'app').replace(/[^\w\sа-яА-ЯёЁ.-]/gi, '').trim().replace(/\s+/g, '_');
+                    const safeName = displayTitle.replace(/[^\w\sа-яА-ЯёЁ.-]/gi, '').trim().replace(/\s+/g, '_');
                     dlBtn.setAttribute('download', `${safeName}_v${app.version || '1.0'}.ipa`);
                     dlBtn.style.display = 'inline-flex';
                 } else {
