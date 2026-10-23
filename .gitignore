@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+*$py.class
+backend/__pycache__/
+Apps/
+Sessions/
+.DS_Store
+*.log

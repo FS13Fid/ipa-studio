@@ -1,1918 +1,361 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IPA Studio — Личный каталог приложений</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-base: #07090e;
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.6);
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --card-specular: rgba(255, 255, 255, 0.22);
-            --accent-glow: #0a84ff;
-            --btn-bg: rgba(255, 255, 255, 0.1);
-            --btn-text: #5ac8fa;
-            --input-bg: rgba(255, 255, 255, 0.06);
-            --blob-1: rgba(10, 132, 255, 0.4);
-            --blob-2: rgba(175, 82, 222, 0.35);
-            --blob-3: rgba(48, 209, 88, 0.2);
-            --icon-bg: #1c1c1e;
-        }
-
-        [data-theme="light"] {
-            --bg-base: #e9ecf2;
-            --text-primary: #1c1c1e;
-            --text-secondary: rgba(0, 0, 0, 0.55);
-            --card-bg: rgba(255, 255, 255, 0.65);
-            --card-border: rgba(255, 255, 255, 0.7);
-            --card-specular: rgba(255, 255, 255, 0.95);
-            --accent-glow: #007aff;
-            --btn-bg: rgba(0, 122, 255, 0.1);
-            --btn-text: #007aff;
-            --input-bg: rgba(255, 255, 255, 0.6);
-            --blob-1: rgba(0, 122, 255, 0.25);
-            --blob-2: rgba(175, 82, 222, 0.2);
-            --blob-3: rgba(52, 199, 89, 0.18);
-            --icon-bg: #e5e5ea;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-            background-color: var(--bg-base);
-            color: var(--text-primary);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-            transition: background-color 0.4s ease, color 0.4s ease;
-        }
-
-        .ambient-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .liquid-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.85;
-            animation: float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .orb-1 {
-            width: 480px;
-            height: 480px;
-            background: radial-gradient(circle, var(--blob-1) 0%, transparent 70%);
-            top: -100px;
-            left: -80px;
-        }
-
-        .orb-2 {
-            width: 520px;
-            height: 520px;
-            background: radial-gradient(circle, var(--blob-2) 0%, transparent 70%);
-            bottom: -120px;
-            right: -100px;
-            animation-duration: 24s;
-            animation-direction: alternate-reverse;
-        }
-
-        .orb-3 {
-            width: 380px;
-            height: 380px;
-            background: radial-gradient(circle, var(--blob-3) 0%, transparent 70%);
-            top: 40%;
-            left: 35%;
-            animation-duration: 18s;
-        }
-
-        @keyframes float {
-            0% { transform: translate(0px, 0px) scale(1) rotate(0deg); }
-            50% { transform: translate(60px, 80px) scale(1.1) rotate(45deg); }
-            100% { transform: translate(-40px, 40px) scale(0.95) rotate(-30deg); }
-        }
-
-        .wrapper {
-            position: relative;
-            z-index: 1;
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 36px 20px 80px;
-        }
-
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-        }
-
-        .header-title-box {
-            user-select: none;
-            cursor: pointer;
-        }
-
-        .header-title-box h1 {
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: -0.8px;
-            line-height: 1.15;
-            background: linear-gradient(180deg, var(--text-primary) 0%, var(--text-secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header-title-box p {
-            color: var(--text-secondary);
-            font-size: 13.5px;
-            margin-top: 4px;
-            font-weight: 500;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .studio-btn {
-            background: linear-gradient(135deg, rgba(10, 132, 255, 0.22), rgba(175, 82, 222, 0.22));
-            border: 1px solid rgba(10, 132, 255, 0.45);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 10px 18px;
-            border-radius: 14px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 13px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            cursor: pointer;
-            box-shadow: 0 4px 16px rgba(10, 132, 255, 0.2);
-            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-            user-select: none;
-        }
-
-        .studio-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 22px rgba(10, 132, 255, 0.38);
-            border-color: rgba(10, 132, 255, 0.8);
-            background: linear-gradient(135deg, rgba(10, 132, 255, 0.32), rgba(175, 82, 222, 0.32));
-        }
-
-        .studio-btn:active {
-            transform: scale(0.96);
-        }
-
-        .theme-toggle-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--text-primary);
-            font-size: 18px;
-            transition: transform 0.2s;
-        }
-
-        .theme-toggle-btn:active {
-            transform: scale(0.92);
-        }
-
-        /* Поиск */
-        .search-container {
-            position: relative;
-            margin-bottom: 14px;
-        }
-
-        .search-bar {
-            width: 100%;
-            background: var(--input-bg);
-            border: 1px solid var(--card-border);
-            border-top: 1px solid var(--card-specular);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border-radius: 16px;
-            padding: 14px 18px 14px 44px;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--text-primary);
-            outline: none;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .search-bar::placeholder {
-            color: var(--text-secondary);
-        }
-
-        .search-bar:focus {
-            border-color: var(--accent-glow);
-            box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.25);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            fill: var(--text-secondary);
-            width: 18px;
-            height: 18px;
-            pointer-events: none;
-        }
-
-        /* Панель фильтров и сортировки */
-        .filter-sort-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 22px;
-            flex-wrap: wrap;
-        }
-
-        .account-tabs-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: none;
-            flex: 1;
-            min-width: 260px;
-        }
-
-        .account-tabs-wrapper::-webkit-scrollbar {
-            display: none;
-        }
-
-        .account-tab {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .account-tab.active {
-            background: var(--text-primary);
-            color: var(--bg-base);
-            border-color: var(--text-primary);
-        }
-
-        .account-tab .count {
-            font-size: 10px;
-            opacity: 0.75;
-            background: rgba(0,0,0,0.15);
-            padding: 2px 6px;
-            border-radius: 10px;
-        }
-
-        .sort-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
-        .sort-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        .sort-select {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 12.5px;
-            font-weight: 600;
-            padding: 8px 12px;
-            border-radius: 14px;
-            outline: none;
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
-
-        .sort-select:focus {
-            border-color: var(--accent-glow);
-        }
-
-        .sort-select option {
-            background: #1c2029;
-            color: #fff;
-        }
-
-        /* Сетка карточек приложений */
-        .apps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 18px;
-        }
-
-        .app-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-top: 1px solid var(--card-specular);
-            backdrop-filter: blur(28px) saturate(180%);
-            -webkit-backdrop-filter: blur(28px) saturate(180%);
-            border-radius: 22px;
-            padding: 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            cursor: pointer;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s;
-        }
-
-        .app-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
-        }
-
-        .app-card:active {
-            transform: scale(0.98);
-        }
-
-        .app-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .app-icon-wrapper {
-            width: 60px;
-            height: 60px;
-            border-radius: 14px;
-            background: var(--icon-bg);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            flex-shrink: 0;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .app-icon-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 14px;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .app-info {
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .app-title {
-            font-size: 16px;
-            font-weight: 700;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: var(--text-primary);
-        }
-
-        .app-meta {
-            font-size: 11.5px;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Бейдж аккаунта */
-        .account-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 11px;
-            font-weight: 600;
-            color: #5ac8fa;
-            background: rgba(90, 200, 250, 0.1);
-            border: 1px solid rgba(90, 200, 250, 0.2);
-            padding: 4px 8px;
-            border-radius: 8px;
-            width: fit-content;
-            max-width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .app-tags {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .tag {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--text-secondary);
-        }
-
-        .btn-install {
-            margin-top: auto;
-            background: var(--btn-bg);
-            color: var(--btn-text);
-            text-decoration: none;
-            padding: 10px;
-            border-radius: 14px;
-            font-size: 14px;
-            font-weight: 700;
-            text-align: center;
-            display: block;
-            letter-spacing: 0.4px;
-            transition: all 0.2s;
-        }
-
-        .btn-install:active {
-            filter: brightness(1.2);
-            transform: scale(0.97);
-        }
-
-        /* Общие оверлеи и модалки */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            opacity: 0;
-            transition: opacity 0.25s ease;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal-sheet {
-            background: rgba(28, 28, 30, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-top: 1px solid rgba(255, 255, 255, 0.35);
-            backdrop-filter: blur(36px);
-            -webkit-backdrop-filter: blur(36px);
-            border-radius: 26px;
-            width: 100%;
-            max-width: 420px;
-            padding: 24px;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-            transform: scale(0.92);
-            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-            position: relative;
-        }
-
-        .modal-overlay.active .modal-sheet {
-            transform: scale(1);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.12);
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-            transition: background 0.2s;
-        }
-
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .modal-icon-wrapper {
-            width: 68px;
-            height: 68px;
-            border-radius: 16px;
-            background: var(--icon-bg);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            flex-shrink: 0;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .modal-account-box {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 10px 14px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .modal-account-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            font-weight: 700;
-        }
-
-        .modal-account-val {
-            font-size: 12.5px;
-            font-weight: 600;
-            color: #5ac8fa;
-        }
-
-        .modal-desc {
-            font-size: 13.5px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-
-        .modal-specs {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 12px;
-            border-radius: 16px;
-            text-align: center;
-            margin-bottom: 22px;
-        }
-
-        .spec-item .label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            font-weight: 700;
-            margin-bottom: 3px;
-        }
-
-        .spec-item .val {
-            font-size: 13px;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .modal-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .modal-install-btn {
-            background: #007aff;
-            color: #ffffff;
-            font-size: 14.5px;
-            font-weight: 700;
-            padding: 13px;
-            border-radius: 15px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-align: center;
-            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.35);
-            transition: all 0.2s;
-        }
-
-        .modal-install-btn:hover {
-            filter: brightness(1.1);
-            transform: translateY(-1px);
-        }
-
-        .modal-direct-btn {
-            background: rgba(10, 132, 255, 0.15);
-            border: 1px solid rgba(10, 132, 255, 0.35);
-            color: #5ac8fa;
-            font-family: inherit;
-            font-size: 13px;
-            font-weight: 700;
-            padding: 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .modal-direct-btn:hover {
-            background: rgba(10, 132, 255, 0.25);
-            border-color: rgba(10, 132, 255, 0.6);
-        }
-
-        /* DEVICE STUDIO MODAL */
-        .studio-sheet {
-            max-width: 520px;
-        }
-
-        .studio-status-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            padding: 10px 14px;
-            margin-bottom: 16px;
-        }
-
-        .studio-status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12.5px;
-            font-weight: 600;
-        }
-
-        .status-dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: #ff453a;
-            box-shadow: 0 0 8px #ff453a;
-        }
-
-        .status-dot.online {
-            background: #30d158;
-            box-shadow: 0 0 8px #30d158;
-        }
-
-        .studio-refresh-btn {
-            background: none;
-            border: none;
-            color: #5ac8fa;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 8px;
-        }
-
-        .studio-tabs {
-            display: flex;
-            gap: 6px;
-            background: rgba(0, 0, 0, 0.25);
-            padding: 4px;
-            border-radius: 12px;
-            margin-bottom: 18px;
-        }
-
-        .studio-tab-btn {
-            flex: 1;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            padding: 8px;
-            border-radius: 9px;
-            font-family: inherit;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .studio-tab-btn.active {
-            background: rgba(255, 255, 255, 0.15);
-            color: #fff;
-        }
-
-        .studio-content-section {
-            display: none;
-        }
-
-        .studio-content-section.active {
-            display: block;
-        }
-
-        .device-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .device-info-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .device-phone-icon {
-            font-size: 26px;
-        }
-
-        .device-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .device-details {
-            font-size: 11.5px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        .studio-action-box {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 14px;
-        }
-
-        .studio-action-box h4 {
-            font-size: 13px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-
-        .studio-action-box p {
-            font-size: 12px;
-            color: var(--text-secondary);
-            line-height: 1.4;
-            margin-bottom: 12px;
-        }
-
-        .studio-code-block {
-            background: #0d1117;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            padding: 10px 12px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            color: #5ac8fa;
-            user-select: all;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .dropzone-box {
-            border: 2px dashed rgba(255, 255, 255, 0.2);
-            border-radius: 14px;
-            padding: 18px;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.2s, background 0.2s;
-        }
-
-        .dropzone-box:hover {
-            border-color: #0a84ff;
-            background: rgba(10, 132, 255, 0.05);
-        }
-
-        .search-store-input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            padding: 10px 14px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 13px;
-            outline: none;
-            margin-bottom: 10px;
-        }
-
-        .search-store-input:focus {
-            border-color: #0a84ff;
-        }
-
-        /* DEV HUD */
-        .hud-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .hud-overlay.active {
-            display: flex;
-        }
-
-        .hud-panel {
-            background: #11141a;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 440px;
-            padding: 24px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
-            font-family: 'JetBrains Mono', monospace;
-            color: #e5e5ea;
-        }
-
-        .hud-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 12px;
-        }
-
-        .hud-header h3 {
-            font-size: 13px;
-            font-weight: 600;
-            color: #30d158;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .hud-header h3::before {
-            content: "";
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #30d158;
-            box-shadow: 0 0 8px #30d158;
-        }
-
-        .hud-close {
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .hud-lock-screen {
-            text-align: center;
-            padding: 10px 10px 15px;
-        }
-
-        .touch-icon {
-            font-size: 46px;
-            margin-bottom: 14px;
-            display: inline-block;
-            filter: drop-shadow(0 0 12px rgba(10, 132, 255, 0.5));
-        }
-
-        .hud-lock-btn {
-            background: #0a84ff;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 20px;
-            font-family: inherit;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .hud-reset-link {
-            display: inline-block;
-            margin-top: 18px;
-            background: none;
-            border: none;
-            color: rgba(255, 69, 58, 0.85);
-            font-family: inherit;
-            font-size: 11px;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
-        .hud-group {
-            margin-bottom: 16px;
-        }
-
-        .hud-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 6px;
-            display: block;
-        }
-
-        .hud-input, .hud-select {
-            width: 100%;
-            background: #1c2029;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            padding: 10px 12px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 12px;
-            outline: none;
-        }
-
-        .hud-dropzone {
-            border: 2px dashed rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .hud-status {
-            font-size: 11px;
-            margin-top: 14px;
-            padding: 10px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            display: none;
-            word-break: break-all;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>IPA Studio — Установка и загрузка приложений App Store</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍏</text></svg>">
 </head>
 <body>
 
-    <div class="ambient-canvas">
-        <div class="liquid-orb orb-1"></div>
-        <div class="liquid-orb orb-2"></div>
-        <div class="liquid-orb orb-3"></div>
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand" onclick="App.switchTab('catalog')">
+      <div class="brand-icon">🍏</div>
+      <div class="brand-title">
+        IPA Studio
+        <span class="brand-badge">Pro</span>
+      </div>
     </div>
 
-    <div class="wrapper">
-        <header>
-            <div class="header-title-box" id="logoBox" title="Тройной клик для Security Console">
-                <h1>IPA Studio</h1>
-                <p>Личный каталог приложений</p>
-            </div>
-            <div class="header-actions">
-                <button class="studio-btn" onclick="openStudioModal()" title="Device Studio — установка и управление">
-                    <span>⚡ Device Studio</span>
-                </button>
-                <button class="theme-toggle-btn" id="themeBtn" aria-label="Сменить тему">🌓</button>
-            </div>
-        </header>
-
-        <div class="search-container">
-            <svg class="search-icon" viewBox="0 0 24 24">
-                <path d="M10 2a8 8 0 015.293 13.998l4.854 4.853a1 1 0 01-1.414 1.414l-4.853-4.854A8 8 0 1110 2zm0 2a6 6 0 100 12 6 6 0 000-12z"/>
-            </svg>
-            <input type="text" class="search-bar" id="searchInput" placeholder="Поиск по названию, bundle ID или учетной записи...">
-        </div>
-
-        <!-- Панель фильтров и сортировки -->
-        <div class="filter-sort-bar">
-            <div class="account-tabs-wrapper" id="accountTabs">
-                <div class="account-tab active" data-acc="all">
-                    Все <span class="count" id="countAll">0</span>
-                </div>
-            </div>
-
-            <div class="sort-container">
-                <span class="sort-label">Сортировка:</span>
-                <select id="sortSelect" class="sort-select" onchange="changeSort(this.value)">
-                    <option value="name-asc">По названию (А → Я)</option>
-                    <option value="name-desc">По названию (Я → А)</option>
-                    <option value="account">По Apple ID</option>
-                    <option value="size-desc">По размеру (большие сначала)</option>
-                    <option value="size-asc">По размеру (маленькие сначала)</option>
-                    <option value="version">По версии (новые)</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="apps-grid" id="appsGrid">
-            <div style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 50px;">
-                Загрузка каталога...
-            </div>
-        </div>
+    <div class="header-center">
+      <div class="device-status-pill" id="headerDevicePill" onclick="App.switchTab('devices')">
+        <span class="status-dot" id="headerDeviceDot"></span>
+        <span id="headerDeviceText">Проверка устройств...</span>
+      </div>
     </div>
 
-    <!-- Модалка приложения -->
-    <div class="modal-overlay" id="appModal">
-        <div class="modal-sheet">
-            <button class="modal-close" onclick="closeModal()">✕</button>
-            <div class="modal-header">
-                <div class="modal-icon-wrapper" id="modalIconBox">
-                    <span id="modalIconLetter">A</span>
-                    <img id="modalIconImg" class="app-icon-img" src="" alt="" style="display:none;" onerror="this.style.display='none'">
-                </div>
-                <div class="app-info">
-                    <h2 id="modalTitle" class="app-title" style="font-size: 18px; color: #fff;"></h2>
-                    <span id="modalBundle" class="app-meta"></span>
-                </div>
-            </div>
-
-            <div class="modal-account-box">
-                <span class="modal-account-label">Apple ID учетная запись</span>
-                <span id="modalAccount" class="modal-account-val"></span>
-            </div>
-
-            <div class="modal-specs">
-                <div class="spec-item">
-                    <div class="label">Версия</div>
-                    <div id="modalVersion" class="val">-</div>
-                </div>
-                <div class="spec-item">
-                    <div class="label">Размер</div>
-                    <div id="modalSize" class="val">-</div>
-                </div>
-                <div class="spec-item">
-                    <div class="label">Тип</div>
-                    <div class="val">OTA / IPA</div>
-                </div>
-            </div>
-
-            <p id="modalDesc" class="modal-desc"></p>
-
-            <div class="modal-actions">
-                <a id="modalInstallBtn" href="#" class="modal-install-btn">
-                    📲 Установить на iPhone (Safari OTA)
-                </a>
-                <button id="modalDirectBtn" class="modal-direct-btn" onclick="openStudioWithCurrentApp()">
-                    ⚡ Прямая установка (Device Studio USB/Wi-Fi)
-                </button>
-            </div>
+    <div class="header-right">
+      <div class="account-pill" id="headerAccountPill" onclick="App.switchTab('accounts')">
+        <div class="account-avatar" id="headerAccountAvatar"></div>
+        <div class="account-info-text">
+          <span class="account-name" id="headerAccountName">Вход в Apple ID</span>
+          <span class="account-email" id="headerAccountEmail">Нажмите для авторизации</span>
         </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+
+    <!-- Navigation Tabs (12 operations of IPA Downloader + Personal Signed Catalog) -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="catalog">⭐ Каталог IPA (36)</button>
+      <button class="nav-tab" data-tab="search">🔍 Поиск App Store</button>
+      <button class="nav-tab" data-tab="popular">⚡ Популярные (677+)</button>
+      <button class="nav-tab" data-tab="purchases">🛍️ Мои Покупки</button>
+      <button class="nav-tab" data-tab="library">
+        📦 Папка Apps 
+        <span class="tab-badge" id="libraryTabBadge">0</span>
+      </button>
+      <button class="nav-tab" data-tab="devices">📱 Устройства iOS</button>
+      <button class="nav-tab" data-tab="custom">📝 Свой список</button>
+      <button class="nav-tab" data-tab="accounts">👤 Аккаунты</button>
+    </nav>
+
+    <!-- Quick Menu Ribbon for IPA Downloader 4.3.0 features -->
+    <div class="quick-menu-banner">
+      <div class="quick-menu-title">
+        <span>⚡ Функции IPA Downloader:</span>
+      </div>
+      <div class="quick-menu-actions">
+        <button class="btn btn-secondary btn-sm" onclick="App.switchTab('search')">🔍 Поиск и покупка</button>
+        <button class="btn btn-secondary btn-sm" onclick="App.switchTab('search')">⬇️ Скачать последнюю</button>
+        <button class="btn btn-secondary btn-sm" onclick="App.switchTab('popular')">⏳ Выбор версии</button>
+        <button class="btn btn-secondary btn-sm" onclick="App.switchTab('devices')">📱 Установка по кабелю USB</button>
+        <button class="btn btn-secondary btn-sm" onclick="App.switchTab('library')">📋 Проверка iOS версий</button>
+        <button class="btn btn-secondary btn-sm" onclick="UI.toggleTerminal()">📟 Терминал</button>
+      </div>
     </div>
 
-    <!-- DEVICE STUDIO MODAL -->
-    <div class="modal-overlay" id="studioModal">
-        <div class="modal-sheet studio-sheet">
-            <button class="modal-close" onclick="closeStudioModal()">✕</button>
-            <div class="modal-header">
-                <div class="modal-icon-wrapper" style="background: rgba(10, 132, 255, 0.15); border-color: rgba(10, 132, 255, 0.3); color: #0a84ff;">
-                    <span style="font-size: 26px;">⚡</span>
-                </div>
-                <div class="app-info">
-                    <h2 class="app-title" style="font-size: 18px; color: #fff;">Device Studio</h2>
-                    <span class="app-meta">Удаленная и локальная установка на iPhone</span>
-                </div>
-            </div>
+    <!-- Toolbar: Search & Categories -->
+    <div class="toolbar">
+      <div class="search-box" id="mainSearchBox">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="mainSearchInput" placeholder="Поиск по названию или ID (Сбер, Т-Банк, Альфа, 481627348)...">
+      </div>
 
-            <div class="studio-status-box">
-                <div class="studio-status-indicator">
-                    <span class="status-dot" id="serverStatusDot"></span>
-                    <span id="serverStatusText">Проверка локального сервера...</span>
-                </div>
-                <button class="studio-refresh-btn" onclick="checkLocalServer()">Обновить 🔄</button>
-            </div>
-
-            <div class="studio-tabs">
-                <button class="studio-tab-btn active" onclick="switchStudioTab('deviceTab')">📱 Устройство</button>
-                <button class="studio-tab-btn" onclick="switchStudioTab('installTab')">📦 Установка IPA</button>
-                <button class="studio-tab-btn" onclick="switchStudioTab('storeTab')">🌐 App Store</button>
-            </div>
-
-            <!-- Вкладка 1: Устройство -->
-            <div id="deviceTab" class="studio-content-section active">
-                <div id="deviceNoticeBox" style="background: rgba(255, 159, 10, 0.1); border: 1px solid rgba(255, 159, 10, 0.3); border-radius: 14px; padding: 12px 14px; margin-bottom: 14px; display: none;">
-                    <div style="font-size: 13px; font-weight: 700; color: #ff9f0a; margin-bottom: 4px;">
-                        ⚠️ Прямая установка по кабелю работает только на компьютере
-                    </div>
-                    <div style="font-size: 11.5px; color: rgba(255, 255, 255, 0.75); line-height: 1.45;">
-                        iPhone физически подключается проводом именно к вашему Mac или ПК.<br>
-                        • Чтобы установить по кабелю: откройте сайт на компьютере и запустите <code>./start.sh</code>.<br>
-                        • Прямо сейчас на этом iPhone вы можете установить приложение в один клик через <strong>«Установить через Safari (OTA)»</strong>.
-                    </div>
-                </div>
-
-                <div class="device-card" id="deviceCard">
-                    <div class="device-info-left">
-                        <span class="device-phone-icon">📱</span>
-                        <div>
-                            <div class="device-name" id="detectedDevName">Устройства не обнаружены</div>
-                            <div class="device-details" id="detectedDevDetails">Подключите iPhone через USB кабель или Wi-Fi</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="studio-action-box" id="daemonHelperBox">
-                    <h4>Как запустить локальный сервер установки?</h4>
-                    <p>Для прямой установки через USB/Wi-Fi без профилей запустите сервер в терминале:</p>
-                    <div class="studio-code-block">
-                        <span>cd ipa-studio && ./start.sh</span>
-                    </div>
-                    <p style="font-size: 11px; color: rgba(255,255,255,0.45); margin-bottom: 0;">
-                        Сервер запускается на <code>http://localhost:5050</code> и мгновенно связывается с сайтом.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Вкладка 2: Установка выбранного или локального IPA -->
-            <div id="installTab" class="studio-content-section">
-                <div class="studio-action-box" id="targetAppBox" style="display:none;">
-                    <h4>Выбранное приложение:</h4>
-                    <p id="targetAppDesc" style="color:#5ac8fa; font-weight:600;"></p>
-                    <button class="modal-install-btn" style="width:100%; border:none; cursor:pointer;" onclick="installCurrentAppDirect()">
-                        ⚡ Установить выбранный IPA на устройство
-                    </button>
-                </div>
-
-                <div class="studio-action-box">
-                    <h4>Установка любого локального .ipa файла</h4>
-                    <p>Перетащите сюда любой файл приложения для установки на iPhone:</p>
-                    <div class="dropzone-box" onclick="document.getElementById('localIpaFile').click()">
-                        <p id="dropzoneText">Нажмите для выбора .ipa файла</p>
-                    </div>
-                    <input type="file" id="localIpaFile" accept=".ipa" style="display:none;" onchange="handleLocalIpaUpload(this)">
-                </div>
-                <div id="studioInstallProgress" style="display:none; font-size:12px; color:#5ac8fa; padding:10px; text-align:center;"></div>
-            </div>
-
-            <!-- Вкладка 3: App Store -->
-            <div id="storeTab" class="studio-content-section">
-                <div class="studio-action-box">
-                    <h4>Загрузка и подпись из App Store (ipatool)</h4>
-                    <p>Введите Bundle ID или название для поиска приложения:</p>
-                    <div style="display:flex; gap:8px;">
-                        <input type="text" id="storeSearchInput" class="search-store-input" placeholder="com.example.app или название">
-                        <button class="studio-btn" style="height:39px; white-space:nowrap;" onclick="searchAppStore()">Найти</button>
-                    </div>
-                    <div id="storeResults" style="margin-top:10px; font-size:12px; color:var(--text-secondary);"></div>
-                </div>
-            </div>
-        </div>
+      <div class="category-chips" id="categoryChips" style="display: none;">
+        <button class="chip active" data-category="all">Все (677+)</button>
+        <button class="chip" data-category="finance">Банки и Финансы</button>
+        <button class="chip" data-category="vpn">VPN и Прокси</button>
+        <button class="chip" data-category="ai">Нейросети и AI</button>
+        <button class="chip" data-category="social">Мессенджеры и Соцсети</button>
+        <button class="chip" data-category="maps">Карты и Навигация</button>
+        <button class="chip" data-category="gov">Госуслуги</button>
+        <button class="chip" data-category="media">Кино и Музыка</button>
+        <button class="chip" data-category="shop">Шопинг и Доставка</button>
+      </div>
     </div>
 
-    <!-- DEV HUD -->
-    <div class="hud-overlay" id="hudOverlay">
-        <div class="hud-panel">
-            <div class="hud-header">
-                <h3>SECURITY CONSOLE // DEV HUD</h3>
-                <button class="hud-close" onclick="toggleHud(false)">✕</button>
-            </div>
-
-            <div id="hudLockedState" class="hud-lock-screen" style="display: none;">
-                <div class="touch-icon">🪪</div>
-                <p style="font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 18px;">
-                    Требуется подтверждение Touch ID
-                </p>
-                <div>
-                    <button class="hud-lock-btn" onclick="authenticateUser()">
-                        <span>Войти через Touch ID</span>
-                    </button>
-                </div>
-                <button class="hud-reset-link" onclick="resetBiometrics()">
-                    Сбросить Touch ID / Сменить токен
-                </button>
-            </div>
-
-            <div id="hudMainContent" style="display: none;">
-                <div class="hud-group" id="tokenGroup">
-                    <label class="hud-label">GitHub Access Token</label>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="password" id="hudToken" class="hud-input" placeholder="ghp_xxxxxxxxxxxxxxx">
-                        <button class="hud-lock-btn" id="saveBiometricBtn" style="padding: 0 14px; font-size: 11px; white-space: nowrap;" onclick="enrollBiometrics()">
-                            Touch ID
-                        </button>
-                    </div>
-                </div>
-
-                <div class="hud-group">
-                    <label class="hud-label">Целевое приложение</label>
-                    <select id="hudAppSelect" class="hud-select"></select>
-                </div>
-
-                <div class="hud-group">
-                    <label class="hud-label">Загрузка иконки</label>
-                    <div class="hud-dropzone" onclick="document.getElementById('hudFileInput').click()">
-                        <p id="hudDropText">Нажми для выбора файла иконки</p>
-                    </div>
-                    <input type="file" id="hudFileInput" accept="image/png, image/jpeg" style="display:none;">
-                </div>
-
-                <div id="hudStatus" class="hud-status"></div>
-
-                <div style="margin-top: 16px; padding-top: 12px; border-top: 1px dashed rgba(255, 255, 255, 0.1); text-align: center;">
-                    <button class="hud-reset-link" onclick="resetBiometrics()">
-                        ⚠️ Отвязать Touch ID и сбросить токен
-                    </button>
-                </div>
-            </div>
+    <!-- Tab View 1: Personal Signed IPA Catalog (36 apps) -->
+    <section class="tab-view" id="catalogTabView">
+      <div class="device-notice" id="catalogDeviceNotice">
+        💡 <strong>Установка на iPhone:</strong> На iPhone нажмите <strong>«📲 Установить (OTA)»</strong> для моментальной беспроводной установки через Safari. Для прямой установки по кабелю откройте сайт на Mac/ПК и запустите <code>./start.sh</code>.
+      </div>
+      <div class="catalog-filter-bar">
+        <div class="account-tabs-wrapper" id="catalogAccountTabs">
+          <div class="account-tab active" data-acc="all">Все аккаунты <span class="count">36</span></div>
         </div>
+        <div class="sort-container">
+          <label class="sort-label">Сортировка:</label>
+          <select id="catalogSortSelect" class="sort-select">
+            <option value="name-asc">По названию (А → Я)</option>
+            <option value="name-desc">По названию (Я → А)</option>
+            <option value="size-desc">По размеру (большие)</option>
+            <option value="size-asc">По размеру (маленькие)</option>
+            <option value="version-desc">По версии (новые)</option>
+            <option value="account">По аккаунту Apple ID</option>
+          </select>
+        </div>
+      </div>
+      <div class="apps-grid" id="catalogAppsGrid"></div>
+    </section>
+
+    <!-- Tab View 2: Live App Store Search (Search, Purchase, Download) -->
+    <section class="tab-view" id="searchTabView" style="display: none;">
+      <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <span style="font-size: 14px; color: var(--text-secondary);">
+          Прямой поиск в App Store через официальный API и ipatool. Поддерживает покупку лицензий и скачивание любых версий.
+        </span>
+        <button class="btn btn-primary btn-sm" onclick="App.executeAppStoreSearch()">🔍 Найти в App Store</button>
+      </div>
+      <div class="apps-grid" id="searchAppsGrid">
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">
+          Введите название приложения в строку поиска выше и нажмите «Найти в App Store»
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab View 3: Popular & Removed Apps (677+) -->
+    <section class="tab-view" id="popularTabView" style="display: none;">
+      <div class="apps-grid" id="popularAppsGrid"></div>
+    </section>
+
+    <!-- Tab View 4: Purchases History -->
+    <section class="tab-view" id="purchasesTabView" style="display: none;">
+      <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <span style="font-size: 14px; color: var(--text-secondary);">
+          Отображаются все приложения, купленные с вашего текущего Apple ID (включая удаленные из App Store)
+        </span>
+        <button class="btn btn-secondary btn-sm" onclick="App.loadPurchases()">🔄 Обновить покупки</button>
+      </div>
+      <div class="apps-grid" id="purchasesGrid"></div>
+    </section>
+
+    <!-- Tab View 5: Library (Downloaded IPAs in Apps folder) -->
+    <section class="tab-view" id="libraryTabView" style="display: none;">
+      <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <span style="font-size: 14px; color: var(--text-secondary);">
+          Файлы IPA, сохраненные на компьютере в папке <code>Apps</code>. Отображается минимальная версия iOS и размер.
+        </span>
+        <button class="btn btn-secondary btn-sm" onclick="App.loadLibrary()">🔄 Обновить</button>
+      </div>
+      <div class="apps-grid" id="libraryGrid"></div>
+    </section>
+
+    <!-- Tab View 6: Devices -->
+    <section class="tab-view" id="devicesTabView" style="display: none;">
+      <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <span style="font-size: 14px; color: var(--text-secondary);">
+          Подключенные устройства iPhone / iPad (через кабель USB или Wi-Fi).
+        </span>
+        <button class="btn btn-secondary btn-sm" onclick="App.loadDevices()">🔄 Обновить устройства</button>
+      </div>
+      <div id="devicesContainer"></div>
+    </section>
+
+    <!-- Tab View 7: Custom Apps List -->
+    <section class="tab-view" id="customTabView" style="display: none;">
+      <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <span style="font-size: 14px; color: var(--text-secondary);">
+          Пользовательский список приложений (сохраняется в <code>data/AppsListCustom.txt</code>)
+        </span>
+        <button class="btn btn-primary btn-sm" onclick="UI.openModal('addCustomAppModal')">➕ Добавить приложение</button>
+      </div>
+      <div id="customAppsContainer"></div>
+    </section>
+
+    <!-- Tab View 8: Accounts -->
+    <section class="tab-view" id="accountsTabView" style="display: none;">
+      <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <span style="font-size: 14px; color: var(--text-secondary);">
+          Управление сохраненными аккаунтами Apple ID и мгновенное переключение между ними.
+        </span>
+        <button class="btn btn-primary btn-sm" onclick="UI.openModal('loginModal')">➕ Добавить аккаунт</button>
+      </div>
+      <div id="savedAccountsContainer"></div>
+    </section>
+
+  </main>
+
+  <!-- Login Modal -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Вход в Apple ID</div>
+        <button class="modal-close">&times;</button>
+      </div>
+      <form id="loginForm">
+        <div class="modal-body">
+          <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
+            Данные учетной записи передаются напрямую на официальные серверы Apple через безопасный сеанс ipatool.
+          </div>
+          <div class="form-group">
+            <label class="form-label">Apple ID (Email)</label>
+            <input type="email" class="form-input" id="loginEmail" placeholder="example@icloud.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Пароль</label>
+            <input type="password" class="form-input" id="loginPassword" placeholder="••••••••••••" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Код проверки (2FA) — если уже известен</label>
+            <input type="text" class="form-input" id="loginAuthCode" placeholder="Необязательно (придет на устройство)">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close">Отмена</button>
+          <button type="submit" class="btn btn-primary">Войти в аккаунт</button>
+        </div>
+      </form>
     </div>
-
-    <script>
-        const REPO_OWNER = "FS13Fid";
-        const REPO_NAME = "ipa-studio";
-        const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        let LOCAL_API = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") 
-            ? window.location.origin 
-            : "http://localhost:5050";
-
-        let appsData = [];
-        let currentAccountFilter = 'all';
-        let currentSort = 'name-asc';
-        let currentModalApp = null;
-        let isLocalServerOnline = false;
-        let connectedDevices = [];
-        let isAuthenticated = false;
-
-        // Theme toggle
-        const themeBtn = document.getElementById('themeBtn');
-        let isDark = true;
-        themeBtn.addEventListener('click', () => {
-            isDark = !isDark;
-            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-            themeBtn.innerText = isDark ? '🌓' : '☀️';
-        });
-
-        // Load apps catalog
-        async function loadApps() {
-            try {
-                const res = await fetch('apps.json?t=' + Date.now());
-                if (!res.ok) throw new Error('apps.json не найден');
-                appsData = await res.json();
-                buildAccountTabs();
-                renderApps();
-                populateHudSelect();
-            } catch (e) {
-                console.warn(e);
-                document.getElementById('appsGrid').innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 50px;">
-                        Каталог обновляется...
-                    </div>`;
-            }
-        }
-
-        // Clean account email helper
-        function cleanAccount(acc) {
-            if (!acc) return 'App Store';
-            acc = String(acc).trim().toLowerCase();
-            const emailMatch = acc.match(/([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,10})/);
-            if (emailMatch) return emailMatch[1];
-            return acc;
-        }
-
-        // Build account tabs
-        function buildAccountTabs() {
-            const tabsContainer = document.getElementById('accountTabs');
-            tabsContainer.innerHTML = '';
-
-            const allTab = document.createElement('div');
-            allTab.className = 'account-tab active';
-            allTab.dataset.acc = 'all';
-            allTab.innerHTML = `Все <span class="count" id="countAll">${appsData.length}</span>`;
-            allTab.onclick = () => filterByAccount('all', allTab);
-            tabsContainer.appendChild(allTab);
-
-            const accounts = {};
-            appsData.forEach(app => {
-                const acc = cleanAccount(app.account);
-                accounts[acc] = (accounts[acc] || 0) + 1;
-            });
-
-            Object.keys(accounts).sort().forEach(acc => {
-                const tab = document.createElement('div');
-                tab.className = 'account-tab';
-                tab.dataset.acc = acc;
-                const displayAcc = acc.length > 22 ? acc.substring(0, 20) + '...' : acc;
-                tab.innerHTML = ` ${displayAcc} <span class="count">${accounts[acc]}</span>`;
-                tab.onclick = () => filterByAccount(acc, tab);
-                tabsContainer.appendChild(tab);
-            });
-        }
-
-        function filterByAccount(acc, tabEl) {
-            document.querySelectorAll('.account-tab').forEach(t => t.classList.remove('active'));
-            tabEl.classList.add('active');
-            currentAccountFilter = acc;
-            renderApps();
-        }
-
-        function changeSort(val) {
-            currentSort = val;
-            renderApps();
-        }
-
-        function parseSize(sz) {
-            if (!sz) return 0;
-            const str = String(sz).trim().toUpperCase();
-            const num = parseFloat(str.replace(',', '.')) || 0;
-            if (str.includes('ГБ') || str.includes('GB')) return num * 1024 * 1024 * 1024;
-            if (str.includes('МБ') || str.includes('MB')) return num * 1024 * 1024;
-            if (str.includes('КБ') || str.includes('KB')) return num * 1024;
-            return num;
-        }
-
-        function parseVer(v) {
-            if (!v) return [0];
-            const parts = String(v).match(/\d+/g);
-            return parts ? parts.map(Number) : [0];
-        }
-
-        function compareVer(v1, v2) {
-            const p1 = parseVer(v1);
-            const p2 = parseVer(v2);
-            for (let i = 0; i < Math.max(p1.length, p2.length); i++) {
-                const num1 = p1[i] || 0;
-                const num2 = p2[i] || 0;
-                if (num1 !== num2) return num1 - num2;
-            }
-            return 0;
-        }
-
-        function renderApps() {
-            const grid = document.getElementById('appsGrid');
-            const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
-            grid.innerHTML = '';
-
-            let filtered = appsData.filter(app => {
-                const appAcc = cleanAccount(app.account);
-                const matchesAccount = currentAccountFilter === 'all' || appAcc === currentAccountFilter;
-                const matchesQuery = (app.name || '').toLowerCase().includes(query) || 
-                                     (app.bundleId || '').toLowerCase().includes(query) ||
-                                     appAcc.toLowerCase().includes(query);
-                return matchesAccount && matchesQuery;
-            });
-
-            // Sorting
-            filtered.sort((a, b) => {
-                if (currentSort === 'name-asc') {
-                    return (a.name || '').localeCompare(b.name || '', 'ru');
-                } else if (currentSort === 'name-desc') {
-                    return (b.name || '').localeCompare(a.name || '', 'ru');
-                } else if (currentSort === 'account') {
-                    return cleanAccount(a.account).localeCompare(cleanAccount(b.account), 'ru');
-                } else if (currentSort === 'size-desc') {
-                    return parseSize(b.size) - parseSize(a.size);
-                } else if (currentSort === 'size-asc') {
-                    return parseSize(a.size) - parseSize(b.size);
-                } else if (currentSort === 'version') {
-                    return compareVer(b.version, a.version);
-                }
-                return 0;
-            });
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 50px;">
-                        Ничего не найдено
-                    </div>`;
-                return;
-            }
-
-            filtered.forEach(app => {
-                const card = document.createElement('div');
-                card.className = 'app-card';
-                card.onclick = () => openModal(app);
-
-                const itmsLink = `itms-services://?action=download-manifest&url=${encodeURIComponent(app.manifestUrl)}`;
-                const firstLetter = (app.name || 'A').charAt(0).toUpperCase();
-                const accText = cleanAccount(app.account);
-
-                card.innerHTML = `
-                    <div class="app-header">
-                        <div class="app-icon-wrapper">
-                            <span>${firstLetter}</span>
-                            <img class="app-icon-img" src="${app.icon}" alt="${app.name}" onload="this.style.display='block'" onerror="this.style.display='none'">
-                        </div>
-                        <div class="app-info">
-                            <div class="app-title">${app.name}</div>
-                            <div class="app-meta">${app.bundleId}</div>
-                        </div>
-                    </div>
-                    <div class="account-badge">
-                        <span></span> ${accText}
-                    </div>
-                    <div class="app-tags">
-                        <span class="tag">v${app.version}</span>
-                        <span class="tag">${app.size || 'IPA'}</span>
-                    </div>
-                    <a class="btn-install" href="${itmsLink}" onclick="event.stopPropagation()">GET</a>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function openModal(app) {
-            currentModalApp = app;
-            const firstLetter = (app.name || 'A').charAt(0).toUpperCase();
-            document.getElementById('modalIconLetter').innerText = firstLetter;
-            
-            const modalImg = document.getElementById('modalIconImg');
-            modalImg.src = app.icon;
-            modalImg.onload = () => modalImg.style.display = 'block';
-            modalImg.onerror = () => modalImg.style.display = 'none';
-
-            document.getElementById('modalTitle').innerText = app.name;
-            document.getElementById('modalBundle').innerText = app.bundleId;
-            document.getElementById('modalAccount').innerText = cleanAccount(app.account);
-            document.getElementById('modalVersion').innerText = 'v' + app.version;
-            document.getElementById('modalSize').innerText = app.size || 'IPA';
-            document.getElementById('modalDesc').innerText = app.description || `Приложение ${app.name} готово к установке.`;
-
-            const itmsLink = `itms-services://?action=download-manifest&url=${encodeURIComponent(app.manifestUrl)}`;
-            document.getElementById('modalInstallBtn').href = itmsLink;
-
-            const modal = document.getElementById('appModal');
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('appModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        /* DEVICE STUDIO MODAL LOGIC */
-        function openStudioModal() {
-            const modal = document.getElementById('studioModal');
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            const noticeBox = document.getElementById('deviceNoticeBox');
-            if (noticeBox) noticeBox.style.display = isMobileDevice ? 'block' : 'none';
-            checkLocalServer();
-        }
-
-        function closeStudioModal() {
-            const modal = document.getElementById('studioModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        function openStudioWithCurrentApp() {
-            const app = currentModalApp;
-            closeModal();
-            setTimeout(() => {
-                openStudioModal();
-                if (app) {
-                    switchStudioTab('installTab');
-                    const targetBox = document.getElementById('targetAppBox');
-                    targetBox.style.display = 'block';
-                    document.getElementById('targetAppDesc').innerText = `${app.name} (v${app.version}) • ${app.bundleId}`;
-                }
-            }, 120);
-        }
-
-        function switchStudioTab(tabId) {
-            document.querySelectorAll('.studio-tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.studio-content-section').forEach(s => s.classList.remove('active'));
-            
-            const targetSection = document.getElementById(tabId);
-            if (targetSection) targetSection.classList.add('active');
-
-            const btnIdx = tabId === 'deviceTab' ? 0 : tabId === 'installTab' ? 1 : 2;
-            const btns = document.querySelectorAll('.studio-tab-btn');
-            if (btns[btnIdx]) btns[btnIdx].classList.add('active');
-        }
-
-        async function checkLocalServer() {
-            const dot = document.getElementById('serverStatusDot');
-            const txt = document.getElementById('serverStatusText');
-            txt.innerText = 'Проверка...';
-
-            try {
-                const res = await fetch(`${LOCAL_API}/api/devices`, { timeout: 2500 });
-                if (res.ok) {
-                    const data = await res.json();
-                    isLocalServerOnline = true;
-                    dot.classList.add('online');
-                    txt.innerText = 'Локальный сервер активен';
-                    document.getElementById('daemonHelperBox').style.display = 'none';
-
-                    connectedDevices = data.devices || [];
-                    if (connectedDevices.length > 0) {
-                        const dev = connectedDevices[0];
-                        document.getElementById('detectedDevName').innerText = dev.name || 'Apple iPhone';
-                        document.getElementById('detectedDevDetails').innerText = `Модель: ${dev.model || 'iPhone'} • iOS ${dev.version || '17+'} • ${dev.connection_type || 'USB'}`;
-                    } else {
-                        document.getElementById('detectedDevName').innerText = 'Устройство не подключено';
-                        document.getElementById('detectedDevDetails').innerText = 'Подключите iPhone через USB провод или Wi-Fi';
-                    }
-                    return;
-                }
-            } catch (e) {
-                // Daemon offline
-            }
-
-            isLocalServerOnline = false;
-            dot.classList.remove('online');
-            txt.innerText = 'Сервер не запущен';
-            document.getElementById('daemonHelperBox').style.display = 'block';
-            document.getElementById('detectedDevName').innerText = 'Локальный агент не запущен';
-            document.getElementById('detectedDevDetails').innerText = 'Запустите ./start.sh на компьютере для прямой установки';
-        }
-
-        async function installCurrentAppDirect() {
-            if (!currentModalApp) return;
-            if (!isLocalServerOnline) {
-                alert('Локальный сервер не запущен! Запустите ./start.sh в терминале.');
-                return;
-            }
-            if (connectedDevices.length === 0) {
-                alert('Подключите iPhone через USB провод!');
-                return;
-            }
-
-            const progress = document.getElementById('studioInstallProgress');
-            progress.style.display = 'block';
-            progress.innerText = `Установка ${currentModalApp.name} на iPhone...`;
-
-            try {
-                const res = await fetch(`${LOCAL_API}/api/install`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        bundle_id: currentModalApp.bundleId,
-                        manifest_url: currentModalApp.manifestUrl
-                    })
-                });
-                const resData = await res.json();
-                if (res.ok && resData.status === 'success') {
-                    progress.style.color = '#30d158';
-                    progress.innerText = `✅ Приложение ${currentModalApp.name} успешно установлено!`;
-                } else {
-                    progress.style.color = '#ff453a';
-                    progress.innerText = `Ошибка установки: ${resData.message || 'Проверьте соединение'}`;
-                }
-            } catch (err) {
-                progress.style.color = '#ff453a';
-                progress.innerText = `Ошибка соединения: ${err.message}`;
-            }
-        }
-
-        async function handleLocalIpaUpload(input) {
-            const file = input.files[0];
-            if (!file) return;
-
-            if (!isLocalServerOnline) {
-                alert('Локальный сервер не запущен! Запустите ./start.sh в терминале.');
-                return;
-            }
-
-            const progress = document.getElementById('studioInstallProgress');
-            progress.style.display = 'block';
-            progress.style.color = '#5ac8fa';
-            progress.innerText = `Загрузка и установка ${file.name}...`;
-
-            const formData = new FormData();
-            formData.append('file', file);
-
-            try {
-                const res = await fetch(`${LOCAL_API}/api/upload`, {
-                    method: 'POST',
-                    body: formData
-                });
-                const resData = await res.json();
-                if (res.ok) {
-                    progress.style.color = '#30d158';
-                    progress.innerText = `✅ Файл ${file.name} установлен!`;
-                } else {
-                    progress.style.color = '#ff453a';
-                    progress.innerText = `Ошибка: ${resData.detail || 'Не удалось установить'}`;
-                }
-            } catch (err) {
-                progress.style.color = '#ff453a';
-                progress.innerText = `Ошибка: ${err.message}`;
-            }
-        }
-
-        async function searchAppStore() {
-            const query = document.getElementById('storeSearchInput').value.trim();
-            if (!query) return;
-
-            const resDiv = document.getElementById('storeResults');
-            resDiv.innerText = 'Поиск в App Store...';
-
-            if (!isLocalServerOnline) {
-                resDiv.innerHTML = '<span style="color:#ff453a;">Локальный сервер не запущен! Запустите ./start.sh</span>';
-                return;
-            }
-
-            try {
-                const res = await fetch(`${LOCAL_API}/api/appstore/search?q=${encodeURIComponent(query)}`);
-                const data = await res.json();
-                if (data.results && data.results.length > 0) {
-                    resDiv.innerHTML = data.results.map(app => `
-                        <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:10px; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between;">
-                            <div>
-                                <strong style="color:#fff;">${app.name}</strong> (${app.version})
-                                <div style="font-size:11px; color:var(--text-secondary);">${app.bundle_id}</div>
-                            </div>
-                            <button class="studio-btn" style="padding:6px 12px; font-size:11px;" onclick="downloadFromStore('${app.bundle_id}')">Скачать</button>
-                        </div>
-                    `).join('');
-                } else {
-                    resDiv.innerText = 'Ничего не найдено в App Store.';
-                }
-            } catch (err) {
-                resDiv.innerText = `Ошибка: ${err.message}`;
-            }
-        }
-
-        async function downloadFromStore(bundleId) {
-            const resDiv = document.getElementById('storeResults');
-            resDiv.innerHTML = `<span style="color:#5ac8fa;">Загрузка ${bundleId} из App Store через ipatool...</span>`;
-            try {
-                const res = await fetch(`${LOCAL_API}/api/appstore/download`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ bundle_id: bundleId })
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    resDiv.innerHTML = `<span style="color:#30d158;">✅ Приложение ${bundleId} успешно скачано!</span>`;
-                } else {
-                    resDiv.innerHTML = `<span style="color:#ff453a;">Ошибка: ${data.detail || 'Не удалось скачать'}</span>`;
-                }
-            } catch (err) {
-                resDiv.innerHTML = `<span style="color:#ff453a;">Ошибка: ${err.message}</span>`;
-            }
-        }
-
-        /* WEBAUTHN / HUD */
-        async function enrollBiometrics() {
-            const token = document.getElementById('hudToken').value.trim();
-            if (!token.startsWith('ghp_')) {
-                alert('Введи корректный токен ghp_!');
-                return;
-            }
-            try {
-                if (window.PublicKeyCredential) {
-                    const challenge = new Uint8Array(32);
-                    window.crypto.getRandomValues(challenge);
-                    await navigator.credentials.create({
-                        publicKey: {
-                            challenge: challenge,
-                            rp: { name: "IPA Studio Console" },
-                            user: { id: new Uint8Array([1, 2, 3, 4]), name: "admin", displayName: "Administrator" },
-                            pubKeyCredParams: [{ alg: -7, type: "public-key" }],
-                            authenticatorSelection: { userVerification: "required" },
-                            timeout: 60000
-                        }
-                    });
-                }
-                localStorage.setItem('gh_token_vault', btoa(token));
-                localStorage.setItem('has_touch_id', 'true');
-                isAuthenticated = true;
-                document.getElementById('tokenGroup').style.display = 'none';
-                alert('Touch ID привязан!');
-            } catch (err) {
-                localStorage.setItem('gh_token_vault', btoa(token));
-                isAuthenticated = true;
-                document.getElementById('tokenGroup').style.display = 'none';
-                alert('Токен сохранен.');
-            }
-        }
-
-        async function authenticateUser() {
-            try {
-                if (window.PublicKeyCredential) {
-                    const challenge = new Uint8Array(32);
-                    window.crypto.getRandomValues(challenge);
-                    await navigator.credentials.get({
-                        publicKey: { challenge: challenge, userVerification: "required", timeout: 60000 }
-                    });
-                }
-                unlockConsole();
-            } catch (err) {
-                const pass = prompt('Введи токен ghp_ вручную:');
-                if (pass && btoa(pass.trim()) === localStorage.getItem('gh_token_vault')) {
-                    unlockConsole();
-                } else if (pass) {
-                    alert('Неверный ключ!');
-                }
-            }
-        }
-
-        function resetBiometrics() {
-            if (confirm('Сбросить привязку Touch ID и токен?')) {
-                localStorage.removeItem('gh_token_vault');
-                localStorage.removeItem('has_touch_id');
-                isAuthenticated = false;
-                document.getElementById('hudToken').value = '';
-                document.getElementById('hudLockedState').style.display = 'none';
-                document.getElementById('hudMainContent').style.display = 'block';
-                document.getElementById('tokenGroup').style.display = 'block';
-            }
-        }
-
-        function unlockConsole() {
-            isAuthenticated = true;
-            document.getElementById('hudLockedState').style.display = 'none';
-            document.getElementById('hudMainContent').style.display = 'block';
-            document.getElementById('tokenGroup').style.display = 'none';
-        }
-
-        function toggleHud(show) {
-            const hud = document.getElementById('hudOverlay');
-            if (show) {
-                const hasVault = localStorage.getItem('gh_token_vault');
-                if (hasVault && !isAuthenticated) {
-                    document.getElementById('hudLockedState').style.display = 'block';
-                    document.getElementById('hudMainContent').style.display = 'none';
-                } else if (hasVault && isAuthenticated) {
-                    unlockConsole();
-                } else {
-                    document.getElementById('hudLockedState').style.display = 'none';
-                    document.getElementById('hudMainContent').style.display = 'block';
-                    document.getElementById('tokenGroup').style.display = 'block';
-                }
-                hud.classList.add('active');
-            } else {
-                hud.classList.remove('active');
-            }
-        }
-
-        function populateHudSelect() {
-            const select = document.getElementById('hudAppSelect');
-            select.innerHTML = '';
-            appsData.forEach(app => {
-                const opt = document.createElement('option');
-                opt.value = app.bundleId;
-                opt.textContent = `${app.name} (${cleanAccount(app.account)})`;
-                select.appendChild(opt);
-            });
-        }
-
-        window.addEventListener('keydown', (e) => {
-            if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.code === 'KeyD') {
-                e.preventDefault();
-                toggleHud(!document.getElementById('hudOverlay').classList.contains('active'));
-            }
-        });
-
-        let tapCount = 0;
-        let tapTimer = null;
-        document.getElementById('logoBox').addEventListener('click', () => {
-            tapCount++;
-            clearTimeout(tapTimer);
-            tapTimer = setTimeout(() => { tapCount = 0; }, 500);
-            if (tapCount === 3) {
-                tapCount = 0;
-                toggleHud(true);
-            }
-        });
-
-        document.getElementById('hudFileInput').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const vault = localStorage.getItem('gh_token_vault');
-            const token = vault ? atob(vault) : document.getElementById('hudToken').value.trim();
-            const statusEl = document.getElementById('hudStatus');
-            statusEl.style.display = 'block';
-
-            if (!token) {
-                statusEl.style.color = '#ff453a';
-                statusEl.innerText = '[ERROR] Токен не найден!';
-                return;
-            }
-
-            const bundleId = document.getElementById('hudAppSelect').value;
-            const targetApp = appsData.find(a => a.bundleId === bundleId);
-            statusEl.style.color = '#ff9f0a';
-            statusEl.innerText = `[INFO] Загрузка иконки для ${bundleId}...`;
-
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async () => {
-                const base64Content = reader.result.split(',')[1];
-                const filePath = `icons/${bundleId}.png`;
-
-                try {
-                    let sha = null;
-                    const getRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}`, {
-                        headers: { 'Authorization': `token ${token}` }
-                    });
-                    if (getRes.ok) {
-                        const fileInfo = await getRes.json();
-                        sha = fileInfo.sha;
-                    }
-
-                    const putRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: `Update icon for ${bundleId}`,
-                            content: base64Content,
-                            sha: sha || undefined
-                        })
-                    });
-
-                    if (!putRes.ok) throw new Error(`HTTP ${putRes.status}`);
-
-                    const newUrl = `https://${REPO_OWNER.toLowerCase()}.github.io/${REPO_NAME}/${filePath}?t=${Date.now()}`;
-                    if (targetApp) targetApp.icon = newUrl;
-
-                    statusEl.style.color = '#30d158';
-                    statusEl.innerText = `[SUCCESS] Иконка сохранена!`;
-                    renderApps();
-                } catch (err) {
-                    statusEl.style.color = '#ff453a';
-                    statusEl.innerText = `[FAIL] ${err.message}`;
-                }
-            };
-        });
-
-        document.getElementById('searchInput').addEventListener('input', renderApps);
-
-        window.addEventListener('click', (e) => {
-            const appModal = document.getElementById('appModal');
-            if (e.target === appModal) closeModal();
-            const studioModal = document.getElementById('studioModal');
-            if (e.target === studioModal) closeStudioModal();
-            const hud = document.getElementById('hudOverlay');
-            if (e.target === hud) toggleHud(false);
-        });
-
-        loadApps();
-    </script>
+  </div>
+
+  <!-- 2FA Modal -->
+  <div class="modal-overlay" id="twoFaModal">
+    <div class="modal" style="max-width: 440px;">
+      <div class="modal-header">
+        <div class="modal-title">Двухфакторная аутентификация</div>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <div style="font-size: 38px; margin-bottom: 12px;">📲</div>
+        <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">Введите 6-значный код проверки</div>
+        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 18px;">
+          Код отправлен на ваши доверенные устройства для аккаунта <br><strong id="twoFaEmailDisplay"></strong>
+        </div>
+        <input type="text" class="form-input" id="twoFaCodeInput" maxlength="6" placeholder="123456" 
+               style="text-align: center; font-size: 24px; letter-spacing: 6px; font-weight: 700; width: 200px; margin: 0 auto;">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close">Отмена</button>
+        <button type="button" class="btn btn-primary" id="twoFaConfirmBtn">Подтвердить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Version Selector Modal -->
+  <div class="modal-overlay" id="versionSelectorModal">
+    <div class="modal" style="max-width: 600px;">
+      <div class="modal-header">
+        <div class="modal-title" id="versionModalTitle">Выбор версии приложения</div>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="versionModalList"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- USB Install Modal -->
+  <div class="modal-overlay" id="installModal">
+    <div class="modal" style="max-width: 480px;">
+      <div class="modal-header">
+        <div class="modal-title">Установка на iPhone / iPad по кабелю</div>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size: 14px; margin-bottom: 14px;">
+          Приложение: <strong id="installIpaName"></strong>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Выберите подключенное устройство:</label>
+          <select class="form-input" id="installDeviceSelect"></select>
+        </div>
+        <div style="font-size: 12px; color: var(--text-secondary); background: rgba(0, 122, 255, 0.08); padding: 10px; border-radius: var(--radius-sm);">
+          💡 Убедитесь, что экран устройства разблокирован и на нем подтверждено доверие компьютеру.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close">Отмена</button>
+        <button type="button" class="btn btn-primary" id="confirmInstallBtn">🚀 Установить сейчас</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Device Helper Modal -->
+  <div class="modal-overlay" id="deviceHelperModal">
+    <div class="modal" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title">📱 Установка по кабелю USB</div>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size: 13.5px; line-height: 1.6; color: var(--text-secondary);">
+          <p style="margin-bottom: 12px;">
+            Для прямой установки через USB провод на ваш iPhone устройство должно быть подключено к компьютеру с запущенным локальным сервером.
+          </p>
+          <div style="background: rgba(0, 122, 255, 0.1); border: 1px solid rgba(0, 122, 255, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 14px; color: #fff; font-family: monospace; font-size: 13px;">
+            cd ipa-studio && ./start.sh
+          </div>
+          <p>
+            Прямо сейчас вы также можете установить это приложение без компьютера прямо с вашего iPhone в один клик через кнопку <strong>«📲 Установить (OTA)»</strong> в Safari!
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary modal-close">Понятно</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Custom App Modal -->
+  <div class="modal-overlay" id="addCustomAppModal">
+    <div class="modal" style="max-width: 480px;">
+      <div class="modal-header">
+        <div class="modal-title">Добавить приложение в список</div>
+        <button class="modal-close">&times;</button>
+      </div>
+      <form id="addCustomAppForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Название приложения</label>
+            <input type="text" class="form-input" id="customAppName" placeholder="Например: СберБанк Онлайн" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ID приложения в App Store</label>
+            <input type="number" class="form-input" id="customAppId" placeholder="Например: 492224193" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close">Отмена</button>
+          <button type="submit" class="btn btn-primary">Добавить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Collapsible Terminal Drawer (SSE Logs from ipatool & ideviceinstaller) -->
+  <div class="terminal-drawer" id="terminalDrawer">
+    <div class="terminal-header" onclick="UI.toggleTerminal()">
+      <span>📟 Терминал операций (ipatool & ideviceinstaller)</span>
+      <span style="font-size: 11px;">▲ Развернуть / Свернуть</span>
+    </div>
+    <div class="terminal-body" id="terminalBody">
+      <div class="log-line info">[System] IPA Studio Pro запущена и готова к работе.</div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

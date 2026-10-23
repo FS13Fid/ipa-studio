@@ -1,4 +1,5 @@
 import os
+import re
 import shutil
 import json
 import subprocess
@@ -32,22 +33,22 @@ def get_active_account_info():
                     "storefront": data.get("storefront", "RUS")
                 }
             except Exception:
-                # Text output fallback
-                lines = proc.stdout.splitlines()
-                email = ""
-                name = ""
-                for line in lines:
-                    if "email:" in line.lower():
-                        email = line.split(":", 1)[1].strip()
-                    elif "name:" in line.lower():
-                        name = line.split(":", 1)[1].strip()
+                # Text output fallback: supports both "email: xxx" and "email=xxx name=yyy storefront=zzz"
+                text = proc.stdout + " " + proc.stderr
+                email_match = re.search(r'email[=:]\s*([^\s,]+)', text, re.IGNORECASE)
+                name_match = re.search(r'name[=:]\s*([^\n\r]+?)(?=\s+(?:storefront|success|dsid|email)=|$)', text, re.IGNORECASE)
+                storefront_match = re.search(r'storefront[=:]\s*([^\s,]+)', text, re.IGNORECASE)
+                
+                email = email_match.group(1) if email_match else ""
+                name = name_match.group(1).strip() if name_match else ""
+                storefront = storefront_match.group(1) if storefront_match else "RUS"
                 if email:
                     return {
                         "is_logged_in": True,
                         "name": name or "Apple User",
                         "email": email,
                         "dsid": "",
-                        "storefront": "RUS"
+                        "storefront": storefront
                     }
         # If exit code != 0, check if login file exists as a fallback check
         login_file = os.path.join(IPATOOL_HOME, "login")
