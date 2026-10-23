@@ -5,7 +5,7 @@
     "bundleId": "com.advancy.app",
     "account": "Fidel Sinakaev",
     "size": "232.9 МБ",
-    "icon": "https://fs13fid.github.io/ipa-studio/icons/com.advancy.app.png?t=1792772628",
+    "icon": "https://fs13fid.github.io/ipa-studio/icons/com.advancy.app.png?t=1792774032",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.advancy.app.plist",
     "description": "Приложение Advance выгружено из учетной записи Fidel Sinakaev."
   },
@@ -55,7 +55,7 @@
     "bundleId": "com.advancy.app",
     "account": "sinakayev@icloud.com",
     "size": "232.8 МБ",
-    "icon": "https://fs13fid.github.io/ipa-studio/icons/com.advancy.app.png?t=1792772628",
+    "icon": "https://fs13fid.github.io/ipa-studio/icons/com.advancy.app.png?t=1792774032",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.advancy.app.plist",
     "description": "Приложение Advance выгружено из учетной записи sinakayev@icloud.com."
   },
@@ -115,7 +115,7 @@
     "bundleId": "ru.kari-app.ios",
     "account": "sinakayev@icloud.com",
     "size": "116.9 МБ",
-    "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.kari-app.ios.png?t=1792772628",
+    "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.kari-app.ios.png?t=1792774032",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.kari-app.ios.plist",
     "description": "Приложение Kari выгружено из учетной записи sinakayev@icloud.com."
   },
@@ -165,7 +165,7 @@
     "bundleId": "com.inv.gen",
     "account": "sinakayev@icloud.com",
     "size": "507.4 МБ",
-    "icon": "https://fs13fid.github.io/ipa-studio/icons/com.inv.gen.png?t=1792772628",
+    "icon": "https://fs13fid.github.io/ipa-studio/icons/com.inv.gen.png?t=1792774032",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.inv.gen.plist",
     "description": "Приложение Online выгружено из учетной записи sinakayev@icloud.com."
   },
@@ -270,6 +270,46 @@
     "description": "Приложение VK выгружено из учетной записи Fidel Sinakaev."
   },
   {
+    "name": "VKDating",
+    "version": "1.33",
+    "bundleId": "com.vk.dating",
+    "account": "Fidel Sinakaev",
+    "size": "161.4 МБ",
+    "icon": "https://fs13fid.github.io/ipa-studio/icons/com.vk.dating.png?v=1.33",
+    "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.vk.dating.plist",
+    "description": "Приложение VKDating выгружено из учетной записи Fidel Sinakaev."
+  },
+  {
+    "name": "VK Music",
+    "version": "8.30.1",
+    "bundleId": "com.music.vk",
+    "account": "Fidel Sinakaev",
+    "size": "180.7 МБ",
+    "icon": "https://fs13fid.github.io/ipa-studio/icons/com.music.vk.png?v=8.30.1",
+    "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.music.vk.plist",
+    "description": "Приложение VK Music выгружено из учетной записи Fidel Sinakaev."
+  },
+  {
+    "name": "VK Mail",
+    "version": "3.92.0",
+    "bundleId": "com.vk.mail",
+    "account": "Fidel Sinakaev",
+    "size": "475.3 МБ",
+    "icon": "https://fs13fid.github.io/ipa-studio/icons/com.vk.mail.png?v=3.92.0",
+    "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.vk.mail.plist",
+    "description": "Приложение VK Mail выгружено из учетной записи Fidel Sinakaev."
+  },
+  {
+    "name": "VK Video",
+    "version": "8.183",
+    "bundleId": "com.vk.vkvideo.prod",
+    "account": "Fidel Sinakaev",
+    "size": "236.6 МБ",
+    "icon": "https://fs13fid.github.io/ipa-studio/icons/com.vk.vkvideo.prod.png?v=8.183",
+    "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.vk.vkvideo.prod.plist",
+    "description": "Приложение VK Video выгружено из учетной записи Fidel Sinakaev."
+  },
+  {
     "name": "Купер",
     "version": "10.0.36",
     "bundleId": "ru.moiseev",
@@ -278,6 +318,36 @@
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.moiseev.png?v=10.0.36",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.moiseev.plist",
     "description": "Приложение Купер выгружено из учетной записи Fidel Sinakaev."
+  },
+  {
+    "name": "Online",
+    "version": "17.0.0",
+    "bundleId": "com.digit.budg",
+    "account": "Fidel Sinakaev",
+    "size": "480.5 МБ",
+    "icon": "https://fs13fid.github.io/ipa-studio/icons/com.digit.budg.png?v=17.0.0",
+    "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/com.digit.budg.plist",
+    "description": "Приложение Online выгружено из учетной записи Fidel Sinakaev."
+  },
+  {
+    "name": "MarketDelivery",
+    "version": "26.39.0",
+    "bundleId": "am.helix.Delivery-Club",
+    "account": "Fidel Sinakaev",
+    "size": "265.7 МБ",
+    "icon": "https://fs13fid.github.io/ipa-studio/icons/am.helix.Delivery-Club.png?v=26.39.0",
+    "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/am.helix.Delivery-Club.plist",
+    "description": "Приложение MarketDelivery выгружено из учетной записи Fidel Sinakaev."
+  },
+  {
+    "name": "Учёт надоя",
+    "version": "1.2.2",
+    "bundleId": "ru.nadoiaccount",
+    "account": "Fidel Sinakaev",
+    "size": "52.0 МБ",
+    "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.nadoiaccount.png?v=1.2.2",
+    "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.nadoiaccount.plist",
+    "description": "Приложение Учёт надоя выгружено из учетной записи Fidel Sinakaev."
   },
   {
     "name": "СберБанк",
@@ -318,6 +388,16 @@
     "icon": "https://fs13fid.github.io/ipa-studio/icons/ru.tcsbank.mobileclient.png?v=6.13.5",
     "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/ru.tcsbank.mobileclient.plist",
     "description": "Приложение Тинькофф выгружено из учетной записи Fidel Sinakaev."
+  },
+  {
+    "name": "Копилка ремонта",
+    "version": "8.0.0",
+    "bundleId": "renovation.appstore",
+    "account": "Fidel Sinakaev",
+    "size": "554.2 МБ",
+    "icon": "https://fs13fid.github.io/ipa-studio/icons/renovation.appstore.png?v=8.0.0",
+    "manifestUrl": "https://fs13fid.github.io/ipa-studio/manifests/renovation.appstore.plist",
+    "description": "Приложение Копилка ремонта выгружено из учетной записи Fidel Sinakaev."
   },
   {
     "name": "Au",
